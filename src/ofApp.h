@@ -2,12 +2,11 @@
 
 #include "ofMain.h"
 #include "ofxCv.h"
-#include "MSAFluid.h"
+#include "Fluid.h"
 
 class ofApp : public ofBaseApp{
     
     
-
 	public:
     
 		void setup();
@@ -35,6 +34,6 @@ class ofApp : public ofBaseApp{
 		
         ofVec2f pMouse;
     
-        msa::fluid::Solver fluid;
-        msa::fluid::DrawerGl fluid_drawer;
+        FluidSolver fluid;
+        ofTexture fluid_texture;
 };

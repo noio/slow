@@ -12,7 +12,7 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofBackground(0, 0, 0);
     
-    camera.setDeviceID(1);
+//    camera.setDeviceID(0);
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     
     float ratio = (float)kScreenWidth / (float)kScreenHeight;
@@ -21,17 +21,10 @@ void ofApp::setup(){
     roi = cv::Rect((kCaptureWidth - w) / 2, (kCaptureHeight - h) / 2, w, h);
     
     fluid.setup(kFluidWidth, kFluidHeight);
-    fluid.enableRGB(true).setFadeSpeed(0.002).setDeltaT(0.5).setVisc(0.00002).setColorDiffusion(0);
-
-    fluid_drawer.setup(&fluid);
-//    fluid_drawer.setDrawMode(msa::fluid::kDrawVectors);
-    
-    pMouse = msa::getWindowCenter();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    fluid.update();
     
     camera.update();
     
@@ -42,34 +35,9 @@ void ofApp::update(){
     cv::pyrDown(frame_gray, frame_gray);
 //    cv::pyrDown(frame_gray, frame_gray);
 //    opticalflow.calcOpticalFlow(frame_gray);
-    
-    
-    
+
 }
 
-// add force and dye to fluid, and create particles
-void ofApp::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce) {
-    float speed = vel.x * vel.x  + vel.y * vel.y * msa::getWindowAspectRatio() * msa::getWindowAspectRatio();    // balance the x and y components of speed with the screen aspect ratio
-    if(speed > 0) {
-		pos.x = ofClamp(pos.x, 0.0f, 1.0f);
-		pos.y = ofClamp(pos.y, 0.0f, 1.0f);
-		
-        int index = fluid.getIndexForPos(pos);
-		
-		if(addColor) {
-            //			Color drawColor(CM_HSV, (getElapsedFrames() % 360) / 360.0f, 1, 1);
-			
-			fluid.addColorAtIndex(index, 100);
-			
-//			if(drawParticles)
-//				particleSystem.addParticles(pos * ofVec2f(ofGetWindowSize()), 10);
-		}
-		
-		if(addForce)
-			fluid.addForceAtIndex(index, vel * 300);
-		
-    }
-}
 
 
 //--------------------------------------------------------------
@@ -81,12 +49,17 @@ void ofApp::draw(){
 //    opticalflow.draw(0,0, kScreenWidth, kScreenHeight);
     ofDrawBitmapString(ofToString(ofGetFrameRate())+"fps", 10, 15);
     
-    fluid_drawer.draw(0, 0, kScreenWidth, kScreenHeight);
+    unsigned char pixels[kFluidWidth*kFluidHeight];
+    fluid.fill_texture(pixels);
+    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_LUMINANCE);
+    fluid_texture.draw(0,0);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == ' '){
+        fluid.update();
+    }
 }
 
 //--------------------------------------------------------------
@@ -96,11 +69,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    ofVec2f eventPos = ofVec2f(x, y);
-	ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-	ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-	addToFluid(mouseNorm, mouseVel, true, true);
-	pMouse = eventPos;
+    
 }
 
 //--------------------------------------------------------------

@@ -12,7 +12,9 @@
 #include <iostream>
 #include <vector>
 
-#define IX(i,j) ((i) + (nx) * (j))
+// This indexing is different from Jos Stam's paper, here
+// i = row or 'y' and j = column or 'x'.
+#define IX(i,j) ((i) * (nx+2) + (j))
 
 using std::vector;
 
@@ -22,15 +24,22 @@ public:
     int nx, ny;
     int cells;
     
-    vector<float> u, v, u_prev, v_prev, d, d_prev;
+    double diffusion, viscosity, delta;
+    vector<double> u, v, u_prev, v_prev, d, d_prev;
     
     void setup(int width, int height);
     void update();
     
-    void diffuse(vector<float>& x, vector<float>& x0, int boundary, float diff, float dt);
-    void advect (vector<float>& m, vector<float>& m0, vector<float>& u, vector<float>& v, int boundary, float dt )
+    void diffuse(vector<double>& m, const vector<double>& m0, double diff, int boundary, double dt);
+    void advect(vector<double>& m, const vector<double>& m0, const vector<double>& fu, const vector<double>& fv, int boundary, double dt);
+    void project(vector<double>& u, vector<double>& v, vector<double>& p, vector<double>& div);
     
-    void set_boundary(int boundary, vector<float>& m);
+    void density_step(vector<double>& m, vector<double>& m0, double diff, double dt);
+    void velocity_step(double dt);
+    
+    void set_boundary(int boundary, vector<double>& m);
+    
+    void fill_texture(unsigned char * pixels);
 };
 
 #endif /* defined(__slow__Fluid__) */

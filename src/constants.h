@@ -22,8 +22,8 @@ const int kScreenHeight = 480;
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480;
 
-const int kFluidWidth = 100;
-const int kFluidHeight = 100;
+const int kFluidWidth = 160;
+const int kFluidHeight = 90;
 
 const float kGameWidth = 360.0f;
 const float kGameHeight = 160.0f;

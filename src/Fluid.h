@@ -18,12 +18,18 @@
 
 using std::vector;
 
+const int kBoundaryDensity = 0;
+const int kBoundaryHorizontal = 1;
+const int kBoundaryVertical = 2;
+
+
 class FluidSolver {
     
 public:
     int nx, ny;
     int cells;
-    
+
+    int iterations;
     double diffusion, viscosity, delta;
     vector<double> u, v, u_prev, v_prev, d, d_prev;
     

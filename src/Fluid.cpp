@@ -17,8 +17,9 @@ void FluidSolver::setup(int width, int height) {
     cells = (nx + 2) * (ny + 2);
     
     delta = 1/30.0;
-    diffusion = 0.01;
-    viscosity = 0.001;
+    diffusion = 0.0001;
+    viscosity = 0.0008;
+    iterations = 10;
     
     cout << "Initialized " << nx << "x" << ny << " fluid (" << cells << " cells)." << endl;
     
@@ -32,45 +33,50 @@ void FluidSolver::setup(int width, int height) {
 }
 
 void FluidSolver::update(){
-    d[IX(50,50)] += 1.0;
+    d[IX(50,50)] += 8.1;
+    v[IX(50,50)] += 500.1;
+    v[IX(50,51)] += 500.1;
     velocity_step(delta);
     density_step(d, d_prev, diffusion, delta);
+//    cout << "[50,50] " << d[IX(50,50)] << endl;
+//    cout << "[50,51] " << d[IX(50,51)] << endl;
 }
 
 void FluidSolver::density_step(vector<double>& m, vector<double>& m0, double diff, double dt){
     m.swap(m0);
     diffuse(m, m0, diff, 0, dt);
     m.swap(m0);
-//    advect(m, m0, u, v, 0, dt);
+    advect(m, m0, u, v, 0, dt);
 }
 
 void FluidSolver::velocity_step(double dt){
     // Diffuse and fix mass-preservation
     v.swap(v_prev);
     u.swap(u_prev);
-    diffuse(v, v_prev, viscosity, 1, dt);
-    diffuse(u, u_prev, viscosity, 2, dt);
+    diffuse(u, u_prev, viscosity, kBoundaryHorizontal, dt);
+    diffuse(v, v_prev, viscosity, kBoundaryVertical, dt);
     project(u, v, u_prev, v_prev);
     // Advect and fix mass-preservation
     u.swap(u_prev);
     v.swap(v_prev);
-    advect(u, u_prev, u_prev, v_prev, 1, dt); // TODO Make constants out of these magic 1's and 2's
-    advect(v, v_prev, u_prev, v_prev, 2, dt);
+    advect(u, u_prev, u_prev, v_prev, kBoundaryHorizontal, dt);
+    advect(v, v_prev, u_prev, v_prev, kBoundaryVertical, dt);
     project(u, v, u_prev, v_prev);
 }
 
 void FluidSolver::diffuse(vector<double>& m, const vector<double>& m0, double diff, int boundary,  double dt){
-    int i, j, k;
+    int i, j, k, idx;
     double a = dt * diff * nx * ny;
+    int row = nx + 2;
     
-    // TODO optimize this loop: don't use IX all over the place.
-    for (k = 0; k < 20; k++) {
-        for (i = 1; i <= ny; i++) {
+    for (k = 0; k < iterations; k++) {
+        for (i = 1; i <= ny; i++){
+            idx = IX(i,1);
             for (j = 1; j <= nx; j++) {
-                m[IX(i,j)] = (m0[IX(i,j)] + a * (m[IX(i-1,j)] + m[IX(i+1,j)]+
-                                                 m[IX(i,j-1)] + m[IX(i,j+1)])) / (1.0 + 4.0 * a);
-            } 
-        } 
+                m[idx] = (m0[idx] + a * (m[idx-row] + m[idx+row] + m[idx-1] + m[idx+1])) / (1.0 + 4.0 * a);
+                idx++;
+            }
+        }
         set_boundary(boundary, m);
     }
 }
@@ -82,68 +88,74 @@ void FluidSolver::advect(vector<double>& m, const vector<double>& m0, const vect
     
     for (i = 1; i <= ny; i++ ) {
         for (j = 1; j <= nx; j++ ) {
-            // TODO take out the multiplication by nx and ny here.
-            // Make velocities in "cells/second" because this is FUCKED UP YO.
-            x = j - dt * nx * fu[IX(i,j)];
-            y = i - dt * ny * fv[IX(i,j)];
+            x = j - dt * fu[IX(i,j)];
+            y = i - dt * fv[IX(i,j)];
             if (x < 0.5) x = 0.5;
-            if (x > nx - 1.5) x = nx - 1.5;
+            if (x > nx + 0.5) x = nx + 0.5;
             if (y < 0.5) y = 0.5;
-            if (y > ny - 1.5) y = ny - 1.5;
+            if (y > ny + 0.5) y = ny + 0.5;
             i0 = (int)y; i1 = i0 + 1;
             j0 = (int)x; j1 = j0 + 1;
-            s1 = x - i0; s0 = 1 - s1; t1 = y - j0; t0 = 1 - t1;
+            s1 = y - i0; s0 = 1 - s1; t1 = x - j0; t0 = 1 - t1;
             m[IX(i,j)] = s0 * (t0 * m0[IX(i0,j0)] + t1 * m0[IX(i0,j1)])+
                          s1 * (t0 * m0[IX(i1,j0)] + t1 * m0[IX(i1,j1)]);
+//            if (i > 48 && i < 52 && j > 48 && j < 52){
+//                cout << "i0[" << i << "," << j << "] = " << i0 << endl;
+//                cout << "x[" << i << "," << j << "] = " << x << endl;
+//                cout << "y[" << i << "," << j << "] = " << y << endl;
+//            }
         }
     }
     set_boundary(boundary, m);
 }
 
 void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& p, vector<double>& div){
-    int i, j, k;
+    int i, j, k, idx;
+    int row = nx + 2;
     
-    double h = 1.0 / nx; // TODO THIS IS FUCKED UP YO!
-    
-    for (i = 1; i <= ny; i++) {
+    for (i = 1; i <= ny; i++){
+        idx = IX(i,1);
         for (j = 1; j <= nx; j++) {
-            div[IX(i,j)] = -0.5 * h * (u[IX(i+1,j)] - u[IX(i-1,j)]+
-                                       v[IX(i,j+1)] - v[IX(i,j-1)]);
+            div[idx] = -0.5 * (u[idx+1] - u[idx-1] + v[idx+row] - v[idx-row]);
             p[IX(i,j)] = 0;
+            idx ++;
         } 
     }
-    set_boundary(0, div);
-    set_boundary(0, p);
+    set_boundary(kBoundaryDensity, div);
+    set_boundary(kBoundaryDensity, p);
     
-    for (k = 0; k < 20; k++ ) {
-        for (i = 1; i <= ny; i++ ) { // TODO loop optimizing
-            for (j = 1; j <= nx; j++ ) {
-                p[IX(i,j)] = (div[IX(i,j)] + p[IX(i-1,j)] + p[IX(i+1,j)] +
-                                             p[IX(i,j-1)] + p[IX(i,j+1)]) / 4;
+    for (k = 0; k < iterations; k++ ) {
+        for (i = 1; i <= ny; i++){
+            idx = IX(i,1);
+            for (j = 1; j <= nx; j++) {
+                p[idx] = (div[idx] + p[idx-row] + p[idx+row] + p[idx-1] + p[idx+1]) / 4;
+                idx++;
             } 
         } 
-        set_boundary(0, p);
+        set_boundary(kBoundaryDensity, p);
     }
     
-    for (i = 1; i <= ny; i++) {
-        for (j = 1; j <= nx; j++ ) {
-            u[IX(i,j)] -= 0.5 * (p[IX(i+1,j)] - p[IX(i-1,j)])/h;
-            v[IX(i,j)] -= 0.5 * (p[IX(i,j+1)] - p[IX(i,j-1)])/h;
+    for (i = 1; i <= ny; i++){
+        idx = IX(i,1);
+        for (j = 1; j <= nx; j++) {
+            u[idx] -= 0.5 * (p[idx+1] - p[idx-1]);
+            v[idx] -= 0.5 * (p[idx+row] - p[idx-row]);
+            idx++;
         }
     }
-    set_boundary(1, u);
-    set_boundary(2, v);
+    set_boundary(kBoundaryHorizontal, u);
+    set_boundary(kBoundaryVertical, v);
 }
 
 void FluidSolver::set_boundary(int boundary, vector<double>& m){
     int i, j;
     for (j = 1; j <= nx; j++){
-        m[IX(0,j)]    = (boundary == 1) ? -m[IX(1,j)] : m[IX(1,j)];
-        m[IX(ny+1,j)] = (boundary == 1) ? -m[IX(ny,j)] : m[IX(ny,j)];
+        m[IX(0,j)]    = (boundary == kBoundaryVertical) ? -2 * m[IX(1,j)] : m[IX(1,j)];
+        m[IX(ny+1,j)] = (boundary == kBoundaryVertical) ? -2 * m[IX(ny,j)] : m[IX(ny,j)];
     }
     for (i = 1; i <= ny; i++){
-        m[IX(i,0)]    = (boundary == 2) ? -m[IX(i,1)] : m[IX(i,1)];
-        m[IX(i,nx+1)] = (boundary == 2) ? -m[IX(i,nx)] : m[IX(i,nx)];
+        m[IX(i,0)]    = (boundary == kBoundaryHorizontal) ? -m[IX(i,1)] : m[IX(i,1)];
+        m[IX(i,nx+1)] = (boundary == kBoundaryHorizontal) ? -m[IX(i,nx)] : m[IX(i,nx)];
     }
     m[IX(0,0)]    = 0.5 * (m[IX(1, 0)] + m[IX(0, 1)]);
     m[IX(0,nx+1)] = 0.5 * (m[IX(1, nx+1)] + m[IX(0, nx)]);

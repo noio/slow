@@ -22,20 +22,18 @@ const int kScreenHeight = 480;
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480;
 
-const int kFluidWidth = 160;
-const int kFluidHeight = 90;
-
 const float kGameWidth = 360.0f;
 const float kGameHeight = 160.0f;
 const float kGameWorldPadding = 20.0f;
+
+const int kFluidWidth = kGameWidth / 4;
+const int kFluidHeight = kGameHeight / 4;
 
 //GAMEPLAY
 const int kHistoryInterval = 2;
 const int kHistoryMaxSize = 30;
 
 const int kFlowFrameSkip = 2;
-
-const int kFlowInputMaxWidth = 160;
 
 const float kFlowLowThreshold = 0.1f;
 const float kFlowHighThreshold = 0.3f;

@@ -19,6 +19,7 @@ void FluidSolver::setup(int width, int height) {
     delta = 1/30.0;
     diffusion = 0.0001;
     viscosity = 0.0008;
+    density_decay = 0.998;
     iterations = 10;
     
     cout << "Initialized " << nx << "x" << ny << " fluid (" << cells << " cells)." << endl;
@@ -33,13 +34,21 @@ void FluidSolver::setup(int width, int height) {
 }
 
 void FluidSolver::update(){
-    d[IX(50,50)] += 8.1;
-    v[IX(50,50)] += 500.1;
-    v[IX(50,51)] += 500.1;
+
+//    v[IX(50,50)] += 500.1;
+//    v[IX(50,51)] += 500.1;
     velocity_step(delta);
     density_step(d, d_prev, diffusion, delta);
 //    cout << "[50,50] " << d[IX(50,50)] << endl;
 //    cout << "[50,51] " << d[IX(50,51)] << endl;
+}
+
+void FluidSolver::add_velocity(int at_x, int at_y, double to_u, double to_v){
+    u[IX(at_y+1,at_x+1)] += to_u;
+    v[IX(at_y+1,at_x+1)] += to_v;
+}
+void FluidSolver::add_density(int at_x, int at_y, double to_d){
+    d[IX(at_y+1,at_x+1)] += to_d;
 }
 
 void FluidSolver::density_step(vector<double>& m, vector<double>& m0, double diff, double dt){
@@ -47,6 +56,7 @@ void FluidSolver::density_step(vector<double>& m, vector<double>& m0, double dif
     diffuse(m, m0, diff, 0, dt);
     m.swap(m0);
     advect(m, m0, u, v, 0, dt);
+    decay(m, density_decay);
 }
 
 void FluidSolver::velocity_step(double dt){
@@ -78,6 +88,17 @@ void FluidSolver::diffuse(vector<double>& m, const vector<double>& m0, double di
             }
         }
         set_boundary(boundary, m);
+    }
+}
+
+void FluidSolver::decay(vector<double>& m, double d){
+    int i, j, idx;
+    for (i = 1; i <= ny; i++){
+        idx = IX(i,1);
+        for (j = 1; j <= nx; j++) {
+            m[idx] = d * m[idx];
+            idx++;
+        }
     }
 }
 
@@ -113,10 +134,12 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
     int i, j, k, idx;
     int row = nx + 2;
     
+    float h = 1.0 / nx;
+    
     for (i = 1; i <= ny; i++){
         idx = IX(i,1);
         for (j = 1; j <= nx; j++) {
-            div[idx] = -0.5 * (u[idx+1] - u[idx-1] + v[idx+row] - v[idx-row]);
+            div[idx] = -0.5 * h * (u[idx+1] - u[idx-1] + v[idx+row] - v[idx-row]);
             p[IX(i,j)] = 0;
             idx ++;
         } 
@@ -138,8 +161,8 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
     for (i = 1; i <= ny; i++){
         idx = IX(i,1);
         for (j = 1; j <= nx; j++) {
-            u[idx] -= 0.5 * (p[idx+1] - p[idx-1]);
-            v[idx] -= 0.5 * (p[idx+row] - p[idx-row]);
+            u[idx] -= 0.5 * (p[idx+1] - p[idx-1])/h;
+            v[idx] -= 0.5 * (p[idx+row] - p[idx-row])/h;
             idx++;
         }
     }

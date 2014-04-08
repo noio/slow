@@ -2,12 +2,16 @@
 
 #include "ofMain.h"
 #include "ofxCv.h"
+#include "ofxUI.h"
 #include "Fluid.h"
 
+
 class ofApp : public ofBaseApp{
-    
+
     
 	public:
+        ofApp() : gui("EDIT")
+        { };
     
 		void setup();
 		void update();
@@ -22,13 +26,15 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+        void guiEvent(ofxUIEventArgs &e);
     
-        void addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce);
+        ofxUISuperCanvas gui;
     
-        cv::Mat frame, frame_gray;
+        cv::Mat erode_kernel, frame, frame_gray, magnitude, angle, flow_low, flow_low_prev, flow_high, sensitivity;
     
         cv::Rect roi;
     
+        ofVideoPlayer video;
         ofVideoGrabber camera;
         ofxCv::FlowFarneback opticalflow;
 		

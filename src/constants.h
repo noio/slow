@@ -19,15 +19,15 @@ const int kCaptureHeight = 360;
 const int kScreenWidth = 1080;
 const int kScreenHeight = 480;
 
+const float kGameWidth = kScreenWidth;
+const float kGameHeight = kScreenHeight;
+const float kGameWorldPadding = 20.0f;
+
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480;
 
-const float kGameWidth = 360.0f;
-const float kGameHeight = 160.0f;
-const float kGameWorldPadding = 20.0f;
-
-const int kFluidWidth = kGameWidth / 4;
-const int kFluidHeight = kGameHeight / 4;
+const int kFluidWidth = kScreenWidth / 6;
+const int kFluidHeight = kScreenHeight / 6;
 
 //GAMEPLAY
 const int kHistoryInterval = 2;

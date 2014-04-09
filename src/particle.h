@@ -14,6 +14,8 @@
 
 #include "ofMain.h"
 
+#include "fluid.h"
+
 using std::vector;
 
 //Particle class
@@ -21,7 +23,7 @@ class Particle {
 public:
 	Particle();
 	void setup();
-	void update( float dt , const vector<double>& u, const vector<double>& v);
+	void update( float dt , FluidSolver fluid);
 	void draw();
     
 	ofPoint pos;

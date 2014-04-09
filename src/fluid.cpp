@@ -6,7 +6,7 @@
 //  Following the famous Jos Stam paper.
 //
 
-#include "Fluid.h"
+#include "fluid.h"
 
 using std::cout;
 using std::endl;
@@ -47,9 +47,32 @@ void FluidSolver::add_velocity(int at_x, int at_y, double to_u, double to_v){
     u[IX(at_y+1,at_x+1)] += to_u;
     v[IX(at_y+1,at_x+1)] += to_v;
 }
+
+void FluidSolver::add_velocity(float at_x, float at_y, double to_u, double to_v){
+    int i = 1 + at_y * ny;
+    int j = 1 + at_x * nx;
+    u[IX(i,j)] += to_u;
+    v[IX(i,j)] += to_v;
+}
+
 void FluidSolver::add_density(int at_x, int at_y, double to_d){
     d[IX(at_y+1,at_x+1)] += to_d;
 }
+
+void FluidSolver::add_density(float at_x, float at_y, double to_d){
+    int i = 1 + at_y * ny;
+    int j = 1 + at_x * nx;
+    d[IX(i,j)] += to_d;
+}
+
+Point FluidSolver::velocity_at(float x, float y){
+    int i = 1 + y * ny;
+    int j = 1 + x * nx;
+    Point vel = {u[IX(i,j)], v[IX(i,j)]};
+    return vel;
+}
+
+
 
 void FluidSolver::density_step(vector<double>& m, vector<double>& m0, double diff, double dt){
     m.swap(m0);

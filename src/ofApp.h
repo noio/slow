@@ -3,7 +3,9 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
+
 #include "Fluid.h"
+#include "Particle.h"
 
 
 class ofApp : public ofBaseApp{
@@ -16,6 +18,8 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+    
+        void updateFlow();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -30,7 +34,9 @@ class ofApp : public ofBaseApp{
     
         ofxUISuperCanvas gui;
     
-        cv::Mat erode_kernel, frame, frame_gray, magnitude, angle, flow_low, flow_low_prev, flow_high, sensitivity;
+        cv::Mat erode_kernel;
+        cv::Mat frame, frame_gray;
+        cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, sensitivity;
     
         cv::Rect roi;
     
@@ -42,4 +48,6 @@ class ofApp : public ofBaseApp{
     
         FluidSolver fluid;
         ofTexture fluid_texture;
+    
+        std::vector<Particle> particles;
 };

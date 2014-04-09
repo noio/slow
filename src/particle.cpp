@@ -6,7 +6,9 @@
 //
 //
 
-#include "Particle.h"
+#include "particle.h"
+
+#include "constants.h"
 
 Particle::Particle(){
     alive = false;
@@ -14,11 +16,13 @@ Particle::Particle(){
 
 void Particle::setup(){
     time = 0;
+    alive = true;
 }
 
-void Particle::update( float dt , const vector<double>& u, const vector<double>& v){
+void Particle::update( float dt , FluidSolver fluid){
     if (alive){
-        
+        Point v = fluid.velocity_at(pos.x / kGameWidth, pos.y / kGameHeight);
+        pos += vel;
     }
 }
 

@@ -16,6 +16,11 @@
 // i = row or 'y' and j = column or 'x'.
 #define IX(i,j) ((i) * (nx+2) + (j))
 
+typedef struct Point {
+    int x;
+    int y;
+} Point;
+
 using std::vector;
 
 const int kBoundaryDensity = 0;
@@ -36,8 +41,12 @@ public:
     void setup(int width, int height);
     void update();
     
-    void add_velocity(int x, int y, double u, double v);
+    void add_velocity(int at_x, int at_y, double to_u, double to_v);
+    void add_velocity(float at_x, float at_y, double to_u, double to_v);
     void add_density(int at_x, int at_y, double to_d);
+    void add_density(float at_x, float at_y, double to_d);
+    
+    Point velocity_at(float x, float y);
     
     void diffuse(vector<double>& m, const vector<double>& m0, double diff, int boundary, double dt);
     void advect(vector<double>& m, const vector<double>& m0, const vector<double>& fu, const vector<double>& fv, int boundary, double dt);

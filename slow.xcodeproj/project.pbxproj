@@ -18,6 +18,8 @@
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
+		E254A37618F583F7007C3AFA /* Delaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A36E18F583F7007C3AFA /* Delaunay.cpp */; };
+		E254A37718F583F7007C3AFA /* ofxDelaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */; };
 		E256417718EAF7AD0030858B /* MSACoreGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256415A18EAF7AD0030858B /* MSACoreGL.cpp */; };
 		E256417C18EAF7AD0030858B /* MSAFluidDrawerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417018EAF7AD0030858B /* MSAFluidDrawerBase.cpp */; };
 		E256417D18EAF7AD0030858B /* MSAFluidSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417518EAF7AD0030858B /* MSAFluidSolver.cpp */; };
@@ -151,6 +153,12 @@
 		D29DD28C195CD81267F3C8A1 /* Distance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Distance.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h; sourceTree = SOURCE_ROOT; };
 		D347FB65D19015303863922A /* Wrappers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Wrappers.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Wrappers.cpp; sourceTree = SOURCE_ROOT; };
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
+		E254A36018F583F7007C3AFA /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		E254A36E18F583F7007C3AFA /* Delaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delaunay.cpp; sourceTree = "<group>"; };
+		E254A36F18F583F7007C3AFA /* Delaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delaunay.h; sourceTree = "<group>"; };
+		E254A37018F583F7007C3AFA /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDelaunay.cpp; sourceTree = "<group>"; };
+		E254A37318F583F7007C3AFA /* ofxDelaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDelaunay.h; sourceTree = "<group>"; };
 		E256414318EAC8650030858B /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 		E256415218EAF7AD0030858B /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E256415318EAF7AD0030858B /* license.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.md; sourceTree = "<group>"; };
@@ -421,6 +429,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E254A35F18F583F7007C3AFA /* ofxDelaunay */,
 				E2E9319118F43158007BC76B /* ofxXmlSettings */,
 				E2E92EDA18F42F7C007BC76B /* ofxUI */,
 				E256415118EAF7AD0030858B /* ofxMSACore */,
@@ -474,6 +483,44 @@
 				D347FB65D19015303863922A /* Wrappers.cpp */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		E254A35F18F583F7007C3AFA /* ofxDelaunay */ = {
+			isa = PBXGroup;
+			children = (
+				E254A36018F583F7007C3AFA /* .gitignore */,
+				E254A36C18F583F7007C3AFA /* libs */,
+				E254A37018F583F7007C3AFA /* README.md */,
+				E254A37118F583F7007C3AFA /* src */,
+			);
+			name = ofxDelaunay;
+			path = ../../../addons/ofxDelaunay;
+			sourceTree = "<group>";
+		};
+		E254A36C18F583F7007C3AFA /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				E254A36D18F583F7007C3AFA /* Delaunay */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		E254A36D18F583F7007C3AFA /* Delaunay */ = {
+			isa = PBXGroup;
+			children = (
+				E254A36E18F583F7007C3AFA /* Delaunay.cpp */,
+				E254A36F18F583F7007C3AFA /* Delaunay.h */,
+			);
+			path = Delaunay;
+			sourceTree = "<group>";
+		};
+		E254A37118F583F7007C3AFA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */,
+				E254A37318F583F7007C3AFA /* ofxDelaunay.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		E256415118EAF7AD0030858B /* ofxMSACore */ = {
@@ -828,12 +875,14 @@
 				E2E9315518F42F7F007BC76B /* ofxUITextInput.cpp in Sources */,
 				E2E9314718F42F7F007BC76B /* ofxUIMultiImageToggle.cpp in Sources */,
 				E2E9314C18F42F7F007BC76B /* ofxUIRotarySlider.cpp in Sources */,
+				E254A37718F583F7007C3AFA /* ofxDelaunay.cpp in Sources */,
 				E256417718EAF7AD0030858B /* MSACoreGL.cpp in Sources */,
 				E2E9313618F42F7F007BC76B /* ofxUICircleSlider.cpp in Sources */,
 				E2E9319D18F43158007BC76B /* ofxXmlSettings.cpp in Sources */,
 				E2E9313318F42F7F007BC76B /* ofxUIBiLabelSlider.cpp in Sources */,
 				E2E9314518F42F7F007BC76B /* ofxUIMovingGraph.cpp in Sources */,
 				E2E9319C18F43158007BC76B /* tinyxmlparser.cpp in Sources */,
+				E254A37618F583F7007C3AFA /* Delaunay.cpp in Sources */,
 				E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,

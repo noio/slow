@@ -65,11 +65,21 @@ void FluidSolver::add_density(float at_x, float at_y, double to_d){
     d[IX(i,j)] += to_d;
 }
 
-Point FluidSolver::velocity_at(float x, float y){
+Velocity FluidSolver::velocity_at(float x, float y){
+    x = (x < 0) ? 0 : (x > 1) ? 1 : x;
+    y = (y < 0) ? 0 : (y > 1) ? 1 : y;
     int i = 1 + y * ny;
     int j = 1 + x * nx;
-    Point vel = {u[IX(i,j)], v[IX(i,j)]};
+    Velocity vel = {u[IX(i,j)], v[IX(i,j)]};
     return vel;
+}
+
+double FluidSolver::density_at(float x, float y){
+    x = (x < 0) ? 0 : (x > 1) ? 1 : x;
+    y = (y < 0) ? 0 : (y > 1) ? 1 : y;
+    int i = 1 + y * ny;
+    int j = 1 + x * nx;
+    return d[IX(i,j)];
 }
 
 
@@ -132,8 +142,8 @@ void FluidSolver::advect(vector<double>& m, const vector<double>& m0, const vect
     
     for (i = 1; i <= ny; i++ ) {
         for (j = 1; j <= nx; j++ ) {
-            x = j - dt * fu[IX(i,j)];
-            y = i - dt * fv[IX(i,j)];
+            x = j - dt * nx * fu[IX(i,j)];
+            y = i - dt * ny * fv[IX(i,j)];
             if (x < 0.5) x = 0.5;
             if (x > nx + 0.5) x = nx + 0.5;
             if (y < 0.5) y = 0.5;

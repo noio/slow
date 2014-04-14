@@ -19,6 +19,8 @@ const int kCaptureHeight = 360;
 const int kScreenWidth = 1080;
 const int kScreenHeight = 480;
 
+const float kFrameRate = 40.0;
+
 const float kGameWidth = kScreenWidth;
 const float kGameHeight = kScreenHeight;
 const float kGameWorldPadding = 20.0f;
@@ -29,21 +31,12 @@ const float kGameWorldPadding = 20.0f;
 const int kFluidWidth = kScreenWidth / 6;
 const int kFluidHeight = kScreenHeight / 6;
 
+const int kMaxParticles = 1000;
+
 //GAMEPLAY
-const int kHistoryInterval = 2;
-const int kHistoryMaxSize = 30;
-
-const int kFlowFrameSkip = 2;
-
 const float kFlowLowThreshold = 0.1f;
 const float kFlowHighThreshold = 0.3f;
 
 const float kFlowErosionSize = 3.0f;
-const float kFlowSensitivityDecay = 0.95f;
-const float kFlowSensitivityMultiplier = 0.0005f;
-
-const float kRepelForceMultiplier = 10.f;
-const float kRepelForceVerticalBias = -1.0f;
-const float kRepelMaxDistance = 40.f;
 
 #endif

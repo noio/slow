@@ -15,7 +15,7 @@ void ofApp::setup(){
     
     // SET UP CAMERA/VIDEO AND RESOLUTION
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
-    video.loadMovie("test.mp4");
+    video.loadMovie("videos/damrak/damrak_3.mov");
     video.play();
     
     float ratio = (float)kScreenWidth / (float)kScreenHeight;
@@ -25,7 +25,7 @@ void ofApp::setup(){
     
     
     // SET UP OPTICAL FLOW
-    cv::getStructuringElement(cv::MORPH_ELLIPSE,
+    open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
                          cv::Size(2 * kFlowErosionSize + 1, 2 * kFlowErosionSize + 1),
                          cv::Point(kFlowErosionSize, kFlowErosionSize));
 
@@ -42,7 +42,8 @@ void ofApp::setup(){
     // SET UP CONTROL PANEL
     gui.addSpacer();
     gui.addSlider("VISCOSITY", 0, 0.001, 0.0008)->setLabelPrecision(4);
-    gui.addSlider("DECAY", 0.8, 0.999, 0.96)->setLabelPrecision(4);
+    gui.addSlider("DECAY", 0.8, 0.999, 0.950)->setLabelPrecision(4);
+    gui.addSlider("DIFFUSION", 0.00001, 0.0001, 0.0001)->setLabelPrecision(5);
     gui.autoSizeToFitWidgets();
     gui.setPosition(kScreenWidth-212, 0);
     
@@ -55,28 +56,44 @@ void ofApp::update(){
     camera.update();
     video.update();
 
-//    cv::Mat frame_full = toCv(camera);
-    cv::Mat frame_full = toCv(video.getPixelsRef());
+    cv::Mat frame_full = toCv(camera);
+//    cv::Mat frame_full = toCv(video.getPixelsRef());
 
     cv::flip(frame_full(roi), frame, 1);
     
     fluid.update();
     
     // COMPUTING OPTICAL FLOW
-    updateFlow();
+    if (video.isFrameNew()){
+        updateFlow();
+    }
+    
     
     // AFFECT FLUID
     for (int x = 0; x < flow_high.cols; x++){
         for (int y = 0; y < flow_high.rows; y++){
-            if (flow_high.at<bool>(y,x)){
-                Vec2f f = flow.at<Vec2f>(y, x);
-                float x_ = (float) x / flow_high.cols;
-                float y_ = (float) y / flow_high.rows;
-                fluid.add_velocity(x_, y_, -MAX(-20, MIN(2 * f[0], 20)), -MAX(-20, MIN(2 * f[1], 20)));
-                fluid.add_density(x_, y_, 1);
+            Vec2f f = flow.at<Vec2f>(y, x);
+            float x_ = (float) x / flow_high.cols;
+            float y_ = (float) y / flow_high.rows;
+
+            if (flow_behind.at<bool>(y,x)){
+
+                if (particles.size() < kMaxParticles && fluid.density_at(x_, y_) < .5 && (random() % 10) < 2){
+                    Particle p;
+                    p.setup(x_ * kGameWidth, y_ * kGameHeight);
+                    particles.push_back(p);
+                }
+
+                fluid.add_velocity(x_, y_, -MAX(-20, MIN(.5 * f[0], 20)), -MAX(-20, MIN(.5 * f[1], 20)));
+                fluid.add_density(x_, y_, 0.03 * (random() % 10));
+            }
+            if (flow_new.at<bool>(y,x)){
+                fluid.add_velocity(x_, y_, MAX(-20, MIN(.2 * f[0], 20)), MAX(-20, MIN(.2 * f[1], 20)));
             }
         }
     }
+    
+    updateParticles();
 }
 
 void ofApp::updateFlow(){
@@ -89,8 +106,8 @@ void ofApp::updateFlow(){
     
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
     if (flow.cols == 1){
-        sensitivity = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32F);
-        flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32F);
+        flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
+        flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
     }
     
@@ -101,8 +118,8 @@ void ofApp::updateFlow(){
     // Compute the low speed mask
     cv::threshold(magnitude, magnitude, kFlowLowThreshold, 1, cv::THRESH_TOZERO);
     flow_low = magnitude > 0;
-    cv::erode(flow_low, flow_low, erode_kernel);
-    cv::dilate(flow_low, flow_low, erode_kernel);
+    cv::erode(flow_low, flow_low, open_kernel);
+    cv::dilate(flow_low, flow_low, open_kernel);
     
     // Compute the high speed mask
 //    cv::add(sensitivity, flow_low, sensitivity, cv::noArray(), CV_32F);
@@ -112,27 +129,73 @@ void ofApp::updateFlow(){
     cv::threshold(magnitude, flow_high, kFlowHighThreshold, 1, cv::THRESH_TOZERO);
     flow_high = flow_high > 0; // & flow_low_prev > 0;
 
+    cv::erode(flow_high, flow_high, open_kernel);
+//    cv::dilate(flow_high, flow_high, open_kernel_small);
     
-    cv::erode(flow_high, flow_high, erode_kernel);
-    cv::dilate(flow_high, flow_high, erode_kernel);
+    flow_behind = flow_high_prev & (255 - flow_high);
+    flow_new = flow_high & ( 255 - flow_high_prev);
     
     std::swap(flow_low_prev, flow_low);
+    std::swap(flow_high_prev, flow_high);
     
+}
+
+void ofApp::updateParticles(){
+    std::vector<Particle>::iterator begin = particles.begin();
+    std::vector<Particle>::iterator lastDead = particles.begin();
+    bool dead = true;
+    
+    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it) {
+        if (it->alive) dead = false;
+        if (dead) lastDead = it;
+        it->update(1 / 30.0, &fluid);
+    }
+    particles.erase(begin, lastDead);
 }
 
 
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofSetColor(255,255,255,255);
+
     ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
+
+    ofxCv::drawMat(flow_behind, 0, 0);
+    ofxCv::drawMat(flow_new, 0, flow.rows);
     
-    ofxCv::drawMat(flow_high, 0, 0);
 //    opticalflow.draw(0,0, kScreenWidth, kScreenHeight);
 
     unsigned char pixels[kFluidWidth*kFluidHeight];
     fluid.fill_texture(pixels);
     fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
     fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
+    
+    triangulator.reset();
+    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it) {
+        if (it->alive) {
+            triangulator.addPoint(it->pos, it->color);
+        }
+    }
+    triangulator.triangulate();
+    
+    vector<ofMeshFace> tris = triangulator.triangleMesh.getUniqueFaces();
+    for(std::vector<ofMeshFace>::iterator it = tris.begin(); it != tris.end(); ++it){
+        ofPoint p0 = it->getVertex(0);
+        ofPoint p1 = it->getVertex(1);
+        ofPoint p2 = it->getVertex(2);
+        float d = p0.distance(p1) + p1.distance(p2) + p2.distance(p0);
+        if (d < 1000){
+            ofSetColor(0, 0, 0, 10000 / d);
+            ofTriangle(p0,p1,p2);
+        }
+    }
+//
+    
+//    ofSetColor(0, 0, 0);
+//    triangulator.triangleMesh.drawFaces();
+    
+//    triangulator.triangleMesh;
     
     ofDrawBitmapString(ofToString(ofGetFrameRate())+"fps", 10, 15);
 }
@@ -198,4 +261,8 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
 		fluid.density_decay = slider->getScaledValue();
 	}
+    if(name == "DIFFUSION"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        fluid.diffusion = slider->getScaledValue();
+    }
 }

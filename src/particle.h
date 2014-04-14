@@ -22,13 +22,15 @@ using std::vector;
 class Particle {
 public:
 	Particle();
-	void setup();
-	void update( float dt , FluidSolver fluid);
+	void setup(float x, float y);
+	void update(float dt , FluidSolver* fluid);
 	void draw();
     
 	ofPoint pos;
 	ofPoint vel;
-	float time;
+    ofColor color;
+    ofRectangle bounds;
+	float age;
 	bool alive;
 };
 

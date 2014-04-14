@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
+#include "ofxDelaunay.h"
 
 #include "Fluid.h"
 #include "Particle.h"
@@ -20,6 +21,7 @@ class ofApp : public ofBaseApp{
 		void draw();
     
         void updateFlow();
+        void updateParticles();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -34,9 +36,9 @@ class ofApp : public ofBaseApp{
     
         ofxUISuperCanvas gui;
     
-        cv::Mat erode_kernel;
+        cv::Mat open_kernel;
         cv::Mat frame, frame_gray;
-        cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, sensitivity;
+        cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
     
         cv::Rect roi;
     
@@ -50,4 +52,6 @@ class ofApp : public ofBaseApp{
         ofTexture fluid_texture;
     
         std::vector<Particle> particles;
+    
+        ofxDelaunay triangulator;
 };

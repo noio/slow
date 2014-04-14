@@ -4,10 +4,11 @@ ParticleSystem::ParticleSystem() :
 	timeStep(1) {
 }
 
-void ParticleSystem::setup(int width, int height, int k) {
+void ParticleSystem::setup(int width, int height, int k, int maxParticles) {
 	this->width = width;
 	this->height = height;
 	this->k = k;
+    this->maxParticles = maxParticles;
 	binSize = 1 << k;
 	xBins = (int) ceilf((float) width / (float) binSize);
 	yBins = (int) ceilf((float) height / (float) binSize);
@@ -188,8 +189,18 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
 
 void ParticleSystem::update() {
 	int n = particles.size();
-	for(int i = 0; i < n; i++)
-		particles[i].updatePosition(timeStep);
+	for(int i = 0; i < n; i++) {
+        if (particles[i].alive){
+            particles[i].update(timeStep);            
+        }
+    }
+}
+
+// Clean out dead particles
+void ParticleSystem::clean(){
+    while (particles.size() > maxParticles || (particles.size() && !particles.front().alive)){
+        particles.pop_front();
+    }
 }
 
 void ParticleSystem::draw() {

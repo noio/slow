@@ -2,20 +2,25 @@
 
 #include "Particle.h"
 
+#include <deque>
+
 //#define DRAW_FORCES
 #define USE_INVSQRT
+
+using std::deque;
 
 class ParticleSystem {
 protected:
 	float timeStep;
-	vector<Particle> particles;
+	deque<Particle> particles;
 	vector< vector<Particle*> > bins;
 	int width, height, k, xBins, yBins, binSize;
+    int maxParticles;
 
 public:
 	ParticleSystem();
 
-	void setup(int width, int height, int k);
+	void setup(int width, int height, int k, int maxParticles);
 	void setTimeStep(float timeStep);
 
 	void add(Particle particle);
@@ -32,8 +37,9 @@ public:
 	void addAttractionForce(float x, float y, float radius, float scale);
 	void addForce(const Particle& particle, float radius, float scale);
 	void addForce(float x, float y, float radius, float scale);
-	void update();
 
+	void update();
+    void clean();
 	void draw();
 };
 

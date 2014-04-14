@@ -7,17 +7,27 @@ public:
 	float x, y;
 	float xv, yv;
 	float xf, yf;
+    float life;
+    ofColor color;
+    bool alive;
+    
 	Particle(float _x = 0, float _y = 0,
-		float _xv = 0, float _yv = 0) :
+		float _xv = 0, float _yv = 0,
+        float _life = 10.0) :
 		x(_x), y(_y),
-		xv(_xv), yv(_yv) {
+		xv(_xv), yv(_yv),
+        life(_life), alive(true) {
 	}
-	void updatePosition(float timeStep) {
+	void update(float timeStep) {
 		// f = ma, m = 1, f = a, v = int(a)
 		xv += xf;
 		yv += yf;
 		x += xv * timeStep;
 		y += yv * timeStep;
+        life -= timeStep;
+        if (life < 0){
+            alive = false;
+        }
 	}
 	void resetForce() {
 		xf = 0;

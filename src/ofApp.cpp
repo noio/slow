@@ -40,7 +40,7 @@ void ofApp::setup(){
     fluid.setup(kFluidWidth, kFluidHeight);
     
     // SET UP PARTICLE SYSTEM
-    particles.setup(kGameWidth, kGameHeight, 3);
+    particles.setup(kGameWidth, kGameHeight, 3, 512);
     particles.setTimeStep(1/30.0);
     
     // SET UP CONTROL PANEL
@@ -82,8 +82,8 @@ void ofApp::update(){
 
             if (flow_behind.at<bool>(y,x)){
                 
-                if ((particles.size() < 1000) && ofRandom(1.0) < 0.1) {
-                    Particle p(x_ * kScreenWidth, y_ * kScreenHeight, ofRandom(-.5,.5), ofRandom(-.5, .5));
+                if (ofRandom(1.0) < 0.05) {
+                    Particle p(x_ * kScreenWidth, y_ * kScreenHeight, 0,0);
                     particles.add(p);
                 }
 
@@ -144,12 +144,14 @@ void ofApp::updateFlow(){
 }
 
 void ofApp::updateParticles(){
+    particles.clean();
+    
     particles.setupForces();
     
     for(int i = 0; i < particles.size(); i++) {
         Particle& cur = particles[i];
         // global force on other particles
-        particles.addRepulsionForce(cur, 50, 5.0);
+        particles.addRepulsionForce(cur, 50, 2.0);
         Velocity v = fluid.velocity_at(cur.x / kGameWidth, cur.y / kGameHeight);
         cur.xf += v.u * kGameWidth / 30.0;
         cur.yf += v.v * kGameHeight / 30.0;
@@ -171,8 +173,6 @@ void ofApp::draw(){
 
     ofxCv::drawMat(flow_behind, 0, 0);
     ofxCv::drawMat(flow_new, 0, flow.rows);
-    
-    opticalflow.draw(0,0, kScreenWidth, kScreenHeight);
 
     unsigned char pixels[kFluidWidth*kFluidHeight];
     fluid.fill_texture(pixels);
@@ -183,7 +183,9 @@ void ofApp::draw(){
 
     for(int i = 0; i < particles.size(); i++) {
         Particle& cur = particles[i];
-        triangulator.addPoint(cur.x, cur.y, 0);
+        if (cur.alive){
+            triangulator.addPoint(cur.x, cur.y, 0);
+        }
     }
     
     triangulator.triangulate();
@@ -195,12 +197,11 @@ void ofApp::draw(){
         ofPoint p2 = it->getVertex(2);
         float d = p0.distance(p1) + p1.distance(p2) + p2.distance(p0);
         if (d < 1000){
-            ofSetColor(0, 0, 0, 10000 / d);
+            ofColor c = ofColor::fromHsb(ofRandom(255), 100, 100);
+            ofSetColor(c, 10000 / d);
             ofTriangle(p0,p1,p2);
         }
     }
-    
-    particles.draw();
 //
     
 //    ofSetColor(0, 0, 0);
@@ -208,6 +209,7 @@ void ofApp::draw(){
     
 //    triangulator.triangleMesh;
     
+    ofSetColor(255,0,255);
     ofDrawBitmapString(ofToString(ofGetFrameRate())+"fps", 10, 15);
 }
 

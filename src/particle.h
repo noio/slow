@@ -63,7 +63,7 @@ public:
 	}
 	void addDampingForce(float damping = .01) {
 		xf = xf - xv * damping;
-    yf = yf - yv * damping;
+        yf = yf - yv * damping;
 	}
 	void draw() {
 		glVertex2f(x, y);

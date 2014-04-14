@@ -37,6 +37,6 @@ const int kMaxParticles = 1000;
 const float kFlowLowThreshold = 0.1f;
 const float kFlowHighThreshold = 0.3f;
 
-const float kFlowErosionSize = 3.0f;
+const float kFlowErosionSize = 5.0f;
 
 #endif

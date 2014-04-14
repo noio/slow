@@ -22,6 +22,8 @@ void ofApp::setup(){
     int w = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight * ratio));
     int h = std::min(kCaptureHeight, static_cast<int>(kCaptureWidth / ratio));
     roi = cv::Rect((kCaptureWidth - w) / 2, (kCaptureHeight - h) / 2, w, h);
+    flow_width = w / 4;
+    flow_height = h / 4;
     
     
     // SET UP OPTICAL FLOW
@@ -40,7 +42,7 @@ void ofApp::setup(){
     fluid.setup(kFluidWidth, kFluidHeight);
     
     // SET UP PARTICLE SYSTEM
-    particles.setup(kGameWidth, kGameHeight, 3, 512);
+    particles.setup(kGameWidth, kGameHeight, 3, 1024);
     particles.setTimeStep(1/30.0);
     
     // SET UP CONTROL PANEL
@@ -56,7 +58,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+    particles.setupForces();
     camera.update();
     video.update();
 
@@ -65,37 +67,46 @@ void ofApp::update(){
 
     cv::flip(frame_full(roi), frame, 1);
     
-    fluid.update();
-    
     // COMPUTING OPTICAL FLOW
     if (video.isFrameNew()){
         updateFlow();
     }
     
-    
-    // AFFECT FLUID
-    for (int x = 0; x < flow_high.cols; x++){
-        for (int y = 0; y < flow_high.rows; y++){
-            Vec2f f = flow.at<Vec2f>(y, x);
-            float x_ = (float) x / flow_high.cols;
-            float y_ = (float) y / flow_high.rows;
+    const vector<ofPolyline>& polylines = contourfinder.getPolylines();
+    for (int i = 0; i < polylines.size(); i++){
+        const ofPolyline& cur = polylines[i];
+        ofPoint motion = opticalflow.getAverageFlowInRegion(cur.getBoundingBox());
+        ofPoint centroid = cur.getCentroid2D() / ofPoint(flow_width, flow_height);
+        ofPoint force = motion * -50;
 
-            if (flow_behind.at<bool>(y,x)){
-                
-                if (ofRandom(1.0) < 0.05) {
-                    Particle p(x_ * kScreenWidth, y_ * kScreenHeight, 0,0);
-                    particles.add(p);
-                }
+//        centroid.x += ofRandom(-10, 10);
+//        centroid.y += ofRandom(-10, 10);
+        fluid.add_velocity(centroid.x, centroid.y, force.x, force.y);
+        fluid.add_density(centroid.x, centroid.y, 1);
+        
+        centroid *= ofPoint(kScreenWidth, kScreenHeight);
+        particles.addRepulsionForce(centroid.x, centroid.y, 100, 100);
 
-                fluid.add_velocity(x_, y_, -MAX(-20, MIN(.5 * f[0], 20)), -MAX(-20, MIN(.5 * f[1], 20)));
-                fluid.add_density(x_, y_, 0.03 * (random() % 10));
-            }
-            if (flow_new.at<bool>(y,x)){
-                fluid.add_velocity(x_, y_, MAX(-20, MIN(.2 * f[0], 20)), MAX(-20, MIN(.2 * f[1], 20)));
+        ofPolyline resampled = cur.getResampledBySpacing(4.0);
+        const vector<ofPoint>& vertices = resampled.getVertices();
+        for (int j = 0; j < vertices.size(); j++){
+            ofPoint pos = vertices[j] / ofPoint(flow_width, flow_height);
+            ofPoint normal = resampled.getNormalAtIndex(j);
+            if (normal.angle(motion) < 45){
+                pos *= ofPoint(kScreenWidth,kScreenHeight);
+                Particle p(pos.x + ofRandom(-1, 1), pos.y + ofRandom(-1, 1), force.x, force.y);
+                p.color = ofColor::fromHsb(fmod(ofGetElapsedTimef() * 16 + motion.angle(ofPoint(1,0,0)), 255), 100, ofRandom(100));
+                particles.add(p);
+            } else {
+                pos = pos / ofPoint(flow_width, flow_height);
+                fluid.add_velocity(pos.x, pos.y, 20 * normal.x, 20 * normal.y);
+//                ofSetColor(255,255,255,255);
+//                ofLine(pos.x * kScreenWidth, pos.y * kScreenHeight, pos.x * kScreenWidth + 10 * normal.x, pos.y * kScreenHeight + 10 * normal.y);
             }
         }
     }
     
+    updateFluid();
     updateParticles();
 }
 
@@ -103,6 +114,7 @@ void ofApp::updateFlow(){
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
     cv::pyrDown(frame_gray, frame_gray);
     cv::pyrDown(frame_gray, frame_gray);
+    assert(frame_gray.cols == flow_width && frame_gray.rows == flow_height);
     opticalflow.calcOpticalFlow(frame_gray);
     
     flow = opticalflow.getFlow();
@@ -135,6 +147,8 @@ void ofApp::updateFlow(){
     cv::erode(flow_high, flow_high, open_kernel);
 //    cv::dilate(flow_high, flow_high, open_kernel_small);
     
+    contourfinder.findContours(flow_high);
+    
     flow_behind = flow_high_prev & (255 - flow_high);
     flow_new = flow_high & ( 255 - flow_high_prev);
     
@@ -143,21 +157,46 @@ void ofApp::updateFlow(){
     
 }
 
+void ofApp::updateFluid(){
+    for (int x = 0; x < flow_high.cols; x++){
+        for (int y = 0; y < flow_high.rows; y++){
+            Vec2f f = flow.at<Vec2f>(y, x);
+            float x_ = (float) x / flow_high.cols;
+            float y_ = (float) y / flow_high.rows;
+            
+//            if (flow_behind.at<bool>(y,x)){
+//                
+//                if (ofRandom(1.0) < 0.05) {
+//                    Particle p(x_ * kScreenWidth, y_ * kScreenHeight, 0,0);
+//                    p.color = ofColor::fromHsb(fmod(ofGetElapsedTimef() * 16 + x_ * 64, 255), 100, 100);
+//                    particles.add(p);
+//                }
+//                
+//                fluid.add_velocity(x_, y_, -MAX(-20, MIN(.5 * f[0], 20)), -MAX(-20, MIN(.5 * f[1], 20)));
+//                fluid.add_density(x_, y_, 0.03 * (random() % 10));
+//            }
+//            if (flow_new.at<bool>(y,x)){
+////                fluid.add_velocity(x_, y_, MAX(-20, MIN(.5 * f[0], 20)), MAX(-20, MIN(.5 * f[1], 20)));
+//            }
+        }
+    }
+    fluid.update();
+}
+
 void ofApp::updateParticles(){
     particles.clean();
-    
-    particles.setupForces();
     
     for(int i = 0; i < particles.size(); i++) {
         Particle& cur = particles[i];
         // global force on other particles
-        particles.addRepulsionForce(cur, 50, 2.0);
+        particles.addRepulsionForce(cur, 20, 1.0);
+//        particles.addAttractionForce(cur, 100, 0.1);
         Velocity v = fluid.velocity_at(cur.x / kGameWidth, cur.y / kGameHeight);
-        cur.xf += v.u * kGameWidth / 30.0;
-        cur.yf += v.v * kGameHeight / 30.0;
+//        cur.xf += v.u * kGameWidth / 30.0;
+//        cur.yf += v.v * kGameHeight / 30.0;
         // forces on this particle
         cur.bounceOffWalls(0, 0, kGameWidth, kGameHeight);
-        cur.addDampingForce();
+        cur.addDampingForce(0.05);
     }
     
     particles.update();
@@ -173,6 +212,8 @@ void ofApp::draw(){
 
     ofxCv::drawMat(flow_behind, 0, 0);
     ofxCv::drawMat(flow_new, 0, flow.rows);
+    
+    contourfinder.draw();
 
     unsigned char pixels[kFluidWidth*kFluidHeight];
     fluid.fill_texture(pixels);
@@ -184,7 +225,8 @@ void ofApp::draw(){
     for(int i = 0; i < particles.size(); i++) {
         Particle& cur = particles[i];
         if (cur.alive){
-            triangulator.addPoint(cur.x, cur.y, 0);
+            cur.color.a = cur.life * 4;
+            triangulator.addPoint(cur.x, cur.y, 0, cur.color);
         }
     }
     
@@ -196,9 +238,11 @@ void ofApp::draw(){
         ofPoint p1 = it->getVertex(1);
         ofPoint p2 = it->getVertex(2);
         float d = p0.distance(p1) + p1.distance(p2) + p2.distance(p0);
-        if (d < 1000){
-            ofColor c = ofColor::fromHsb(ofRandom(255), 100, 100);
-            ofSetColor(c, 10000 / d);
+        if (d < 256){
+            ofColor c0 = it->getColor(0), c1 = it->getColor(1), c2 = it->getColor(2);
+            float alpha = (c0.a + c1.a + c2.a) * 128 / d;
+            ofColor c = it->getColor(0) + it->getColor(1) + it->getColor(2);
+            ofSetColor(c, alpha);
             ofTriangle(p0,p1,p2);
         }
     }

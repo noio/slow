@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
 		void draw();
     
         void updateFlow();
+        void updateFluid();
         void updateParticles();
 
 		void keyPressed(int key);
@@ -39,19 +40,19 @@ class ofApp : public ofBaseApp{
         cv::Mat open_kernel;
         cv::Mat frame, frame_gray;
         cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
+        int flow_width, flow_height;
     
         cv::Rect roi;
     
         ofVideoPlayer video;
         ofVideoGrabber camera;
-        ofxCv::FlowFarneback opticalflow;
-		
-        ofVec2f pMouse;
     
         FluidSolver fluid;
         ofTexture fluid_texture;
     
         ParticleSystem particles;
     
+        ofxCv::FlowFarneback opticalflow;
+        ofxCv::ContourFinder contourfinder;
         ofxDelaunay triangulator;
 };

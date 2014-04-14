@@ -24,7 +24,7 @@
 		E256417C18EAF7AD0030858B /* MSAFluidDrawerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417018EAF7AD0030858B /* MSAFluidDrawerBase.cpp */; };
 		E256417D18EAF7AD0030858B /* MSAFluidSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417518EAF7AD0030858B /* MSAFluidSolver.cpp */; };
 		E256418018EB08730030858B /* fluid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417E18EB08730030858B /* fluid.cpp */; };
-		E28B5A0418F4449800277901 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E28B5A0218F4449800277901 /* particle.cpp */; };
+		E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */; };
 		E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A018F42F7F007BC76B /* ofxUI2DGraph.cpp */; };
 		E2E9313118F42F7F007BC76B /* ofxUI2DPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A218F42F7F007BC76B /* ofxUI2DPad.cpp */; };
 		E2E9313218F42F7F007BC76B /* ofxUIBaseDraws.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A418F42F7F007BC76B /* ofxUIBaseDraws.cpp */; };
@@ -183,8 +183,9 @@
 		E256417618EAF7AD0030858B /* MSAFluidSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSAFluidSolver.h; sourceTree = "<group>"; };
 		E256417E18EB08730030858B /* fluid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fluid.cpp; sourceTree = "<group>"; };
 		E256417F18EB08730030858B /* fluid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fluid.h; sourceTree = "<group>"; };
-		E28B5A0218F4449800277901 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
-		E28B5A0318F4449800277901 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
+		E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
+		E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		E29D5C2418FBDF5300890C23 /* Particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		E2E92EDB18F42F7C007BC76B /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E2E9309C18F42F7F007BC76B /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ofxaddons_thumbnail.png; sourceTree = "<group>"; };
 		E2E9309D18F42F7F007BC76B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -753,11 +754,12 @@
 			isa = PBXGroup;
 			children = (
 				E256414318EAC8650030858B /* constants.h */,
-				E28B5A0218F4449800277901 /* particle.cpp */,
-				E28B5A0318F4449800277901 /* particle.h */,
+				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E256417F18EB08730030858B /* fluid.h */,
 				E256417E18EB08730030858B /* fluid.cpp */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
+				E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */,
+				E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 			);
@@ -930,13 +932,13 @@
 				E2E9313518F42F7F007BC76B /* ofxUICanvas.cpp in Sources */,
 				E2E9313E18F42F7F007BC76B /* ofxUIImageSampler.cpp in Sources */,
 				E2E9314118F42F7F007BC76B /* ofxUILabel.cpp in Sources */,
-				E28B5A0418F4449800277901 /* particle.cpp in Sources */,
 				E2E9313B18F42F7F007BC76B /* ofxUIFPSSlider.cpp in Sources */,
 				E2E9314F18F42F7F007BC76B /* ofxUISortableList.cpp in Sources */,
 				E2E9314E18F42F7F007BC76B /* ofxUISlider.cpp in Sources */,
 				E2E9315118F42F7F007BC76B /* ofxUISpectrum.cpp in Sources */,
 				E2E9315B18F42F7F007BC76B /* ofxUIWidgetWithLabel.cpp in Sources */,
 				E2E9314018F42F7F007BC76B /* ofxUIImageToggle.cpp in Sources */,
+				E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */,
 				E2E9314B18F42F7F007BC76B /* ofxUIRectangle.cpp in Sources */,
 				DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */,
 				E2E9315A18F42F7F007BC76B /* ofxUIWidget.cpp in Sources */,

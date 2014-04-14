@@ -6,7 +6,7 @@
 #include "ofxDelaunay.h"
 
 #include "Fluid.h"
-#include "Particle.h"
+#include "ParticleSystem.h"
 
 
 class ofApp : public ofBaseApp{
@@ -51,7 +51,7 @@ class ofApp : public ofBaseApp{
         FluidSolver fluid;
         ofTexture fluid_texture;
     
-        std::vector<Particle> particles;
+        ParticleSystem particles;
     
         ofxDelaunay triangulator;
 };

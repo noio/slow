@@ -39,6 +39,10 @@ void ofApp::setup(){
     // SET UP FLUID DYNAMICS
     fluid.setup(kFluidWidth, kFluidHeight);
     
+    // SET UP PARTICLE SYSTEM
+    particles.setup(kGameWidth, kGameHeight, 3);
+    particles.setTimeStep(1/30.0);
+    
     // SET UP CONTROL PANEL
     gui.addSpacer();
     gui.addSlider("VISCOSITY", 0, 0.001, 0.0008)->setLabelPrecision(4);
@@ -56,8 +60,8 @@ void ofApp::update(){
     camera.update();
     video.update();
 
-    cv::Mat frame_full = toCv(camera);
-//    cv::Mat frame_full = toCv(video.getPixelsRef());
+//    cv::Mat frame_full = toCv(camera);
+    cv::Mat frame_full = toCv(video.getPixelsRef());
 
     cv::flip(frame_full(roi), frame, 1);
     
@@ -77,11 +81,10 @@ void ofApp::update(){
             float y_ = (float) y / flow_high.rows;
 
             if (flow_behind.at<bool>(y,x)){
-
-                if (particles.size() < kMaxParticles && fluid.density_at(x_, y_) < .5 && (random() % 10) < 2){
-                    Particle p;
-                    p.setup(x_ * kGameWidth, y_ * kGameHeight);
-                    particles.push_back(p);
+                
+                if ((particles.size() < 1000) && ofRandom(1.0) < 0.1) {
+                    Particle p(x_ * kScreenWidth, y_ * kScreenHeight, ofRandom(-.5,.5), ofRandom(-.5, .5));
+                    particles.add(p);
                 }
 
                 fluid.add_velocity(x_, y_, -MAX(-20, MIN(.5 * f[0], 20)), -MAX(-20, MIN(.5 * f[1], 20)));
@@ -141,16 +144,21 @@ void ofApp::updateFlow(){
 }
 
 void ofApp::updateParticles(){
-    std::vector<Particle>::iterator begin = particles.begin();
-    std::vector<Particle>::iterator lastDead = particles.begin();
-    bool dead = true;
+    particles.setupForces();
     
-    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it) {
-        if (it->alive) dead = false;
-        if (dead) lastDead = it;
-        it->update(1 / 30.0, &fluid);
+    for(int i = 0; i < particles.size(); i++) {
+        Particle& cur = particles[i];
+        // global force on other particles
+        particles.addRepulsionForce(cur, 50, 5.0);
+        Velocity v = fluid.velocity_at(cur.x / kGameWidth, cur.y / kGameHeight);
+        cur.xf += v.u * kGameWidth / 30.0;
+        cur.yf += v.v * kGameHeight / 30.0;
+        // forces on this particle
+        cur.bounceOffWalls(0, 0, kGameWidth, kGameHeight);
+        cur.addDampingForce();
     }
-    particles.erase(begin, lastDead);
+    
+    particles.update();
 }
 
 
@@ -164,7 +172,7 @@ void ofApp::draw(){
     ofxCv::drawMat(flow_behind, 0, 0);
     ofxCv::drawMat(flow_new, 0, flow.rows);
     
-//    opticalflow.draw(0,0, kScreenWidth, kScreenHeight);
+    opticalflow.draw(0,0, kScreenWidth, kScreenHeight);
 
     unsigned char pixels[kFluidWidth*kFluidHeight];
     fluid.fill_texture(pixels);
@@ -172,11 +180,12 @@ void ofApp::draw(){
     fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
     
     triangulator.reset();
-    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it) {
-        if (it->alive) {
-            triangulator.addPoint(it->pos, it->color);
-        }
+
+    for(int i = 0; i < particles.size(); i++) {
+        Particle& cur = particles[i];
+        triangulator.addPoint(cur.x, cur.y, 0);
     }
+    
     triangulator.triangulate();
     
     vector<ofMeshFace> tris = triangulator.triangleMesh.getUniqueFaces();
@@ -190,6 +199,8 @@ void ofApp::draw(){
             ofTriangle(p0,p1,p2);
         }
     }
+    
+    particles.draw();
 //
     
 //    ofSetColor(0, 0, 0);

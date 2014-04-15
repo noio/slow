@@ -11,20 +11,14 @@ using std::endl;
 void ofApp::setup(){
     // GENERIC OPENFRAMEWORKS SETUP
     ofSetFrameRate(40);
-    ofBackground(0, 0, 0);
+    ofSetBackgroundAuto(false);
+    ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     
     // SET UP CAMERA/VIDEO AND RESOLUTION
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
+    video.setVolume(0);
     video.play();
-    
-    float ratio = (float)kScreenWidth / (float)kScreenHeight;
-    int w = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight * ratio));
-    int h = std::min(kCaptureHeight, static_cast<int>(kCaptureWidth / ratio));
-    roi = cv::Rect((kCaptureWidth - w) / 2, (kCaptureHeight - h) / 2, w, h);
-    flow_width = w / 4;
-    flow_height = h / 4;
-    
     
     // SET UP OPTICAL FLOW
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
@@ -42,18 +36,27 @@ void ofApp::setup(){
     fluid.setup(kFluidWidth, kFluidHeight);
     
     // SET UP PARTICLE SYSTEM
-    particles.setup(kGameWidth, kGameHeight, 3, 1024);
-    particles.setTimeStep(1/30.0);
+    particles.setup(kGameWidth, kGameHeight, 3, kMaxParticles);
+    particles.setTimeStep(1 / kFrameRate);
+    
+    // SET UP BOX2D
+    box2d.init();
+    box2d.setFPS(kFrameRate);
+    box2d.setGravity(0, 0);
+    box2d.createBounds(-kGameSizePadding, -kGameSizePadding, kGameWidth + 2 * kGameSizePadding, kGameHeight + 2 * kGameSizePadding);
+    squid.setup(box2d);
+    
     
     // SET UP CONTROL PANEL
     gui.addSpacer();
     gui.addSlider("VISCOSITY", 0, 0.001, 0.0008)->setLabelPrecision(4);
     gui.addSlider("DECAY", 0.8, 0.999, 0.950)->setLabelPrecision(4);
     gui.addSlider("DIFFUSION", 0.00001, 0.0001, 0.0001)->setLabelPrecision(5);
+    gui.addToggle("DEBUG", false);
     gui.autoSizeToFitWidgets();
     gui.setPosition(kScreenWidth-212, 0);
-    
     ofAddListener(gui.newGUIEvent,this,&ofApp::guiEvent);
+    gui.loadSettings("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -65,56 +68,28 @@ void ofApp::update(){
 //    cv::Mat frame_full = toCv(camera);
     cv::Mat frame_full = toCv(video.getPixelsRef());
 
-    cv::flip(frame_full(roi), frame, 1);
+    cv::flip(frame_full(kCaptureROI), frame, 1);
     
     // COMPUTING OPTICAL FLOW
     if (video.isFrameNew()){
         updateFlow();
+        updateMotionEffect();
     }
-    
-    const vector<ofPolyline>& polylines = contourfinder.getPolylines();
-    for (int i = 0; i < polylines.size(); i++){
-        const ofPolyline& cur = polylines[i];
-        ofPoint motion = opticalflow.getAverageFlowInRegion(cur.getBoundingBox());
-        ofPoint centroid = cur.getCentroid2D() / ofPoint(flow_width, flow_height);
-        ofPoint force = motion * -50;
 
-//        centroid.x += ofRandom(-10, 10);
-//        centroid.y += ofRandom(-10, 10);
-        fluid.add_velocity(centroid.x, centroid.y, force.x, force.y);
-        fluid.add_density(centroid.x, centroid.y, 1);
-        
-        centroid *= ofPoint(kScreenWidth, kScreenHeight);
-        particles.addRepulsionForce(centroid.x, centroid.y, 100, 100);
-
-        ofPolyline resampled = cur.getResampledBySpacing(4.0);
-        const vector<ofPoint>& vertices = resampled.getVertices();
-        for (int j = 0; j < vertices.size(); j++){
-            ofPoint pos = vertices[j] / ofPoint(flow_width, flow_height);
-            ofPoint normal = resampled.getNormalAtIndex(j);
-            if (normal.angle(motion) < 45){
-                pos *= ofPoint(kScreenWidth,kScreenHeight);
-                Particle p(pos.x + ofRandom(-1, 1), pos.y + ofRandom(-1, 1), force.x, force.y);
-                p.color = ofColor::fromHsb(fmod(ofGetElapsedTimef() * 16 + motion.angle(ofPoint(1,0,0)), 255), 100, ofRandom(100));
-                particles.add(p);
-            } else {
-                pos = pos / ofPoint(flow_width, flow_height);
-                fluid.add_velocity(pos.x, pos.y, 20 * normal.x, 20 * normal.y);
-//                ofSetColor(255,255,255,255);
-//                ofLine(pos.x * kScreenWidth, pos.y * kScreenHeight, pos.x * kScreenWidth + 10 * normal.x, pos.y * kScreenHeight + 10 * normal.y);
-            }
-        }
-    }
+    squid.update(flow_high, draw_debug);
+    box2d.update();
     
     updateFluid();
     updateParticles();
 }
 
+
+
 void ofApp::updateFlow(){
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
     cv::pyrDown(frame_gray, frame_gray);
     cv::pyrDown(frame_gray, frame_gray);
-    assert(frame_gray.cols == flow_width && frame_gray.rows == flow_height);
+    assert(frame_gray.cols == kFlowWidth && frame_gray.rows == kFlowHeight);
     opticalflow.calcOpticalFlow(frame_gray);
     
     flow = opticalflow.getFlow();
@@ -155,6 +130,44 @@ void ofApp::updateFlow(){
     std::swap(flow_low_prev, flow_low);
     std::swap(flow_high_prev, flow_high);
     
+}
+
+
+
+void ofApp::updateMotionEffect(){
+    const vector<ofPolyline>& polylines = contourfinder.getPolylines();
+    for (int i = 0; i < polylines.size(); i++){
+        const ofPolyline& cur = polylines[i];
+        ofPoint motion = opticalflow.getAverageFlowInRegion(cur.getBoundingBox());
+        ofPoint centroid = cur.getCentroid2D() / kFlowSize;
+        ofPoint force = motion * -50;
+        
+        //        centroid.x += ofRandom(-10, 10);
+        //        centroid.y += ofRandom(-10, 10);
+        fluid.add_velocity(centroid.x, centroid.y, force.x, force.y);
+        fluid.add_density(centroid.x, centroid.y, 1);
+        
+        centroid *= kGameSize;
+        particles.addRepulsionForce(centroid.x, centroid.y, 100, 100);
+        
+        ofPolyline resampled = cur.getResampledBySpacing(4.0);
+        const vector<ofPoint>& vertices = resampled.getVertices();
+        for (int j = 0; j < vertices.size(); j++){
+            ofPoint pos = vertices[j] / kFlowSize;
+            ofPoint normal = resampled.getNormalAtIndex(j);
+            if (normal.angle(motion) < 45){
+                pos *= kGameSize;
+                Particle p(pos.x + ofRandom(-1, 1), pos.y + ofRandom(-1, 1), force.x, force.y);
+                p.color = ofColor::fromHsb(fmod(ofGetElapsedTimef() * 16 + motion.angle(ofPoint(1,0,0)), 255), 100, ofRandom(100));
+                particles.add(p);
+            } else {
+                pos = pos / kFlowSize;
+                fluid.add_velocity(pos.x, pos.y, 20 * normal.x, 20 * normal.y);
+                //                ofSetColor(255,255,255,255);
+                //                ofLine(pos.x * kScreenWidth, pos.y * kScreenHeight, pos.x * kScreenWidth + 10 * normal.x, pos.y * kScreenHeight + 10 * normal.y);
+            }
+        }
+    }
 }
 
 void ofApp::updateFluid(){
@@ -207,21 +220,31 @@ void ofApp::updateParticles(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetColor(255,255,255,255);
+    if (!draw_debug){
+        ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
+    }
 
-    ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
+    if (draw_debug){
+        ofSetColor(255,255,255,100);
+        ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
+    }
 
-    ofxCv::drawMat(flow_behind, 0, 0);
-    ofxCv::drawMat(flow_new, 0, flow.rows);
+//    unsigned char pixels[kFluidWidth*kFluidHeight];
+//    fluid.fill_texture(pixels);
+//    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
+//    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
     
-    contourfinder.draw();
+    squid.draw();
 
-    unsigned char pixels[kFluidWidth*kFluidHeight];
-    fluid.fill_texture(pixels);
-    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
-    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
+    drawParticles();
     
+    ofSetColor(255,0,255);
+    ofDrawBitmapString(ofToString(ofGetFrameRate())+"fps", 10, 15);
+}
+
+void ofApp::drawParticles(){
     triangulator.reset();
-
+    
     for(int i = 0; i < particles.size(); i++) {
         Particle& cur = particles[i];
         if (cur.alive){
@@ -232,6 +255,7 @@ void ofApp::draw(){
     
     triangulator.triangulate();
     
+    ofNoFill();
     vector<ofMeshFace> tris = triangulator.triangleMesh.getUniqueFaces();
     for(std::vector<ofMeshFace>::iterator it = tris.begin(); it != tris.end(); ++it){
         ofPoint p0 = it->getVertex(0);
@@ -246,15 +270,11 @@ void ofApp::draw(){
             ofTriangle(p0,p1,p2);
         }
     }
-//
-    
-//    ofSetColor(0, 0, 0);
-//    triangulator.triangleMesh.drawFaces();
-    
-//    triangulator.triangleMesh;
-    
-    ofSetColor(255,0,255);
-    ofDrawBitmapString(ofToString(ofGetFrameRate())+"fps", 10, 15);
+}
+
+
+void ofApp::exit(){
+    gui.saveSettings("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -304,10 +324,11 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+//--------------------------------------------------------------
 void ofApp::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
 	int kind = e.widget->getKind();
-    
+
     if(name == "VISCOSITY")
 	{
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -321,5 +342,9 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     if(name == "DIFFUSION"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         fluid.diffusion = slider->getScaledValue();
+    }
+    if (name == "DEBUG"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        draw_debug = toggle->getValue();
     }
 }

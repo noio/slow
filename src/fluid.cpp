@@ -1,10 +1,3 @@
-//
-//  Fluid.cpp
-//  slow
-//
-//  Created by Thomas van den Berg on 01/04/14.
-//  Following the famous Jos Stam paper.
-//
 
 #include "fluid.h"
 
@@ -138,7 +131,7 @@ void FluidSolver::decay(vector<double>& m, double d){
 void FluidSolver::advect(vector<double>& m, const vector<double>& m0, const vector<double>& fu, const vector<double>& fv, int boundary, double dt )
 {
     int i, j, i0, j0, i1, j1;
-    double x, y, s0, t0, s1, t1, dt0;
+    double x, y, s0, t0, s1, t1;
     
     for (i = 1; i <= ny; i++ ) {
         for (j = 1; j <= nx; j++ ) {

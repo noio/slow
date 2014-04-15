@@ -1,10 +1,3 @@
-//
-//  Fluid.h
-//  slow
-//
-//  Created by Thomas van den Berg on 01/04/14.
-//
-//
 
 #ifndef SLOW_FLUID_H_
 #define SLOW_FLUID_H_

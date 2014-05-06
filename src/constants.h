@@ -25,7 +25,7 @@ const ofPoint kGameSize(kGameWidth, kGameHeight, 1.0);
 const float kGameSizePadding = 20.0;
 
 const float kRatio = (float)kScreenWidth / (float)kScreenHeight;
-const int kROIWidth = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight * kRatio));
+const int kROIWidth = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight* kRatio));
 const int kROIHeight = std::min(kCaptureHeight, static_cast<int>(kCaptureWidth / kRatio));
 const cv::Rect kCaptureROI = cv::Rect((kCaptureWidth - kROIWidth) / 2, (kCaptureHeight - kROIHeight) / 2, kROIWidth, kROIHeight);
 

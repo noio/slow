@@ -10,9 +10,10 @@
 #include "ParticleSystem.h"
 #include "Squid.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp
+{
 
-	public:
+public:
     ofApp() : gui("EDIT")
     { };
 
@@ -25,7 +26,7 @@ class ofApp : public ofBaseApp{
     void updateMotionEffect();
     void updateFluid();
     void updateParticles();
-    
+
     void drawParticles();
 
     void keyPressed(int key);
@@ -37,7 +38,7 @@ class ofApp : public ofBaseApp{
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    void guiEvent(ofxUIEventArgs &e);
+    void guiEvent(ofxUIEventArgs& e);
 
     ofxUISuperCanvas gui;
     bool draw_debug = false;

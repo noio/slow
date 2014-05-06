@@ -77,6 +77,7 @@
 		E29D5E4118FD34DF00890C23 /* ofxBox2dJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5DDF18FD34DF00890C23 /* ofxBox2dJoint.cpp */; };
 		E29D5E4218FD34DF00890C23 /* ofxBox2dPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5DE118FD34DF00890C23 /* ofxBox2dPolygon.cpp */; };
 		E29D5E4318FD34DF00890C23 /* ofxBox2dRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5DE418FD34DF00890C23 /* ofxBox2dRect.cpp */; };
+		E2DB5C591918E0E000885AC3 /* ofxPathfinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */; };
 		E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A018F42F7F007BC76B /* ofxUI2DGraph.cpp */; };
 		E2E9313118F42F7F007BC76B /* ofxUI2DPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A218F42F7F007BC76B /* ofxUI2DPad.cpp */; };
 		E2E9313218F42F7F007BC76B /* ofxUIBaseDraws.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A418F42F7F007BC76B /* ofxUIBaseDraws.cpp */; };
@@ -337,6 +338,8 @@
 		E29D5DE518FD34DF00890C23 /* ofxBox2dRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dRect.h; sourceTree = "<group>"; };
 		E29D5DE618FD34DF00890C23 /* ofxBox2dRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dRender.h; sourceTree = "<group>"; };
 		E29D5DE718FD34DF00890C23 /* ofxBox2dUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dUtils.h; sourceTree = "<group>"; };
+		E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPathfinder.cpp; sourceTree = "<group>"; };
+		E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPathfinder.h; sourceTree = "<group>"; };
 		E2E92EDB18F42F7C007BC76B /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E2E9309C18F42F7F007BC76B /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ofxaddons_thumbnail.png; sourceTree = "<group>"; };
 		E2E9309D18F42F7F007BC76B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -581,6 +584,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E2DB5C421918E0E000885AC3 /* ofxPathfinder */,
 				E29D5C3218FD34DC00890C23 /* ofxBox2d */,
 				E254A35F18F583F7007C3AFA /* ofxDelaunay */,
 				E2E9319118F43158007BC76B /* ofxXmlSettings */,
@@ -884,6 +888,24 @@
 				E29D5DE518FD34DF00890C23 /* ofxBox2dRect.h */,
 				E29D5DE618FD34DF00890C23 /* ofxBox2dRender.h */,
 				E29D5DE718FD34DF00890C23 /* ofxBox2dUtils.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E2DB5C421918E0E000885AC3 /* ofxPathfinder */ = {
+			isa = PBXGroup;
+			children = (
+				E2DB5C541918E0E000885AC3 /* src */,
+			);
+			name = ofxPathfinder;
+			path = ../../../addons/ofxPathfinder;
+			sourceTree = "<group>";
+		};
+		E2DB5C541918E0E000885AC3 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */,
+				E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1245,6 +1267,7 @@
 				E2E9314218F42F7F007BC76B /* ofxUILabelButton.cpp in Sources */,
 				E2E9315818F42F7F007BC76B /* ofxUIValuePlotter.cpp in Sources */,
 				E29D5E3218FD34DF00890C23 /* b2Joint.cpp in Sources */,
+				E2DB5C591918E0E000885AC3 /* ofxPathfinder.cpp in Sources */,
 				E2E9314818F42F7F007BC76B /* ofxUINumberDialer.cpp in Sources */,
 				C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */,
 				E2E9313A18F42F7F007BC76B /* ofxUIFPS.cpp in Sources */,

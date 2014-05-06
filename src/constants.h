@@ -16,11 +16,11 @@ const int kCaptureHeight = 360;
 
 const int kScreenWidth = 1080;
 const int kScreenHeight = 480;
-const ofPoint kScreenSize(kScreenWidth, kScreenHeight, 1.0);
+const cv::Size kScreenSize(kScreenWidth, kScreenHeight);
 
 const float kGameWidth = kScreenWidth;
 const float kGameHeight = kScreenHeight;
-const ofPoint kGameSize(kGameWidth, kGameHeight, 1.0);
+const cv::Size2f kGameSize(kGameWidth, kGameHeight);
 
 const float kGameSizePadding = 20.0;
 

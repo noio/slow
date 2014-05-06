@@ -340,6 +340,7 @@
 		E29D5DE718FD34DF00890C23 /* ofxBox2dUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dUtils.h; sourceTree = "<group>"; };
 		E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPathfinder.cpp; sourceTree = "<group>"; };
 		E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPathfinder.h; sourceTree = "<group>"; };
+		E2DB5C5E1919187800885AC3 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		E2E92EDB18F42F7C007BC76B /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E2E9309C18F42F7F007BC76B /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ofxaddons_thumbnail.png; sourceTree = "<group>"; };
 		E2E9309D18F42F7F007BC76B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -1087,6 +1088,7 @@
 			isa = PBXGroup;
 			children = (
 				E256414318EAC8650030858B /* constants.h */,
+				E2DB5C5E1919187800885AC3 /* utilities.h */,
 				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E29D5C2F18FD2C9B00890C23 /* squid.h */,
 				E29D5C3018FD2E0C00890C23 /* squid.cpp */,

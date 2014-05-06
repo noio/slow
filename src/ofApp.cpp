@@ -1,6 +1,7 @@
 
 #include "ofApp.h"
 #include "constants.h"
+#include "utilities.h"
 
 using namespace ofxCv;
 
@@ -10,16 +11,21 @@ using std::endl;
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    // GENERIC OPENFRAMEWORKS SETUP
+    //
+    // Generic openframeworks setup
     ofSetFrameRate(40);
     ofSetBackgroundAuto(false);
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
-    // SET UP CAMERA/VIDEO AND RESOLUTION
+    ofClear(0, 0, 0, 255);
+    ofEnableAlphaBlending();
+    //
+    // Set up camera and video
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);
     video.play();
-    // SET UP OPTICAL FLOW
+    //
+    // Set up optical flow
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
                                             cv::Size(2 * kFlowErosionSize + 1, 2 * kFlowErosionSize + 1),
                                             cv::Point(kFlowErosionSize, kFlowErosionSize));
@@ -29,18 +35,22 @@ void ofApp::setup()
     opticalflow.setNumIterations(3);
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
-    // SET UP FLUID DYNAMICS
+    //
+    // Set up fluid dynamics
     fluid.setup(kFluidWidth, kFluidHeight);
-    // SET UP PARTICLE SYSTEM
+    //
+    // Set up the particle system
     particles.setup(kGameWidth, kGameHeight, 3, kMaxParticles);
     particles.setTimeStep(1 / kFrameRate);
-    // SET UP BOX2D
+    //
+    // Set up Box2d
     box2d.init();
     box2d.setFPS(kFrameRate);
     box2d.setGravity(0, 0);
     box2d.createBounds(-kGameSizePadding, -kGameSizePadding, kGameWidth + 2 * kGameSizePadding, kGameHeight + 2 * kGameSizePadding);
     squid.setup(box2d);
-    // SET UP CONTROL PANEL
+    //
+    // Set up control panel
     gui.addSpacer();
     gui.addSlider("VISCOSITY", 0, 0.001, 0.0008)->setLabelPrecision(4);
     gui.addSlider("DECAY", 0.8, 0.999, 0.950)->setLabelPrecision(4);
@@ -55,13 +65,16 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+    if (draw_debug){
+        ofClear(0, 0, 0, 255);
+    }
     particles.setupForces();
     camera.update();
     video.update();
 //    cv::Mat frame_full = toCv(camera);
     cv::Mat frame_full = toCv(video.getPixelsRef());
     cv::flip(frame_full(kCaptureROI), frame, 1);
-    // COMPUTING OPTICAL FLOW
+    // Compute optical flow
     if (video.isFrameNew())
     {
         updateFlow();
@@ -93,11 +106,13 @@ void ofApp::updateFlow()
     std::vector<cv::Mat> xy(2);
     cv::split(flow, xy);
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
+    //
     // Compute the low speed mask
     cv::threshold(magnitude, magnitude, kFlowLowThreshold, 1, cv::THRESH_TOZERO);
     flow_low = magnitude > 0;
     cv::erode(flow_low, flow_low, open_kernel);
     cv::dilate(flow_low, flow_low, open_kernel);
+    //
     // Compute the high speed mask
 //    cv::add(sensitivity, flow_low, sensitivity, cv::noArray(), CV_32F);
 //    sensitivity *= kFlowSensitivityDecay;
@@ -128,7 +143,7 @@ void ofApp::updateMotionEffect()
         //        centroid.y += ofRandom(-10, 10);
         fluid.add_velocity(centroid.x, centroid.y, force.x, force.y);
         fluid.add_density(centroid.x, centroid.y, 1);
-        centroid *= kGameSize;
+        centroid = centroid * kGameSize;
         particles.addRepulsionForce(centroid.x, centroid.y, 100, 100);
         ofPolyline resampled = cur.getResampledBySpacing(4.0);
         const vector<ofPoint>& vertices = resampled.getVertices();
@@ -138,7 +153,7 @@ void ofApp::updateMotionEffect()
             ofPoint normal = resampled.getNormalAtIndex(j);
             if (normal.angle(motion) < 45)
             {
-                pos *= kGameSize;
+                pos = pos * kGameSize;
                 Particle p(pos.x + ofRandom(-1, 1), pos.y + ofRandom(-1, 1), force.x, force.y);
                 p.color = ofColor::fromHsb(fmod(ofGetElapsedTimef() * 16 + motion.angle(ofPoint(1, 0, 0)), 255), 100, ofRandom(100));
                 particles.add(p);
@@ -210,10 +225,12 @@ void ofApp::draw()
     if (!draw_debug)
     {
         ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
+        drawParticles();
     }
     if (draw_debug)
     {
-        ofSetColor(255, 255, 255, 100);
+        ofSetColor(255, 0, 0, 100);
+//        ofSet
         ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
     }
 //    unsigned char pixels[kFluidWidth*kFluidHeight];
@@ -221,7 +238,7 @@ void ofApp::draw()
 //    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
 //    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
     squid.draw();
-    drawParticles();
+
     ofSetColor(255, 0, 255);
     ofDrawBitmapString(ofToString(ofGetFrameRate()) + "fps", 10, 15);
 }

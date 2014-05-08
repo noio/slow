@@ -19,6 +19,7 @@ public:
         xv(_xv), yv(_yv),
         life(_life), alive(true)
     {
+        resetForce();
     }
     void update(float timeStep)
     {

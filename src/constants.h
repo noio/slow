@@ -22,7 +22,9 @@ const float kGameWidth = kScreenWidth;
 const float kGameHeight = kScreenHeight;
 const cv::Size2f kGameSize(kGameWidth, kGameHeight);
 
-const float kGameSizePadding = 20.0;
+const float kGameSizePadding = 10.0;
+
+const float kPhysicsScale = 30.0;
 
 const float kRatio = (float)kScreenWidth / (float)kScreenHeight;
 const int kROIWidth = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight* kRatio));

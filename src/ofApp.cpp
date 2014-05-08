@@ -44,11 +44,29 @@ void ofApp::setup()
     particles.setTimeStep(1 / kFrameRate);
     //
     // Set up Box2d
-    box2d.init();
-    box2d.setFPS(kFrameRate);
-    box2d.setGravity(0, 0);
-    box2d.createBounds(-kGameSizePadding, -kGameSizePadding, kGameWidth + 2 * kGameSizePadding, kGameHeight + 2 * kGameSizePadding);
-    squid.setup(box2d);
+    b2Vec2 gravity(0.0f, 0.0f);
+    phys_world = ofPtr<b2World> ( new b2World(gravity ) );
+    // Set up the world bounds
+    b2BodyDef boundsBodyDef;
+	boundsBodyDef.position.Set(0, 0);
+	b2Body* bounds = phys_world.get()->CreateBody(&boundsBodyDef);
+	b2EdgeShape shape;
+    b2AABB rec = ofToB2(ofRectangle(-kGameSizePadding, -kGameSizePadding,
+                                    (kGameWidth + kGameSizePadding * 2), (kGameHeight + kGameSizePadding * 2)));
+    //right wall
+	shape.Set(b2Vec2(rec.upperBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
+	bounds->CreateFixture(&shape, 0.0f);
+	//left wall
+	shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.lowerBound.x, rec.upperBound.y));
+	bounds->CreateFixture(&shape, 0.0f);
+	// top wall
+	shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.lowerBound.y));
+	bounds->CreateFixture(&shape, 0.0f);
+	// bottom wall
+	shape.Set(b2Vec2(rec.lowerBound.x, rec.upperBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
+	bounds->CreateFixture(&shape, 0.0f);
+    
+    squid.setup(phys_world);
     //
     // Set up control panel
     gui.addSpacer();
@@ -83,7 +101,8 @@ void ofApp::update()
         updateMotionEffect();
     }
     squid.update(delta_t, flow_high, draw_debug);
-    box2d.update();
+    // Update physics
+    phys_world->Step(1.0f / kFrameRate, 6, 2);
     updateFluid();
     updateParticles();
 }

@@ -4,7 +4,7 @@
 #include "ofxCv.h"
 #include "ofxUI.h"
 #include "ofxDelaunay.h"
-#include "ofxBox2d.h"
+#include "Box2D/Box2D.h"
 
 #include "Fluid.h"
 #include "ParticleSystem.h"
@@ -55,7 +55,7 @@ public:
 
     ParticleSystem particles;
 
-    ofxBox2d box2d;
+    ofPtr<b2World> phys_world;
     Squid squid;
 
     ofxCv::FlowFarneback opticalflow;

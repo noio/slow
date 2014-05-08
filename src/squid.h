@@ -5,9 +5,10 @@
 ////////// IMPORTS //////////
 
 #include "ofMain.h"
-#include "ofxBox2d.h"
 #include "ofxCv.h"
 #include "ofxPathfinder.h"
+
+#include "Box2D/Box2D.h"
 
 #include <vector>
 
@@ -17,11 +18,15 @@ using std::vector;
 
 const cv::Size kPathGridSize = cv::Size(20, 10);
 const cv::Size kSectionsSize = cv::Size(4, 2);
-const double kPushForce = 10000.0;
-const double kPushTime = 0.3;
-const double kMinVelocity = 10;
+const double kPushForce = 100000.0;
+const double kPushTime = 0.4;
+const double kPrepTime = 0.2;
+const double kMinVelocity = 200;
 const double kMaxGoalDistance = 100;
-const int kNumTentacles = 5;
+const int kNumTentacles = 7;
+const int kNumSegments = 4;
+const double kTentacleSegmentLength = 20;
+const double kBodyRadius = 20;
 
 ////////// CLASS DEF //////////
 
@@ -29,9 +34,9 @@ class Squid
 {
 public:
     // MEMBERS
-    ofxBox2dCircle body;
-    vector <ofPtr<ofxBox2dCircle> > tentacles;
-    vector <ofPtr<ofxBox2dJoint> > tentacle_joints;
+    b2Body* body;
+    vector <b2Body *> tentacles;
+    vector <b2RevoluteJoint *> tentacle_joints;
     ofxPathfinder pathfinder;
     int goal_x = 0, goal_y = 0;
     cv::Point goal_section;
@@ -43,7 +48,7 @@ public:
     ofPoint push_direction;
 
     // METHODS
-    void setup(ofxBox2d& box2d);
+    void setup(ofPtr<b2World> phys_world);
     void update(double delta_t, cv::Mat flow_high, bool draw_debug);
     void draw();
 };

@@ -14,27 +14,69 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofxBox2d& box2d)
+void Squid::setup(ofPtr<b2World> phys_world)
 {
     // Set up physics body
     ofPoint pos = ofPoint(kGameWidth / 2, kGameHeight / 2);
-    body.setPhysics(3.0, 0.5, 0.1);
-    body.setup(box2d.getWorld(), pos.x, pos.y, 20);
-    body.body->SetLinearDamping(5.0);
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = ofToB2(pos);
+    bodyDef.linearDamping = 2.0;
+    body = phys_world->CreateBody(&bodyDef);
+    b2CircleShape shape;
+    shape.m_radius = kBodyRadius / kPhysicsScale;
+    b2FixtureDef fixture;
+    fixture.shape = &shape;
+    fixture.density = 1.0f;
+    fixture.friction = 0.3;
+    body->CreateFixture(&fixture);
+    //
+    // Create tentacles
     for (int i = 0; i < kNumTentacles; i ++){
         // Add the knee
         double angle = TWO_PI * (i / (double)kNumTentacles);
-        ofPoint offset = ofPoint(cos(angle) * 40, sin(angle) * 40);
-        ofPtr<ofxBox2dCircle> circle = ofPtr<ofxBox2dCircle>(new ofxBox2dCircle);
-        circle.get()->setPhysics(1.0, 0.5, 0.0);
-        circle.get()->setup(box2d.getWorld(), pos.x + offset.x, pos.y + offset.y, 2);
-        circle.get()->body->SetLinearDamping(5.0);
-        tentacles.push_back(circle);
-        // Add the joint
-        ofPtr<ofxBox2dJoint> joint = ofPtr<ofxBox2dJoint>(new ofxBox2dJoint);
-        joint.get()->setup(box2d.getWorld(), body.body, circle.get()->body);
-        joint.get()->setLength(40);
-        tentacle_joints.push_back(joint);
+        ofPoint offset = ofPoint(cos(angle) * kTentacleSegmentLength, sin(angle) * kTentacleSegmentLength);
+        ofPoint body_offset = ofPoint(cos(angle) * kBodyRadius, sin(angle) * kBodyRadius);
+        ofPoint attach_at = body_offset + pos;
+        b2Body* previous = body;
+        
+        cout << "offset : " << offset.x << "," << offset.y << endl;
+        
+        for (int j = 0; j < kNumSegments; j ++){
+            bodyDef.position = ofToB2(attach_at + 0.5 * offset);
+            bodyDef.angle = angle;
+            bodyDef.angularDamping = 2.0f;
+            bodyDef.linearDamping = 3.0;
+            b2Body* tentacle = phys_world->CreateBody(&bodyDef);
+            b2PolygonShape box;
+            box.SetAsBox(kTentacleSegmentLength * 0.5 / kPhysicsScale, 3 / kPhysicsScale);
+            fixture.shape = &box;
+            fixture.density = 0.01f;
+            fixture.filter.maskBits = 0x0;
+            tentacle->CreateFixture(&fixture);
+            tentacles.push_back(tentacle);
+            
+            b2RevoluteJointDef jointDef;
+            jointDef.Initialize(previous, tentacle, ofToB2(attach_at));
+            jointDef.maxMotorTorque = 100.0f;
+            b2RevoluteJoint* joint = (b2RevoluteJoint*) phys_world->CreateJoint(&jointDef);
+            tentacle_joints.push_back(joint);
+            previous = tentacle;
+            attach_at += offset;
+        }
+        cout << tentacle_joints.size() << endl;
+//
+//        
+//        ofPtr<ofxBox2dCircle> circle = ofPtr<ofxBox2dCircle>(new ofxBox2dCircle);
+//        circle.get()->setPhysics(1.0, 0.5, 0.0);
+//        circle.get()->setup(box2d.getWorld(), pos.x + offset.x, pos.y + offset.y, 2);
+//        circle.get()->body->SetLinearDamping(5.0);
+//        tentacles.push_back(circle);
+//        // Add the joint
+//        ofPtr<ofxBox2dJoint> joint = ofPtr<ofxBox2dJoint>(new ofxBox2dJoint);
+//        joint.get()->setup(box2d.getWorld(), body.body, circle.get()->body);
+//        joint.get()->setLength(40);
+//        tentacle_joints.push_back(joint);
         
     }
 }
@@ -47,7 +89,7 @@ void Squid::setup(ofxBox2d& box2d)
  */
 void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
 {
-    ofPoint pos = body.getPosition();
+    ofPoint pos = b2ToOf(body->GetPosition());
     ofPoint pos_grid = pos / kGameSize * kPathGridSize;
     //
     // Subsample the flow grid to get a pathfinding grid
@@ -89,16 +131,47 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
     {
         ofPoint next = (pathfinder.path[pathfinder.path.size() - 2] + 0.5) / kPathGridSize * kGameSize;
         ofPoint diff = (next - pos);
-        if (body.getVelocity().length() < kMinVelocity && (diff.length() > kMaxGoalDistance || pathfinder.path.size() > 2)) {
+        if (pushing <= 0 && b2ToOf(body->GetLinearVelocity()).length() < kMinVelocity && (diff.length() > kMaxGoalDistance || pathfinder.path.size() > 2)) {
             push_direction = diff.normalized();
-            pushing = kPushTime;
+            pushing = kPushTime + kPrepTime;
         }
     }
     //
     // Muscle movement
-    if (pushing > 0){
-        body.addForce(push_direction, kPushForce * delta_t);
-        pushing -= delta_t;
+    if (0 < pushing && pushing < kPushTime){
+        body->ApplyForceToCenter(ofToB2(push_direction * kPushForce * delta_t), true);
+//        double direction_angle = ofPoint(0,0).angleRad(push_direction);
+//        body->ApplyTorque((direction_angle - body->GetAngle()) * 20, true);
+    }
+    pushing -= delta_t;
+    //
+    // Limb muscles
+    for (int i = 0; i < tentacles.size(); i++){
+        b2Body* tentacle = tentacles[i];
+        // Apply tensor friction
+        if (pushing < kPushTime){
+            b2Vec2 velocity = tentacle->GetLinearVelocity();
+            b2Vec2 forward = b2Mul(tentacle->GetTransform().q, b2Vec2(1,0));
+            forward *= b2Dot(velocity, forward);
+            b2Vec2 sideways = velocity - forward;
+            velocity = 0.5 * sideways + forward;
+            tentacle->SetLinearVelocity(velocity);
+        }
+        // Move tentacles out
+        if (pushing > kPushTime){
+            if (i % kNumTentacles < 2){
+                b2Vec2 outward = tentacle->GetPosition() - body->GetPosition();
+                outward.Normalize();
+                tentacle->ApplyForceToCenter(0.7f * outward, true);
+            }
+        // Move tentacles in
+        }
+        else if (pushing > 0) {
+            if (i % kNumTentacles < 2){
+                tentacle->ApplyForceToCenter(b2Vec2(-0.1f * push_direction.x, -0.1f * push_direction.y), true);
+            }
+        }
+
     }
     if (draw_debug)
     {
@@ -106,9 +179,10 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
         ofSetColor(255, 0, 255, 255);
         ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
         ofSetColor(0, 255, 0, 255);
-//        ofxCv::drawMat(sections, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
         // Draw push force
-        ofLine(pos.x, pos.y, pos.x + push_direction.x * 20, pos.y + push_direction.y * 20);
+        if (pushing > 0){
+            ofLine(pos.x, pos.y, pos.x + push_direction.x * 20, pos.y + push_direction.y * 20);
+        }
         // Draw the path and local area
         ofSetColor(0, 255, 255, 255);
         ofSetLineWidth(4);
@@ -126,15 +200,36 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
         ofCircle(goal_x, goal_y, 0.2f);
         ofPopMatrix();
     }
+
+    // Keep limbs straight
+//    for (int i = 0; i < tentacle_joints.size(); i ++){
+//        b2RevoluteJoint* joint = tentacle_joints[i];
+//        double angle = joint->GetJointAngle();
+//        if (abs(angle) > 90 * DEG_TO_RAD) {
+//            joint->SetMotorSpeed((angle > 0) ? -0.1 : 0.1);
+//            joint->EnableMotor(true);
+//        } else {
+//            joint->EnableMotor(false);
+//        }
+//
+//    }
 }
 
 
 void Squid::draw()
 {
-    ofPoint pos = body.getPosition();
+    ofPoint pos = b2ToOf(body->GetPosition());
     ofSetColor(255, 255, 255, 255);
-    body.draw();
-    for (int i=0; i < tentacles.size(); i++) {
-        tentacles[i].get()->draw();
+    ofCircle(pos, kBodyRadius);
+    
+    for (int i = 0; i < tentacles.size(); i ++){
+        ofSetColor(255, 255 * (1.0 - ((float)i / (kNumSegments*kNumTentacles))), 255 * (float)i / (kNumSegments*kNumTentacles));
+        ofPushMatrix();
+        ofTranslate(b2ToOf(tentacles[i]->GetPosition()));
+        ofRotateZ(tentacles[i]->GetAngle() * RAD_TO_DEG);
+        ofRect(-kTentacleSegmentLength / 2, -3, kTentacleSegmentLength, 6);
+//        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
+        ofPopMatrix();
     }
+
 }

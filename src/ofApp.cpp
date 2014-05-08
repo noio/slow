@@ -65,7 +65,8 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (draw_debug){
+    if (draw_debug)
+    {
         ofClear(0, 0, 0, 255);
     }
     particles.setupForces();
@@ -230,7 +231,6 @@ void ofApp::draw()
     if (draw_debug)
     {
         ofSetColor(255, 0, 0, 100);
-//        ofSet
         ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
     }
 //    unsigned char pixels[kFluidWidth*kFluidHeight];
@@ -238,7 +238,6 @@ void ofApp::draw()
 //    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
 //    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
     squid.draw();
-
     ofSetColor(255, 0, 255);
     ofDrawBitmapString(ofToString(ofGetFrameRate()) + "fps", 10, 15);
 }
@@ -251,12 +250,14 @@ void ofApp::drawParticles()
         Particle& cur = particles[i];
         if (cur.alive)
         {
+            ofCircle(cur.x, cur.y, 2);
             cur.color.a = cur.life * 4;
             triangulator.addPoint(cur.x, cur.y, 0, cur.color);
         }
     }
     triangulator.triangulate();
-    ofNoFill();
+//    ofNoFill();
+
     vector<ofMeshFace> tris = triangulator.triangleMesh.getUniqueFaces();
     for(std::vector<ofMeshFace>::iterator it = tris.begin(); it != tris.end(); ++it)
     {

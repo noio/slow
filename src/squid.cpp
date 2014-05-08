@@ -34,77 +34,66 @@ void Squid::update(cv::Mat flow_high, bool draw_debug)
     //
     // Subsample the flow grid to get a pathfinding grid
     cv::resize(flow_high, grid, kPathGridSize, 0, 0, CV_INTER_AREA);
-    grid.convertTo(grid, CV_32F, 1/255.0f);
+    grid.convertTo(grid, CV_32F, 1 / 255.0f);
+    ofxCv::dilate(grid, 1);
     grid = 1.0f - grid;
     cv::threshold(grid, grid, 0.2, 1.0, CV_THRESH_TOZERO);
-    cv::resize(grid, target_grid, kPathGridSize, 0, 0,  CV_INTER_AREA);
+    cv::resize(grid, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
+    ofxCv::blur(sections, 1);
     //
     // Pick a goal, first check if current area or goal is crowded.
-    cv::Rect local_area = cv::Rect(pos_grid.x - 1, pos_grid.y - 1, 2, 2);
-    local_area = local_area & cv::Rect(cv::Point(0,0), kTargetGridSize);
-    
-    double minVal, maxVal;
-    cv::Point minLoc, maxLoc;
-    minMaxLoc( target_grid, &minVal, &maxVal, &minLoc, &maxLoc );
-    
-    cout << "min val : " << minVal << endl;
-    cout << "max val: " << maxVal << endl;
-    
-    // Flip the grid and turn it into an ofPixels to do pathfinding
-    ofxCv::copy(grid, grid_im);
-    // Do the actual pathfinding
-    pathfinder.setup(grid_im);
-    pathfinder.find(pos_grid.x, pos_grid.y, 15, 7);
-    pathfinder.path.simplify(1.0f);
-    
-    
-    if (target_path.size())
+    cv::Rect local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
+    local_area = local_area & cv::Rect(cv::Point(0, 0), kPathGridSize);
+    float local_motion = cv::sum(1.0f - grid(local_area))[0];
+    if (local_motion > 0.0f)
     {
-        body.setDamping(0.2);
-        body.addForce(target_path[0] - pos, 10.0);
-        if (target_path[0].distance(pos) < 30)
+        double minVal, maxVal;
+        cv::Point minLoc, maxLoc;
+        minMaxLoc( sections, &minVal, &maxVal, &minLoc, &maxLoc );
+        if (goal_section != maxLoc)
         {
-            target_path.clear();
+            goal_section = maxLoc;
+            ofPoint goal = (ofxCv::toOf(goal_section) + ofPoint(ofRandomuf(), ofRandomuf())) / kSectionsSize * kPathGridSize;
+            goal_x = goal.x;
+            goal_y = goal.y;
         }
     }
-    else
+    //
+    // Do the actual pathfinding
+    // Flip the grid and turn it into an ofPixels
+    ofxCv::copy(grid, grid_im);
+    pathfinder.setup(grid_im);
+    float path_length = pathfinder.find(pos_grid.x, pos_grid.y, goal_x, goal_y);
+    pathfinder.path.simplify(0.5f);
+    //
+    // Low level planning on path
+    if (pathfinder.path.size() > 1)
     {
-        ofPoint target;
-        int attempts = 5;
-        while (attempts--)
-        {
-            int x = ofRandom(path_region) - (int)(path_region / 2);
-            int y = ofRandom(path_region) - (int)(path_region / 2);
-            x += pos_grid.x;
-            y += pos_grid.y;
-            if (x >= 0 && x < grid.cols && y >= 0 && y < grid.rows)
-            {
-                target.x = x;
-                target.y = y;
-            }
-            if (grid.at<uchar>(x, y) == 0)
-            {
-                break;
-            }
-        }
-        target_path.push_back(target / kPathGridSize * kGameSize);
+        body.setDamping(0.2);
+        ofPoint next = (pathfinder.path[pathfinder.path.size() - 2] + 0.5) / kPathGridSize * kGameSize;
+        body.addForce((next - pos).normalized(), 2000.0);
     }
     if (draw_debug)
     {
         // Draw the grids
-        ofSetColor(255, 0, 255, 128);
+        ofSetColor(255, 0, 255, 255);
         ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
-        ofSetColor(0,255,0,128);
-        ofxCv::drawMat(target_grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
-//        grid_im.draw(0,0, kScreenWidth, kScreenHeight, GL_NEAREST);
-        ofCircle(target_path[0], 20);
+        ofSetColor(0, 255, 0, 255);
+//        ofxCv::drawMat(sections, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
         // Draw the path
         ofSetColor(0, 255, 255, 255);
         ofSetLineWidth(4);
         ofPushMatrix();
         ofScale(kScreenWidth / kPathGridSize.width, kScreenHeight / kPathGridSize.height);
+        ofRectangle debug_local_area = ofxCv::toOf(local_area);
+        ofRect(debug_local_area);
         ofTranslate(0.5, 0.5);
         pathfinder.path.draw();
+        if (path_length == 0)
+        {
+            ofSetColor(255, 0, 0);
+        }
+        ofCircle(goal_x, goal_y, 0.2f);
         ofPopMatrix();
     }
 }
@@ -115,10 +104,4 @@ void Squid::draw()
     ofPoint pos = body.getPosition();
     ofSetColor(255, 255, 255, 255);
     body.draw();
-    ofNoFill();
-    for (int i = 0; i < target_path.size(); i ++)
-    {
-        ofSetColor(255, 0, 0, 255);
-        ofCircle(target_path[i].x, target_path[i].y, 5.0);
-    }
 }

@@ -15,8 +15,8 @@ using std::vector;
 
 ////////// CONSTANTS //////////
 
-const cv::Size kPathGridSize = cv::Size(16, 8);
-const cv::Size kTargetGridSize = cv::Size(4, 2);
+const cv::Size kPathGridSize = cv::Size(20, 10);
+const cv::Size kSectionsSize = cv::Size(4, 2);
 
 ////////// CLASS DEF //////////
 
@@ -24,14 +24,13 @@ class Squid
 {
 public:
     // MEMBERS
-    int path_region = 5;
     ofxBox2dCircle body;
     ofxPathfinder pathfinder;
     int goal_x = 0, goal_y = 0;
-    vector<ofPoint> target_path;
-    cv::Mat grid, target_grid;
+    cv::Point goal_section;
+    cv::Mat grid, sections;
     ofImage grid_im;
-    
+
     // METHODS
     void setup(ofxBox2d& box2d);
     void update(cv::Mat flow_high, bool draw_debug);

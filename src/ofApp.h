@@ -61,4 +61,6 @@ public:
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
     ofxDelaunay triangulator;
+    
+    double delta_t;
 };

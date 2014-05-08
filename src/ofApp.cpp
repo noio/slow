@@ -65,6 +65,7 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+    delta_t = ofGetLastFrameTime();
     if (draw_debug)
     {
         ofClear(0, 0, 0, 255);
@@ -81,7 +82,7 @@ void ofApp::update()
         updateFlow();
         updateMotionEffect();
     }
-    squid.update(flow_high, draw_debug);
+    squid.update(delta_t, flow_high, draw_debug);
     box2d.update();
     updateFluid();
     updateParticles();

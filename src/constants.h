@@ -22,21 +22,22 @@ const float kGameWidth = kScreenWidth;
 const float kGameHeight = kScreenHeight;
 const cv::Size2f kGameSize(kGameWidth, kGameHeight);
 
-const float kGameSizePadding = 10.0;
+const double kGameSizePadding = 10.0;
 
-const float kPhysicsScale = 30.0;
+const double kPhysicsScale = 30.0;
 
-const float kRatio = (float)kScreenWidth / (float)kScreenHeight;
-const int kROIWidth = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight* kRatio));
-const int kROIHeight = std::min(kCaptureHeight, static_cast<int>(kCaptureWidth / kRatio));
-const cv::Rect kCaptureROI = cv::Rect((kCaptureWidth - kROIWidth) / 2, (kCaptureHeight - kROIHeight) / 2, kROIWidth, kROIHeight);
+const double kRatio = (float)kScreenWidth / (float)kScreenHeight;
+const int kFrameWidth = std::min(kCaptureWidth, static_cast<int>(kCaptureHeight * kRatio));
+const int kFrameHeight = std::min(kCaptureHeight, static_cast<int>(kCaptureWidth / kRatio));
+const cv::Rect kCaptureROI = cv::Rect((kCaptureWidth - kFrameWidth) / 2, (kCaptureHeight - kFrameHeight) / 2, kFrameWidth, kFrameHeight);
 
-const int kFlowWidth = kROIWidth / 4;
-const int kFlowHeight = kROIHeight / 4;
+const float kScaleFrameToScreen = (float)kScreenWidth / kFrameWidth;
+
+const int kFlowWidth = kFrameWidth / 4;
+const int kFlowHeight = kFrameHeight / 4;
 const ofPoint kFlowSize(kFlowWidth, kFlowHeight, 1.0);
 
-const float kFrameRate = 40.0;
-
+const double kFrameRate = 40.0;
 
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480;
@@ -52,5 +53,8 @@ const float kFlowLowThreshold = 0.1f;
 const float kFlowHighThreshold = 0.3f;
 
 const float kFlowErosionSize = 5.0f;
+
+// Other
+const ofPoint kLabelOffset = ofPoint(3, 13);
 
 #endif

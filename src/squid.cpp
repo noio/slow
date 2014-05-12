@@ -1,13 +1,13 @@
 
 ////////// INCLUDES //////////
 #include "squid.h"
-
-#include <algorithm>
+#include "constants.h"
 
 #include "ofxCv.h"
 
-#include "constants.h"
-#include "utilities.h"
+#include <algorithm>
+
+
 
 using std::cout;
 using std::endl;
@@ -96,7 +96,7 @@ void Squid::update(double delta_t, cv::Mat flow_high)
     grid = 1.0f - grid;
     cv::threshold(grid, grid, 0.2, 1.0, CV_THRESH_TOZERO);
     cv::resize(grid, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
-    ofxCv::blur(sections, 1); // Blurring favors quiet sections that neighbor quiet sections.
+    ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
     //
     // Pick a goal, first check if current area or goal is crowded.
     local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
@@ -107,6 +107,10 @@ void Squid::update(double delta_t, cv::Mat flow_high)
     {
         double minVal, maxVal;
         cv::Point minLoc, maxLoc;
+//        cv::Mat random;
+//        ofxCv::imitate(random, sections);
+//        cv::randu(random, 0, 0.1);
+//        sections += random;
         minMaxLoc( sections, &minVal, &maxVal, &minLoc, &maxLoc );
         if (goal_section != maxLoc)
         {
@@ -206,9 +210,12 @@ void Squid::draw(bool draw_debug)
     if (draw_debug)
     {
         // Draw the grids
-        ofSetColor(0, 255, 0, 64);
+
         ofEnableBlendMode(OF_BLENDMODE_ADD);
+        ofSetColor(0, 255, 0, 64);
         ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
+        ofSetColor(0, 0, 255, 64);
+        ofxCv::drawMat(sections, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
         ofDisableBlendMode();
         ofSetColor(0, 255, 0, 255);
         // Draw push force
@@ -217,7 +224,6 @@ void Squid::draw(bool draw_debug)
         }
         // Draw the path and local area
         ofSetColor(0, 255, 255, 255);
-        ofSetLineWidth(4);
         ofPushMatrix();
         ofScale(kScreenWidth / kPathGridSize.width, kScreenHeight / kPathGridSize.height);
         ofRectangle debug_local_area = ofxCv::toOf(local_area);

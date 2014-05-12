@@ -12,6 +12,8 @@
 
 #include <vector>
 
+#include "utilities.h"
+
 using std::vector;
 
 ////////// CONSTANTS //////////
@@ -52,6 +54,8 @@ public:
     void setup(ofPtr<b2World> phys_world);
     void update(double delta_t, cv::Mat flow_high);
     void draw(bool draw_debug);
+    
+    ofPoint getPosition() { return b2ToOf(body->GetPosition()); };
 };
 
 #endif

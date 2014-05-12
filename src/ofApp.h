@@ -1,21 +1,20 @@
 #pragma once
 
+#include "Squid.h"
+#include "Fluid.h"
+#include "ParticleSystem.h"
+
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
 #include "ofxDelaunay.h"
 #include "Box2D/Box2D.h"
 
-#include "Fluid.h"
-#include "ParticleSystem.h"
-#include "Squid.h"
 
 class ofApp : public ofBaseApp
 {
 
 public:
-    ofApp() : gui("EDIT")
-    { };
 
     void setup();
     void update();
@@ -42,14 +41,6 @@ public:
     void gotMessage(ofMessage msg);
     void guiEvent(ofxUIEventArgs& e);
 
-    ofxUISuperCanvas gui;
-    bool draw_debug = false;
-    bool use_camera = false;
-
-    cv::Mat open_kernel;
-    cv::Mat frame, frame_gray;
-    cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
-
     ofVideoPlayer video;
     ofVideoGrabber camera;
 
@@ -58,13 +49,27 @@ public:
 
     ParticleSystem particles;
 
-    ofPtr<b2World> phys_world;
-    Squid squid;
-
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
     ofxCv::ObjectFinder objectfinder;
     ofxDelaunay triangulator;
     
+    ofPtr<b2World> phys_world;
+    Squid squid;
+    
+    ofxUISuperCanvas* gui;
+    
+    cv::Mat open_kernel;
+    cv::Mat frame, frame_gray;
+    cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
+    
     double delta_t;
+    cv::Rect face_roi;
+    
+    // Settings
+    bool draw_debug = false;
+    bool use_camera = false;
+    float face_search_window = 0.2;
+    float face_max_size = 0.6;  // This is relative to the full frame, not the face search window
+    float face_min_size = 0.05; // This is relative to the full frame, not the face search window
 };

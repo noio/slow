@@ -38,11 +38,10 @@ void ofApp::setup()
     //
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
+//    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
     objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
     objectfinder.setMinNeighbors(2);
-    objectfinder.setMultiScaleFactor(1.1);
-    objectfinder.setMinSizeScale(.25);
-    objectfinder.setMaxSizeScale(1.0);
+    objectfinder.setMultiScaleFactor(1.2);
     //
     // Set up fluid dynamics
     fluid.setup(kFluidWidth, kFluidHeight);
@@ -77,16 +76,18 @@ void ofApp::setup()
     squid.setup(phys_world);
     //
     // Set up control panel
-    gui.addSpacer();
-    gui.addSlider("VISCOSITY", 0, 0.001, 0.0008)->setLabelPrecision(4);
-    gui.addSlider("DECAY", 0.8, 0.999, 0.950)->setLabelPrecision(4);
-    gui.addSlider("DIFFUSION", 0.00001, 0.0001, 0.0001)->setLabelPrecision(5);
-    gui.addToggle("DEBUG", false);
-    gui.addToggle("CAMERA", false);
-    gui.autoSizeToFitWidgets();
-    gui.setPosition(kScreenWidth - 212, 0);
-    ofAddListener(gui.newGUIEvent, this, &ofApp::guiEvent);
-    gui.loadSettings("settings.xml");
+    gui = new ofxUISuperCanvas("EDIT PARAMETERS");
+    gui->addSpacer();
+    gui->addToggle("DEBUG", false);
+    gui->addToggle("CAMERA", false);
+    gui->addSpacer();
+    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2)->setLabelPrecision(2);
+    gui->addSlider("FACE_MIN_SIZE", 0.02, 1.0, 0.05)->setLabelPrecision(2);
+    gui->addSlider("FACE_MAX_SIZE", 0.05, 1.0, 0.4)->setLabelPrecision(2);
+    gui->autoSizeToFitWidgets();
+    gui->setPosition(kScreenWidth - 212, 0);
+    ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
+    gui->loadSettings("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -165,17 +166,18 @@ void ofApp::updateFlow()
 }
 
 void ofApp::updateFinder(){
+    ofPoint squid_pos = squid.getPosition();
+    // Only compute a width because the face search window is square.
+    int face_search_width = MIN(kFrameWidth, kFrameHeight) * face_search_window;
+    face_roi = cv::Rect(0, 0, face_search_width, face_search_width);
+    face_roi += cv::Point(MAX(0, MIN(kFrameWidth - face_search_width, (squid_pos.x / kScaleFrameToScreen - face_search_width / 2))),
+                          MAX(0, MIN(kFrameHeight - face_search_width, (squid_pos.y / kScaleFrameToScreen - face_search_width / 2))));
+    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
+    objectfinder.setMinSizeScale(MIN(1.0, face_min_size / face_search_window));
+    objectfinder.setMaxSizeScale(MIN(1.0, face_max_size / face_search_window));
     // The call below uses 2 arguments including a switch "preprocess" that
     // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
-    objectfinder.update(frame_gray, false);
-    if (draw_debug){
-        for(int i = 0; i < objectfinder.size(); i++) {
-			ofRectangle object = objectfinder.getObject(i);
-            object.scale(kScreenWidth / kFlowWidth, kScreenHeight / kFlowHeight);
-			ofRect(object);
-//			ofDrawBitmapStringHighlight(ofToString(getLabel(i)), object.x, object.y);
-		}
-    }
+    objectfinder.update(frame(face_roi), true);
 }
 
 
@@ -276,18 +278,40 @@ void ofApp::draw()
 //    drawParticles();
     if (draw_debug)
     {
-        ofSetColor(255, 0, 0, 255);
+        // Draw the optical flow "high motion" map
+        ofSetColor(ofColor::red);
         ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
         ofDisableBlendMode();
+        // Draw face search window
+
+        ofRectangle face_roi_rect = toOf(face_roi);
+        face_roi_rect.scale(kScaleFrameToScreen);
+        face_roi_rect.x *= kScaleFrameToScreen;
+        face_roi_rect.y *= kScaleFrameToScreen;
+        ofPushStyle();
+        ofSetLineWidth(2.0);
+        ofSetColor(ofColor::orange);
+        ofRect(face_roi_rect);
+        ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
+        ofSetColor(255, 255, 255);
+        ofRect(face_roi_rect.getPosition(), face_min_size * kScreenHeight, face_min_size * kScreenHeight);
+        ofRect(face_roi_rect.getPosition(), face_max_size * kScreenHeight, face_max_size * kScreenHeight);
+
+        // Draw detected faces
+        for(int i = 0; i < objectfinder.size(); i++) {
+			ofRectangle object = objectfinder.getObject(i);
+//            object.x *= (double)kScreenWidth / kFlowWidth;
+//            object.y *= (double)kScreenHeight / kFlowHeight;
+//            object.scale(kScreenWidth / kFlowWidth, kScreenHeight / kFlowHeight);
+//            cout << objectfinder.getRescale() << endl;
+			ofRect(object);
+		}
+        ofPopStyle();
     }
-//    unsigned char pixels[kFluidWidth*kFluidHeight];
-//    fluid.fill_texture(pixels);
-//    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
-//    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
     squid.draw(draw_debug);
-    ofSetColor(255, 0, 255);
-    ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", 10, 20);
+    ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
+    ofDrawBitmapStringHighlight("faces: " + ofToString(objectfinder.size()), kLabelOffset + ofPoint(0, 20));
 }
 
 void ofApp::drawParticles()
@@ -327,7 +351,7 @@ void ofApp::drawParticles()
 
 void ofApp::exit()
 {
-    gui.saveSettings("settings.xml");
+    gui->saveSettings("settings.xml");
 }
 
 //--------------------------------------------------------------
@@ -384,29 +408,22 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 {
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    if(name == "VISCOSITY")
-    {
-        ofxUISlider* slider = (ofxUISlider*) e.widget;
-        fluid.viscosity = slider->getScaledValue();
-    }
-    if(name == "DECAY")
-    {
-        ofxUISlider* slider = (ofxUISlider*) e.widget;
-        fluid.density_decay = slider->getScaledValue();
-    }
-    if(name == "DIFFUSION")
-    {
-        ofxUISlider* slider = (ofxUISlider*) e.widget;
-        fluid.diffusion = slider->getScaledValue();
-    }
+
     if (name == "DEBUG")
     {
-        ofxUIToggle* toggle = (ofxUIToggle*) e.widget;
-        draw_debug = toggle->getValue();
+        draw_debug = ((ofxUIToggle*) e.widget)->getValue();
     }
     if (name == "CAMERA")
     {
-        ofxUIToggle* toggle = (ofxUIToggle*) e.widget;
-        use_camera = toggle->getValue();
+        use_camera = ((ofxUIToggle*) e.widget)->getValue();
+    }
+    if (name == "FACE_SEARCH_WINDOW"){
+        face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
+    }
+    if (name == "FACE_MIN_SIZE"){
+        face_min_size = ((ofxUISlider*) e.widget)->getScaledValue();
+    }
+    if (name == "FACE_MAX_SIZE"){
+        face_max_size = ((ofxUISlider*) e.widget)->getScaledValue();
     }
 }

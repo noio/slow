@@ -46,11 +46,12 @@ public:
     // State
     double pushing = 0.0f;
     ofPoint push_direction;
+    cv::Rect local_area;
 
     // METHODS
     void setup(ofPtr<b2World> phys_world);
-    void update(double delta_t, cv::Mat flow_high, bool draw_debug);
-    void draw();
+    void update(double delta_t, cv::Mat flow_high);
+    void draw(bool draw_debug);
 };
 
 #endif

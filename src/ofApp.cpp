@@ -36,6 +36,14 @@ void ofApp::setup()
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
     //
+    // Set up face detection
+    objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
+    objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
+    objectfinder.setMinNeighbors(2);
+    objectfinder.setMultiScaleFactor(1.1);
+    objectfinder.setMinSizeScale(.25);
+    objectfinder.setMaxSizeScale(1.0);
+    //
     // Set up fluid dynamics
     fluid.setup(kFluidWidth, kFluidHeight);
     //
@@ -74,6 +82,7 @@ void ofApp::setup()
     gui.addSlider("DECAY", 0.8, 0.999, 0.950)->setLabelPrecision(4);
     gui.addSlider("DIFFUSION", 0.00001, 0.0001, 0.0001)->setLabelPrecision(5);
     gui.addToggle("DEBUG", false);
+    gui.addToggle("CAMERA", false);
     gui.autoSizeToFitWidgets();
     gui.setPosition(kScreenWidth - 212, 0);
     ofAddListener(gui.newGUIEvent, this, &ofApp::guiEvent);
@@ -89,32 +98,38 @@ void ofApp::update()
         ofClear(0, 0, 0, 255);
     }
     particles.setupForces();
-    camera.update();
-    video.update();
-//    cv::Mat frame_full = toCv(camera);
-    cv::Mat frame_full = toCv(video.getPixelsRef());
-    cv::flip(frame_full(kCaptureROI), frame, 1);
-    // Compute optical flow
-    if (video.isFrameNew())
+    updateFrame();
+    if ((use_camera && camera.isFrameNew()) || video.isFrameNew() )
     {
         updateFlow();
+        updateFinder();
         updateMotionEffect();
     }
-    squid.update(delta_t, flow_high, draw_debug);
+    squid.update(delta_t, flow_high);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     updateFluid();
     updateParticles();
 }
 
-
-
-void ofApp::updateFlow()
-{
+void ofApp::updateFrame(){
+    cv::Mat frame_full;
+    if (use_camera){
+        camera.update();
+        frame_full = toCv(camera);
+    } else {
+        video.update();
+        frame_full = toCv(video.getPixelsRef());
+    }
+    cv::flip(frame_full(kCaptureROI), frame, 1);
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
     cv::pyrDown(frame_gray, frame_gray);
     cv::pyrDown(frame_gray, frame_gray);
     assert(frame_gray.cols == kFlowWidth && frame_gray.rows == kFlowHeight);
+}
+
+void ofApp::updateFlow()
+{
     opticalflow.calcOpticalFlow(frame_gray);
     flow = opticalflow.getFlow();
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
@@ -147,6 +162,20 @@ void ofApp::updateFlow()
     flow_new = flow_high & ( 255 - flow_high_prev);
     std::swap(flow_low_prev, flow_low);
     std::swap(flow_high_prev, flow_high);
+}
+
+void ofApp::updateFinder(){
+    // The call below uses 2 arguments including a switch "preprocess" that
+    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
+    objectfinder.update(frame_gray, false);
+    if (draw_debug){
+        for(int i = 0; i < objectfinder.size(); i++) {
+			ofRectangle object = objectfinder.getObject(i);
+            object.scale(kScreenWidth / kFlowWidth, kScreenHeight / kFlowHeight);
+			ofRect(object);
+//			ofDrawBitmapStringHighlight(ofToString(getLabel(i)), object.x, object.y);
+		}
+    }
 }
 
 
@@ -243,23 +272,22 @@ void ofApp::updateParticles()
 void ofApp::draw()
 {
     ofSetColor(255, 255, 255, 255);
-    if (!draw_debug)
-    {
-        ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
-        drawParticles();
-    }
+    ofxCv::drawMat(frame, 0, 0, kScreenWidth, kScreenHeight);
+//    drawParticles();
     if (draw_debug)
     {
-        ofSetColor(255, 0, 0, 100);
+        ofSetColor(255, 0, 0, 255);
+        ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
+        ofDisableBlendMode();
     }
 //    unsigned char pixels[kFluidWidth*kFluidHeight];
 //    fluid.fill_texture(pixels);
 //    fluid_texture.loadData(pixels, kFluidWidth, kFluidHeight, GL_ALPHA);
 //    fluid_texture.draw(0,0,kScreenWidth,kScreenHeight);
-    squid.draw();
+    squid.draw(draw_debug);
     ofSetColor(255, 0, 255);
-    ofDrawBitmapString(ofToString(ofGetFrameRate()) + "fps", 10, 15);
+    ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", 10, 20);
 }
 
 void ofApp::drawParticles()
@@ -375,5 +403,10 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     {
         ofxUIToggle* toggle = (ofxUIToggle*) e.widget;
         draw_debug = toggle->getValue();
+    }
+    if (name == "CAMERA")
+    {
+        ofxUIToggle* toggle = (ofxUIToggle*) e.widget;
+        use_camera = toggle->getValue();
     }
 }

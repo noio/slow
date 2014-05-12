@@ -40,8 +40,6 @@ void Squid::setup(ofPtr<b2World> phys_world)
         ofPoint attach_at = body_offset + pos;
         b2Body* previous = body;
         
-        cout << "offset : " << offset.x << "," << offset.y << endl;
-        
         for (int j = 0; j < kNumSegments; j ++){
             bodyDef.position = ofToB2(attach_at + 0.5 * offset);
             bodyDef.angle = angle;
@@ -64,7 +62,6 @@ void Squid::setup(ofPtr<b2World> phys_world)
             previous = tentacle;
             attach_at += offset;
         }
-        cout << tentacle_joints.size() << endl;
 //
 //        
 //        ofPtr<ofxBox2dCircle> circle = ofPtr<ofxBox2dCircle>(new ofxBox2dCircle);
@@ -87,7 +84,7 @@ void Squid::setup(ofPtr<b2World> phys_world)
  - Plan a path to goal
  - Move to goal (low level)
  */
-void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
+void Squid::update(double delta_t, cv::Mat flow_high)
 {
     ofPoint pos = b2ToOf(body->GetPosition());
     ofPoint pos_grid = pos / kGameSize * kPathGridSize;
@@ -102,7 +99,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
     ofxCv::blur(sections, 1); // Blurring favors quiet sections that neighbor quiet sections.
     //
     // Pick a goal, first check if current area or goal is crowded.
-    cv::Rect local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
+    local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
     local_area = local_area & cv::Rect(cv::Point(0, 0), kPathGridSize);
     float local_motion = cv::sum(1.0f - grid(local_area))[0];
     // Any nearby motion scares the squid; causing it to re-select a goal.
@@ -173,33 +170,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
         }
 
     }
-    if (draw_debug)
-    {
-        // Draw the grids
-        ofSetColor(255, 0, 255, 255);
-        ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
-        ofSetColor(0, 255, 0, 255);
-        // Draw push force
-        if (pushing > 0){
-            ofLine(pos.x, pos.y, pos.x + push_direction.x * 20, pos.y + push_direction.y * 20);
-        }
-        // Draw the path and local area
-        ofSetColor(0, 255, 255, 255);
-        ofSetLineWidth(4);
-        ofPushMatrix();
-        ofScale(kScreenWidth / kPathGridSize.width, kScreenHeight / kPathGridSize.height);
-        ofRectangle debug_local_area = ofxCv::toOf(local_area);
-        ofNoFill();
-        ofRect(debug_local_area);
-        ofTranslate(0.5, 0.5);
-        pathfinder.path.draw();
-        if (path_length == 0)
-        {
-            ofSetColor(255, 0, 0);
-        }
-        ofCircle(goal_x, goal_y, 0.2f);
-        ofPopMatrix();
-    }
+
 
     // Keep limbs straight
 //    for (int i = 0; i < tentacle_joints.size(); i ++){
@@ -216,7 +187,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, bool draw_debug)
 }
 
 
-void Squid::draw()
+void Squid::draw(bool draw_debug)
 {
     ofPoint pos = b2ToOf(body->GetPosition());
     ofSetColor(255, 255, 255, 255);
@@ -229,6 +200,32 @@ void Squid::draw()
         ofRotateZ(tentacles[i]->GetAngle() * RAD_TO_DEG);
         ofRect(-kTentacleSegmentLength / 2, -3, kTentacleSegmentLength, 6);
 //        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
+        ofPopMatrix();
+    }
+    
+    if (draw_debug)
+    {
+        // Draw the grids
+        ofSetColor(0, 255, 0, 64);
+        ofEnableBlendMode(OF_BLENDMODE_ADD);
+        ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
+        ofDisableBlendMode();
+        ofSetColor(0, 255, 0, 255);
+        // Draw push force
+        if (pushing > 0){
+            ofLine(pos.x, pos.y, pos.x + push_direction.x * 20, pos.y + push_direction.y * 20);
+        }
+        // Draw the path and local area
+        ofSetColor(0, 255, 255, 255);
+        ofSetLineWidth(4);
+        ofPushMatrix();
+        ofScale(kScreenWidth / kPathGridSize.width, kScreenHeight / kPathGridSize.height);
+        ofRectangle debug_local_area = ofxCv::toOf(local_area);
+        ofNoFill();
+        ofRect(debug_local_area);
+        ofTranslate(0.5, 0.5);
+        pathfinder.path.draw();
+        ofCircle(goal_x, goal_y, 0.2f);
         ofPopMatrix();
     }
 

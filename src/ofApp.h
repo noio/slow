@@ -22,7 +22,9 @@ public:
     void draw();
     void exit();
 
+    void updateFrame();
     void updateFlow();
+    void updateFinder();
     void updateMotionEffect();
     void updateFluid();
     void updateParticles();
@@ -42,6 +44,7 @@ public:
 
     ofxUISuperCanvas gui;
     bool draw_debug = false;
+    bool use_camera = false;
 
     cv::Mat open_kernel;
     cv::Mat frame, frame_gray;
@@ -60,6 +63,7 @@ public:
 
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
+    ofxCv::ObjectFinder objectfinder;
     ofxDelaunay triangulator;
     
     double delta_t;

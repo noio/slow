@@ -27,8 +27,8 @@ void ofApp::setup()
     //
     // Set up optical flow
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-                                            cv::Size(2 * kFlowErosionSize + 1, 2 * kFlowErosionSize + 1),
-                                            cv::Point(kFlowErosionSize, kFlowErosionSize));
+                                            cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
+                                            cv::Point(flow_erosion_size, flow_erosion_size));
     opticalflow.setPyramidScale(0.5);
     opticalflow.setNumLevels(2);
     opticalflow.setWindowSize(7);
@@ -42,6 +42,7 @@ void ofApp::setup()
     objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
     objectfinder.setMinNeighbors(2);
     objectfinder.setMultiScaleFactor(1.2);
+    objectfinder.setFindBiggestObject(true);
     //
     // Set up fluid dynamics
     fluid.setup(kFluidWidth, kFluidHeight);
@@ -55,24 +56,23 @@ void ofApp::setup()
     phys_world = ofPtr<b2World> ( new b2World(gravity ) );
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
-	boundsBodyDef.position.Set(0, 0);
-	b2Body* bounds = phys_world.get()->CreateBody(&boundsBodyDef);
-	b2EdgeShape shape;
+    boundsBodyDef.position.Set(0, 0);
+    b2Body* bounds = phys_world.get()->CreateBody(&boundsBodyDef);
+    b2EdgeShape shape;
     b2AABB rec = ofToB2(ofRectangle(-kGameSizePadding, -kGameSizePadding,
                                     (kGameWidth + kGameSizePadding * 2), (kGameHeight + kGameSizePadding * 2)));
     //right wall
-	shape.Set(b2Vec2(rec.upperBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
-	bounds->CreateFixture(&shape, 0.0f);
-	//left wall
-	shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.lowerBound.x, rec.upperBound.y));
-	bounds->CreateFixture(&shape, 0.0f);
-	// top wall
-	shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.lowerBound.y));
-	bounds->CreateFixture(&shape, 0.0f);
-	// bottom wall
-	shape.Set(b2Vec2(rec.lowerBound.x, rec.upperBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
-	bounds->CreateFixture(&shape, 0.0f);
-    
+    shape.Set(b2Vec2(rec.upperBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
+    bounds->CreateFixture(&shape, 0.0f);
+    //left wall
+    shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.lowerBound.x, rec.upperBound.y));
+    bounds->CreateFixture(&shape, 0.0f);
+    // top wall
+    shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.lowerBound.y));
+    bounds->CreateFixture(&shape, 0.0f);
+    // bottom wall
+    shape.Set(b2Vec2(rec.lowerBound.x, rec.upperBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
+    bounds->CreateFixture(&shape, 0.0f);
     squid.setup(phys_world);
     //
     // Set up control panel
@@ -81,9 +81,11 @@ void ofApp::setup()
     gui->addToggle("DEBUG", false);
     gui->addToggle("CAMERA", false);
     gui->addSpacer();
-    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2)->setLabelPrecision(2);
-    gui->addSlider("FACE_MIN_SIZE", 0.02, 1.0, 0.05)->setLabelPrecision(2);
-    gui->addSlider("FACE_MAX_SIZE", 0.05, 1.0, 0.4)->setLabelPrecision(2);
+    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
+    gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
+    gui->addSpacer();
+    gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
+    gui->addSlider("FLOW_EROSION_SIZE", 1, 7, 5);
     gui->autoSizeToFitWidgets();
     gui->setPosition(kScreenWidth - 212, 0);
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
@@ -106,19 +108,23 @@ void ofApp::update()
         updateFinder();
         updateMotionEffect();
     }
-    squid.update(delta_t, flow_high);
+    squid.update(delta_t, flow_high, objectfinder, frame);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     updateFluid();
     updateParticles();
 }
 
-void ofApp::updateFrame(){
+void ofApp::updateFrame()
+{
     cv::Mat frame_full;
-    if (use_camera){
+    if (use_camera)
+    {
         camera.update();
         frame_full = toCv(camera);
-    } else {
+    }
+    else
+    {
         video.update();
         frame_full = toCv(video.getPixelsRef());
     }
@@ -145,16 +151,13 @@ void ofApp::updateFlow()
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
     //
     // Compute the low speed mask
-    cv::threshold(magnitude, magnitude, kFlowLowThreshold, 1, cv::THRESH_TOZERO);
+    cv::threshold(magnitude, magnitude, flow_threshold_low, 1, cv::THRESH_TOZERO);
     flow_low = magnitude > 0;
     cv::erode(flow_low, flow_low, open_kernel);
     cv::dilate(flow_low, flow_low, open_kernel);
     //
     // Compute the high speed mask
-//    cv::add(sensitivity, flow_low, sensitivity, cv::noArray(), CV_32F);
-//    sensitivity *= kFlowSensitivityDecay;
-//    flow_high = magnitude >  sensitivity * kFlowSensitivityMultiplier;
-    cv::threshold(magnitude, flow_high, kFlowHighThreshold, 1, cv::THRESH_TOZERO);
+    cv::threshold(magnitude, flow_high, flow_threshold_high, 1, cv::THRESH_TOZERO);
     flow_high = flow_high > 0; // & flow_low_prev > 0;
     cv::erode(flow_high, flow_high, open_kernel);
 //    cv::dilate(flow_high, flow_high, open_kernel_small);
@@ -165,7 +168,8 @@ void ofApp::updateFlow()
     std::swap(flow_high_prev, flow_high);
 }
 
-void ofApp::updateFinder(){
+void ofApp::updateFinder()
+{
     ofPoint squid_pos = squid.getPosition();
     // Only compute a width because the face search window is square.
     int face_search_width = MIN(kFrameWidth, kFrameHeight) * face_search_window;
@@ -173,8 +177,8 @@ void ofApp::updateFinder(){
     face_roi += cv::Point(MAX(0, MIN(kFrameWidth - face_search_width, (squid_pos.x / kScaleFrameToScreen - face_search_width / 2))),
                           MAX(0, MIN(kFrameHeight - face_search_width, (squid_pos.y / kScaleFrameToScreen - face_search_width / 2))));
     // Face size is relative to frame, not face search window, so rescale and cap at 1.0
-    objectfinder.setMinSizeScale(MIN(1.0, face_min_size / face_search_window));
-    objectfinder.setMaxSizeScale(MIN(1.0, face_max_size / face_search_window));
+    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
+    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
     // The call below uses 2 arguments including a switch "preprocess" that
     // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
     objectfinder.update(frame(face_roi), true);
@@ -191,8 +195,6 @@ void ofApp::updateMotionEffect()
         ofPoint motion = opticalflow.getAverageFlowInRegion(cur.getBoundingBox());
         ofPoint centroid = cur.getCentroid2D() / kFlowSize;
         ofPoint force = motion * -50;
-        //        centroid.x += ofRandom(-10, 10);
-        //        centroid.y += ofRandom(-10, 10);
         fluid.add_velocity(centroid.x, centroid.y, force.x, force.y);
         fluid.add_density(centroid.x, centroid.y, 1);
         centroid = centroid * kGameSize;
@@ -278,13 +280,14 @@ void ofApp::draw()
 //    drawParticles();
     if (draw_debug)
     {
-        // Draw the optical flow "high motion" map
-        ofSetColor(ofColor::red);
+        // Draw the optical flow maps
+        ofSetColor(256, 0, 0, 196);
         ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofxCv::drawMat(flow_high, 0, 0, kScreenWidth, kScreenHeight);
+        ofSetColor(224, 160, 58, 128);
+        ofxCv::drawMat(flow_low, 0, 0, kScreenWidth, kScreenHeight);
         ofDisableBlendMode();
         // Draw face search window
-
         ofRectangle face_roi_rect = toOf(face_roi);
         face_roi_rect.scale(kScaleFrameToScreen);
         face_roi_rect.x *= kScaleFrameToScreen;
@@ -295,18 +298,17 @@ void ofApp::draw()
         ofRect(face_roi_rect);
         ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
         ofSetColor(255, 255, 255);
-        ofRect(face_roi_rect.getPosition(), face_min_size * kScreenHeight, face_min_size * kScreenHeight);
-        ofRect(face_roi_rect.getPosition(), face_max_size * kScreenHeight, face_max_size * kScreenHeight);
-
+        ofRect(face_roi_rect.getPosition(), face_size_min * kScreenHeight, face_size_min * kScreenHeight);
+        ofRect(face_roi_rect.getPosition(), face_size_max * kScreenHeight, face_size_max * kScreenHeight);
         // Draw detected faces
-        for(int i = 0; i < objectfinder.size(); i++) {
-			ofRectangle object = objectfinder.getObject(i);
-//            object.x *= (double)kScreenWidth / kFlowWidth;
-//            object.y *= (double)kScreenHeight / kFlowHeight;
-//            object.scale(kScreenWidth / kFlowWidth, kScreenHeight / kFlowHeight);
-//            cout << objectfinder.getRescale() << endl;
-			ofRect(object);
-		}
+        for(int i = 0; i < objectfinder.size(); i++)
+        {
+            ofRectangle object = objectfinder.getObject(i);
+            object.scale(kScaleFrameToScreen);
+            object.translate(face_roi_rect.position);
+            ofSetColor(ofColor::green);
+            ofRect(object);
+        }
         ofPopStyle();
     }
     squid.draw(draw_debug);
@@ -329,7 +331,6 @@ void ofApp::drawParticles()
     }
     triangulator.triangulate();
 //    ofNoFill();
-
     vector<ofMeshFace> tris = triangulator.triangleMesh.getUniqueFaces();
     for(std::vector<ofMeshFace>::iterator it = tris.begin(); it != tris.end(); ++it)
     {
@@ -408,7 +409,6 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 {
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-
     if (name == "DEBUG")
     {
         draw_debug = ((ofxUIToggle*) e.widget)->getValue();
@@ -417,13 +417,22 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     {
         use_camera = ((ofxUIToggle*) e.widget)->getValue();
     }
-    if (name == "FACE_SEARCH_WINDOW"){
+    if (name == "FACE_SEARCH_WINDOW")
+    {
         face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
     }
-    if (name == "FACE_MIN_SIZE"){
-        face_min_size = ((ofxUISlider*) e.widget)->getScaledValue();
+    if (name == "FACE_SIZE")
+    {
+        face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
+        face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
-    if (name == "FACE_MAX_SIZE"){
-        face_max_size = ((ofxUISlider*) e.widget)->getScaledValue();
+    if (name == "FLOW_THRESHOLD")
+    {
+        flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
+        flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
+    }
+    if (name == "FLOW_EROSION_SIZE")
+    {
+        flow_erosion_size = (int)(((ofxUISlider*) e.widget)->getScaledValue());
     }
 }

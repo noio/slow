@@ -69,7 +69,12 @@ public:
     // Settings
     bool draw_debug = false;
     bool use_camera = false;
+    
     float face_search_window = 0.2;
-    float face_max_size = 0.6;  // This is relative to the full frame, not the face search window
-    float face_min_size = 0.05; // This is relative to the full frame, not the face search window
+    float face_size_min = 0.6;  // This is relative to the full frame, not the face search window
+    float face_size_max = 0.05; // This is relative to the full frame, not the face search window
+    
+    float flow_threshold_low = 0.1f;
+    float flow_threshold_high = 0.5f;
+    int flow_erosion_size = 5;
 };

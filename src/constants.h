@@ -9,10 +9,10 @@
 #ifndef SLOW_CONSTANTS_H_
 #define SLOW_CONSTANTS_H_
 
-const int kCaptureWidth = 640;
-const int kCaptureHeight = 360;
-//const int kCaptureWidth = 1280;
-//const int kCaptureHeight = 720;
+//const int kCaptureWidth = 640;
+//const int kCaptureHeight = 360;
+const int kCaptureWidth = 1280;
+const int kCaptureHeight = 720;
 
 const int kScreenWidth = 1080;
 const int kScreenHeight = 480;
@@ -48,11 +48,6 @@ const ofPoint kFluidSize(kFluidWidth, kFluidHeight, 1.0);
 
 const int kMaxParticles = 1000;
 
-//GAMEPLAY
-const float kFlowLowThreshold = 0.1f;
-const float kFlowHighThreshold = 0.3f;
-
-const float kFlowErosionSize = 5.0f;
 
 // Other
 const ofPoint kLabelOffset = ofPoint(3, 13);

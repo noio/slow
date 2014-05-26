@@ -17,17 +17,18 @@ using std::endl;
 void Squid::setup(ofPtr<b2World> phys_world)
 {
     // Set up physics body
-    ofPoint pos = ofPoint(kGameWidth / 2, kGameHeight / 2);
+    pos_game = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position = ofToB2(pos);
-    bodyDef.linearDamping = 2.0;
+    bodyDef.position = ofToB2(pos_game);
+    bodyDef.angularDamping = 5.0f;
+    bodyDef.linearDamping = 2.0f;
     body = phys_world->CreateBody(&bodyDef);
     b2CircleShape shape;
     shape.m_radius = kBodyRadius / kPhysicsScale;
     b2FixtureDef fixture;
     fixture.shape = &shape;
-    fixture.density = 1.0f;
+    fixture.density = 0.2f;
     fixture.friction = 0.3;
     body->CreateFixture(&fixture);
     //
@@ -38,7 +39,7 @@ void Squid::setup(ofPtr<b2World> phys_world)
         double angle = TWO_PI * (i / (double)kNumTentacles);
         ofPoint offset = ofPoint(cos(angle) * kTentacleSegmentLength, sin(angle) * kTentacleSegmentLength);
         ofPoint body_offset = ofPoint(cos(angle) * kBodyRadius, sin(angle) * kBodyRadius);
-        ofPoint attach_at = body_offset + pos;
+        ofPoint attach_at = body_offset + pos_game;
         b2Body* previous = body;
         for (int j = 0; j < kNumSegments; j ++)
         {
@@ -62,20 +63,10 @@ void Squid::setup(ofPtr<b2World> phys_world)
             previous = tentacle;
             attach_at += offset;
         }
-//
-//
-//        ofPtr<ofxBox2dCircle> circle = ofPtr<ofxBox2dCircle>(new ofxBox2dCircle);
-//        circle.get()->setPhysics(1.0, 0.5, 0.0);
-//        circle.get()->setup(box2d.getWorld(), pos.x + offset.x, pos.y + offset.y, 2);
-//        circle.get()->body->SetLinearDamping(5.0);
-//        tentacles.push_back(circle);
-//        // Add the joint
-//        ofPtr<ofxBox2dJoint> joint = ofPtr<ofxBox2dJoint>(new ofxBox2dJoint);
-//        joint.get()->setup(box2d.getWorld(), body.body, circle.get()->body);
-//        joint.get()->setLength(40);
-//        tentacle_joints.push_back(joint);
     }
 }
+
+
 
 /*
  This function consists of the following steps:
@@ -85,8 +76,9 @@ void Squid::setup(ofPtr<b2World> phys_world)
  */
 void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder objectfinder, cv::Mat frame)
 {
+    ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
-    pos_grid = pos_game / kGameSize * kPathGridSize;
+    pos_grid = pos_game / game_size * kPathGridSize;
     //
     // Subsample the flow grid to get a pathfinding grid
     cv::resize(flow_high, grid, kPathGridSize, 0, 0, CV_INTER_AREA);
@@ -103,9 +95,12 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     float local_sum = cv::sum(1.0f - grid(local_area))[0] / local_area.area();
     int local_flow_level = 0;
     // Any nearby motion scares the squid; causing it to re-select a goal.
-    if (local_sum > local_flow_high) {
+    if (local_sum > local_flow_high)
+    {
         local_flow_level = 2;
-    } else if (local_sum > 0.0f) {
+    }
+    else if (local_sum > 0.0f)
+    {
         local_flow_level = 1;
     }
     // Define some shorthands
@@ -113,67 +108,69 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     bool near_goal = (ofPoint(goal_x, goal_y) - pos_grid).length() > kMaxGoalDistance;
     //
     // Behavior State machine
-    switch (behavior_state) {
-        case IDLE:
-            if (local_flow_level == 2) {
-                selectQuietGoal();
-                behavior_state = PANIC;
-            } else if (local_flow_level == 1){
-                selectCloseGoal();
-            }
-            break;
-            
-        case PANIC:
-            if (local_flow_level == 0){
-                behavior_state = IDLE;
-            }
-            break;
-            
-        case FACE:
-            break;
-            
-        case SWIM:
-            break;
+    switch (behavior_state)
+    {
+    case IDLE:
+        if (local_flow_level == 2)
+        {
+            selectQuietGoal();
+            behavior_state = PANIC;
+        }
+        break;
+    case PANIC:
+        if (local_flow_level == 0)
+        {
+            behavior_state = IDLE;
+        } else {
+            selectQuietGoal();
+        }
+        break;
+    case FACE:
+        break;
+    case SWIM:
+        break;
     }
-    
     //
     // Motion state machine
-    switch (motion_state) {
-        case STILL:
-            if (going_slow && !near_goal) {
-                motion_time = 0;
-                motion_state = PREP;
-            }
-            break;
-        
-        case PREP:
-            motion_time += delta_t;
-            tentaclePrep();
-            if (motion_time > kMotionTimePrep){
-                findWaypoint();
-                motion_state = PUSH;
-                motion_time = 0;
-            }
-            break;
-            
-        case PUSH:
-            motion_time += delta_t;
-            tentaclePush();
-            body->ApplyForceToCenter(ofToB2(waypoint_direction * kPushForce * delta_t), true);
-            if (motion_time > kMotionTimePush){
-                motion_state = GLIDE;
-                motion_time = 0;
-            }
-            break;
-            
-        case GLIDE:
-            tentacleGlide();
-            if (going_slow){
-                motion_state = STILL;
-            }
-            break;
+    switch (motion_state)
+    {
+    case STILL:
+        if (going_slow && !near_goal)
+        {
+            motion_time = 0;
+            findWaypoint();
+            motion_state = PREP;
+        }
+        break;
+    case PREP:
+        motion_time += delta_t;
+        tentaclePrep();
+        bodyPrep(delta_t);
+        if (motion_time > kMotionTimePrep)
+        {
+            findWaypoint();
+            motion_state = PUSH;
+            motion_time = 0;
+        }
+        break;
+    case PUSH:
+        motion_time += delta_t;
+        tentaclePush();
+        bodyPush(delta_t);
+        if (motion_time > kMotionTimePush)
+        {
+            motion_state = GLIDE;
+            motion_time = 0;
+        }
+        break;
+    case GLIDE:
+        tentacleGlide();
+        if (going_slow)
+        {
+            motion_state = STILL;
+        }
+        break;
     }
-
 }
 
 void Squid::selectQuietGoal()
@@ -199,26 +196,50 @@ void Squid::selectCloseGoal()
     goal_y = pos_grid.y;
 }
 
-void Squid::findWaypoint(){
+void Squid::findWaypoint()
+{
     // Do the actual pathfinding
     ofxCv::copy(grid, grid_im);
     pathfinder.setup(grid_im);
     float path_length = pathfinder.find(pos_grid.x, pos_grid.y, goal_x, goal_y);
     pathfinder.path.simplify(0.5f);
     ofPoint waypoint;
-    if (pathfinder.path.size() > 1){
+    if (pathfinder.path.size() > 1)
+    {
         waypoint = pathfinder.path[pathfinder.path.size() - 2];
-    } else {
+    }
+    else
+    {
         waypoint = ofPoint(goal_x, goal_y);
     }
-    waypoint = (waypoint + 0.5) / kPathGridSize * kGameSize;
+    waypoint = (waypoint + 0.5) / kPathGridSize * ofPoint(ofGetWidth(), ofGetHeight(), 1);
     waypoint_direction = (waypoint - pos_game).normalized();
 }
 
 /*
+ * Rotates the body towards the goal
+ */
+void Squid::bodyPrep(double delta_t){
+    b2Vec2 forward = b2Mul(body->GetTransform().q, b2Vec2(1, 0));
+    float angle = atan2(b2Cross(forward, ofToB2(waypoint_direction)), b2Dot(forward, ofToB2(waypoint_direction)));
+    if (angle < -0.3){
+        body->ApplyAngularImpulse(20 * delta_t, true);
+    } else if (angle > 0.3) {
+        body->ApplyAngularImpulse(-20 * delta_t, true);
+    }
+}
+
+/*
+ * Applies a force to the body to propel it to goal
+ */
+void Squid::bodyPush(double delta_t){
+    body->ApplyForceToCenter(ofToB2(waypoint_direction * kPushForce * delta_t), true);
+}
+/*
  * Moves the tentacles outward to prepare for a push
  */
-void Squid::tentaclePrep(){
+void Squid::tentaclePrep()
+{
     for (int i = 0; i < tentacles.size(); i++)
     {
         b2Body* tentacle = tentacles[i];
@@ -230,11 +251,12 @@ void Squid::tentaclePrep(){
         }
     }
 }
-            
+
 /*
  * Moves the tentacles back to push
  */
-void Squid::tentaclePush(){
+void Squid::tentaclePush()
+{
     // Limb muscles
     for (int i = 0; i < tentacles.size(); i++)
     {
@@ -249,7 +271,8 @@ void Squid::tentaclePush(){
 /*
  * Applies tensor friction to the tentacles to make them trail nicely
  */
-void Squid::tentacleGlide(){
+void Squid::tentacleGlide()
+{
     for (int i = 0; i < tentacles.size(); i++)
     {
         b2Body* tentacle = tentacles[i];
@@ -265,9 +288,9 @@ void Squid::tentacleGlide(){
 
 void Squid::draw(bool draw_debug)
 {
-    ofPoint pos = b2ToOf(body->GetPosition());
+    ofFill();
     ofSetColor(255, 255, 255, 255);
-    ofCircle(pos, kBodyRadius);
+    ofCircle(pos_game, kBodyRadius);
     for (int i = 0; i < tentacles.size(); i ++)
     {
         ofSetColor(255, 255 * (1.0 - ((float)i / (kNumSegments * kNumTentacles))), 255 * (float)i / (kNumSegments * kNumTentacles));
@@ -280,18 +303,29 @@ void Squid::draw(bool draw_debug)
     }
     if (draw_debug)
     {
+        // Draw state
+        switch (behavior_state) {
+            case IDLE:
+                ofDrawBitmapStringHighlight("IDLE", pos_game + kLabelOffset);
+                break;
+            case PANIC:
+                ofDrawBitmapStringHighlight("PANIC", pos_game + kLabelOffset);
+                break;
+            default:
+                break;
+        }
         // Draw the grids
         ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofSetColor(0, 255, 0, 64);
-        ofxCv::drawMat(grid, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
+        ofxCv::drawMat(grid, 0, 0, ofGetWidth(), ofGetHeight(), GL_NEAREST);
         ofSetColor(0, 0, 255, 64);
-        ofxCv::drawMat(sections, 0, 0, kScreenWidth, kScreenHeight, GL_NEAREST);
+        ofxCv::drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight(), GL_NEAREST);
         ofDisableBlendMode();
         ofSetColor(0, 255, 0, 255);
         // Draw the path and local area
         ofSetColor(0, 255, 255, 255);
         ofPushMatrix();
-        ofScale(kScreenWidth / kPathGridSize.width, kScreenHeight / kPathGridSize.height);
+        ofScale(ofGetWidth() / kPathGridSize.width, ofGetHeight() / kPathGridSize.height);
         ofRectangle debug_local_area = ofxCv::toOf(local_area);
         ofNoFill();
         ofRect(debug_local_area);

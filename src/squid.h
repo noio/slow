@@ -32,10 +32,10 @@ public:
     const double kMotionTimePush = 0.4;
     const double kMinVelocity = 200;
     const double kMaxGoalDistance = 100;
-    const int kNumTentacles = 7;
+    const int kNumTentacles = 9;
     const int kNumSegments = 4;
     const double kTentacleSegmentLength = 20;
-    const double kBodyRadius = 20;
+    const double kBodyRadius = 40;
     
     enum BehaviorState { IDLE, SWIM, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE };
@@ -69,6 +69,8 @@ public:
     void selectQuietGoal();
     void selectCloseGoal();
     void findWaypoint();
+    void bodyPush(double delta_t);
+    void bodyPrep(double delta_t);
     void tentaclePrep();
     void tentaclePush();
     void tentacleGlide();

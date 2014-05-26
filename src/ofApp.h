@@ -20,15 +20,19 @@ public:
     void update();
     void draw();
     void exit();
+    
+    void setupPhysics();
+    void setupGUI();
+    
+    void resize();
+    void resizePhysics();
+    void resizeGUI();
+    
+    void doCapture();
 
     void updateFrame();
     void updateFlow();
     void updateFinder();
-    void updateMotionEffect();
-    void updateFluid();
-    void updateParticles();
-
-    void drawParticles();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -41,34 +45,37 @@ public:
     void gotMessage(ofMessage msg);
     void guiEvent(ofxUIEventArgs& e);
 
+    // Components
     ofVideoPlayer video;
     ofVideoGrabber camera;
-
-    FluidSolver fluid;
-    ofTexture fluid_texture;
-
-    ParticleSystem particles;
 
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
     ofxCv::ObjectFinder objectfinder;
-    ofxDelaunay triangulator;
     
     ofPtr<b2World> phys_world;
+    b2Body* world_bounds = NULL;
+    
     Squid squid;
     
-    ofxUISuperCanvas* gui;
+    ofPtr<ofxUIScrollableCanvas> gui;
     
+    // Matrices
     cv::Mat open_kernel;
-    cv::Mat frame, frame_gray;
+    cv::Mat frame_full, frame, frame_gray;
     cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
     
+    // Sizes
     double delta_t;
+    double ratio;
     cv::Rect face_roi;
+    cv::Rect capture_roi;
+    double frame_scale;
     
     // Settings
     bool draw_debug = false;
-    bool use_camera = false;
+    bool source_camera = false;
+    bool resized = true;
     
     float face_search_window = 0.2;
     float face_size_min = 0.6;  // This is relative to the full frame, not the face search window

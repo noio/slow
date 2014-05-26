@@ -25,7 +25,6 @@ void ofApp::setup()
     // Setup GUI
     setupGUI();
     squid.setup(phys_world);
-
     //
     // Set up camera and video
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
@@ -87,7 +86,6 @@ void ofApp::setupGUI()
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
     gui->setPosition(ofGetWidth() - 200, 0);
-
 }
 
 void ofApp::resize()

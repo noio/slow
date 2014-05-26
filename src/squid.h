@@ -36,8 +36,8 @@ public:
     double min_velocity = 200;
     double max_goal_distance = 3;
     int num_tentacles = 9;
-    int num_segments = 4;
-    double segment_length = 20;
+    int num_segments = 5;
+    double segment_length = 40;
     double body_radius = 40;
     double body_density = 0.2;
     

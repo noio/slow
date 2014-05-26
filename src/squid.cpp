@@ -336,15 +336,31 @@ void Squid::draw(bool draw_debug)
     ofFill();
     ofSetColor(255, 255, 255, 255);
     ofCircle(pos_game, body_radius);
-    for (int i = 0; i < tentacles.size(); i ++)
-    {
-        ofSetColor(255, 255 * (1.0 - ((float)i / (num_segments * num_tentacles))), 255 * (float)i / (num_segments * num_tentacles));
-        ofPushMatrix();
-        ofTranslate(b2ToOf(tentacles[i]->GetPosition()));
-        ofRotateZ(tentacles[i]->GetAngle() * RAD_TO_DEG);
-        ofRect(-segment_length / 2, -3, segment_length, 6);
-//        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
-        ofPopMatrix();
+//    for (int i = 0; i < tentacles.size(); i ++)
+//    {
+//        ofSetColor(255, 255 * (1.0 - ((float)i / (num_segments * num_tentacles))), 255 * (float)i / (num_segments * num_tentacles));
+//        ofPushMatrix();
+//        ofTranslate(b2ToOf(tentacles[i]->GetPosition()));
+//        ofRotateZ(tentacles[i]->GetAngle() * RAD_TO_DEG);
+//        ofRect(-segment_length / 2, -3, segment_length, 6);
+////        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
+//        ofPopMatrix();
+//    }
+    for (int i = 0; i < num_tentacles; i ++){
+        ofPolyline path;
+        path.curveTo(b2ToOf(body->GetPosition()));
+        ofPoint p = b2ToOf(tentacles[i * num_segments]->GetWorldPoint(b2Vec2(-0.5 * segment_length / kPhysicsScale, 0)));
+        path.curveTo(p);
+        for (int j = 1; j < num_segments; j ++){
+            ofPoint mid = b2ToOf(tentacles[i * num_segments + j]->GetPosition());
+            path.curveTo(mid);
+            if (j == num_segments - 1){
+                ofPoint end = b2ToOf(tentacles[i * num_segments + j]->GetWorldPoint(b2Vec2(segment_length * 0.75 / kPhysicsScale, 0.0)));
+                path.curveTo(end);
+            }
+        }
+        ofSetLineWidth(10);
+        path.draw();
     }
     if (draw_debug)
     {

@@ -19,6 +19,14 @@ void ofApp::setup()
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
     //
+    // Set up Box2d
+    setupPhysics();
+    //
+    // Setup GUI
+    setupGUI();
+    squid.setup(phys_world);
+
+    //
     // Set up camera and video
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
@@ -43,15 +51,12 @@ void ofApp::setup()
     objectfinder.setMinNeighbors(2);
     objectfinder.setMultiScaleFactor(1.2);
     objectfinder.setFindBiggestObject(true);
-    //
-    // Set up Box2d
-    setupPhysics();
-    setupGUI();
-    squid.setup(phys_world);
+    // Call resize to compute frame sizes the first time
     resize();
 }
 
-void ofApp::setupPhysics(){
+void ofApp::setupPhysics()
+{
     b2Vec2 gravity(0.0f, 0.0f);
     phys_world = ofPtr<b2World> ( new b2World(gravity ) );
     // Set up the world bounds
@@ -60,29 +65,33 @@ void ofApp::setupPhysics(){
     world_bounds = phys_world.get()->CreateBody(&boundsBodyDef);
 }
 
-void ofApp::setupGUI(){
+void ofApp::setupGUI()
+{
     //
     // Set up control panel
-    gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0,0,200,ofGetHeight()));
+    gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
     gui->setTheme(OFX_UI_THEME_HACKER);
     gui->setScrollAreaHeight(ofGetHeight());
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
-    gui->addSpacer();
-    gui->addToggle("DEBUG", false);
-    gui->addToggle("CAMERA", false);
-    gui->addSpacer();
+    gui->addToggle("DEBUG", &draw_debug);
+    gui->addToggle("CAMERA", &use_camera);
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
     gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
-    gui->addSpacer();
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
     gui->addSlider("FLOW_EROSION_SIZE", 1, 7, 5);
+    gui->addLabelButton("1080x480", false);
     gui->autoSizeToFitWidgets();
+    gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
+    gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
+    // Save settings
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
     gui->setPosition(ofGetWidth() - 200, 0);
+
 }
 
-void ofApp::resize(){
+void ofApp::resize()
+{
     ratio = (float)ofGetWidth() / ofGetHeight();
     capture_roi = computeCenteredROI(frame_full, ratio);
     frame_scale = (double)ofGetWidth() / capture_roi.width;
@@ -91,7 +100,8 @@ void ofApp::resize(){
     resizeGUI();
 }
 
-void ofApp::resizePhysics(){
+void ofApp::resizePhysics()
+{
     for (b2Fixture* f = world_bounds->GetFixtureList(); f; )
     {
         b2Fixture* fixtureToDestroy = f;
@@ -115,7 +125,8 @@ void ofApp::resizePhysics(){
     world_bounds->CreateFixture(&shape, 0.0f);
 }
 
-void ofApp::resizeGUI(){
+void ofApp::resizeGUI()
+{
     gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
     gui->setHeight(ofGetHeight());
     gui->setScrollAreaHeight(ofGetHeight());
@@ -130,12 +141,13 @@ void ofApp::update()
     {
         ofClear(0, 0, 0, 255);
     }
-    if (resized){
+    if (resized)
+    {
         resize();
         resized = false;
     }
     updateFrame();
-    if ((source_camera && camera.isFrameNew()) || video.isFrameNew() )
+    if ((use_camera && camera.isFrameNew()) || video.isFrameNew() )
     {
         updateFlow();
         updateFinder();
@@ -145,8 +157,9 @@ void ofApp::update()
     phys_world->Step(1.0f / kFrameRate, 6, 2);
 }
 
-void ofApp::doCapture(){
-    if (source_camera)
+void ofApp::doCapture()
+{
+    if (use_camera)
     {
         camera.update();
         frame_full = toCv(camera);
@@ -271,13 +284,14 @@ void ofApp::keyPressed(int key)
 {
     switch (key)
     {
-        case 'g':
-        {
-            gui->toggleVisible();
-        }
-            break;
-        default:
-            break;
+    case 'g':
+        gui->toggleVisible();
+        break;
+    case 'd':
+        draw_debug = !draw_debug;
+        break;
+    default:
+        break;
     }
 }
 
@@ -327,13 +341,8 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 {
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    if (name == "DEBUG")
-    {
-        draw_debug = ((ofxUIToggle*) e.widget)->getValue();
-    }
     if (name == "CAMERA")
     {
-        source_camera = ((ofxUIToggle*) e.widget)->getValue();
         resized = true;
     }
     if (name == "FACE_SEARCH_WINDOW")
@@ -353,5 +362,20 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "FLOW_EROSION_SIZE")
     {
         flow_erosion_size = (int)(((ofxUISlider*) e.widget)->getScaledValue());
+    }
+    if (name == "1080x480")
+    {
+        ofSetWindowShape(1080, 480);
+        resized = true;
+    }
+    if (name == "SQUID_BODY_RADIUS")
+    {
+        squid.body_radius = (((ofxUISlider*) e.widget)->getScaledValue());
+        squid.setup(phys_world);
+    }
+    if (name == "SQUID_BODY_DENSITY")
+    {
+        squid.body_density = (((ofxUISlider*) e.widget)->getScaledValue());
+        squid.setup(phys_world);
     }
 }

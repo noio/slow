@@ -74,7 +74,7 @@ public:
     
     // Settings
     bool draw_debug = false;
-    bool source_camera = false;
+    bool use_camera = false;
     bool resized = true;
     
     float face_search_window = 0.2;

@@ -6,7 +6,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>CAMERA</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -29,4 +29,14 @@
     <Kind>4</Kind>
     <Name>FLOW_EROSION_SIZE</Name>
     <Value>1.413793087</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>SQUID_BODY_RADIUS</Name>
+    <Value>37.656250000</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>SQUID_BODY_DENSITY</Name>
+    <Value>0.200000003</Value>
 </Widget>

@@ -27,21 +27,23 @@ public:
     // CONST
     const cv::Size kPathGridSize = cv::Size(20, 10);
     const cv::Size kSectionsSize = cv::Size(4, 2);
-    const double kPushForce = 100000.0;
-    const double kMotionTimePrep = 0.2;
-    const double kMotionTimePush = 0.4;
-    const double kMinVelocity = 200;
-    const double kMaxGoalDistance = 100;
-    const int kNumTentacles = 9;
-    const int kNumSegments = 4;
-    const double kTentacleSegmentLength = 20;
-    const double kBodyRadius = 40;
+    
+    double push_force = 100000.0;
+    double motion_time_prep = 0.2;
+    double motion_time_push = 0.4;
+    double min_velocity = 200;
+    double max_goal_distance = 100;
+    int num_tentacles = 9;
+    int num_segments = 4;
+    double segment_length = 20;
+    double body_radius = 40;
+    double body_density = 0.2;
     
     enum BehaviorState { IDLE, SWIM, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE };
     
     // MEMBERS
-    b2Body* body;
+    b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
     ofxPathfinder pathfinder;
@@ -65,6 +67,7 @@ public:
 
     // METHODS
     void setup(ofPtr<b2World> phys_world);
+    void clean();
     void update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder objectfinder, cv::Mat frame);
     void selectQuietGoal();
     void selectCloseGoal();

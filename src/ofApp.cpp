@@ -56,7 +56,7 @@ void ofApp::setup()
 
 void ofApp::setupPhysics()
 {
-    b2Vec2 gravity(0.0f, 0.0f);
+    b2Vec2 gravity(0.0f, 1.0f);
     phys_world = ofPtr<b2World> ( new b2World(gravity ) );
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
@@ -82,6 +82,7 @@ void ofApp::setupGUI()
     gui->autoSizeToFitWidgets();
     gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
     gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
+    gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
     // Save settings
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
@@ -374,6 +375,11 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "SQUID_BODY_DENSITY")
     {
         squid.body_density = (((ofxUISlider*) e.widget)->getScaledValue());
+        squid.setup(phys_world);
+    }
+    if (name == "SQUID_TENTACLE_DAMPING")
+    {
+        squid.tentacle_damping = (((ofxUISlider*) e.widget)->getScaledValue());
         squid.setup(phys_world);
     }
 }

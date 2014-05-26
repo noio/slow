@@ -1,7 +1,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -22,7 +22,7 @@
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
-    <HighValue>1.062500000</HighValue>
+    <HighValue>0.968750000</HighValue>
     <LowValue>0.375000089</LowValue>
 </Widget>
 <Widget>
@@ -33,10 +33,15 @@
 <Widget>
     <Kind>25</Kind>
     <Name>SQUID_BODY_RADIUS</Name>
-    <Value>37.656250000</Value>
+    <Value>36.250000000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>
     <Name>SQUID_BODY_DENSITY</Name>
-    <Value>0.200000003</Value>
+    <Value>0.184375003</Value>
+</Widget>
+<Widget>
+    <Kind>25</Kind>
+    <Name>SQUID_TENTACLE_DAMPING</Name>
+    <Value>5.453125000</Value>
 </Widget>

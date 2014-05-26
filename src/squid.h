@@ -29,10 +29,12 @@ public:
     const cv::Size kSectionsSize = cv::Size(4, 2);
     
     double push_force = 100000.0;
+    double tentacle_prep_force = 400.0f;
+    double tentacle_damping = 10.0f;
     double motion_time_prep = 0.2;
     double motion_time_push = 0.4;
     double min_velocity = 200;
-    double max_goal_distance = 100;
+    double max_goal_distance = 3;
     int num_tentacles = 9;
     int num_segments = 4;
     double segment_length = 20;
@@ -63,6 +65,7 @@ public:
     ofPoint pos_grid;
     double motion_time = 0.0f;
     ofPoint waypoint_direction;
+    double waypoint_distance;
     cv::Rect local_area;
 
     // METHODS
@@ -77,6 +80,7 @@ public:
     void tentaclePrep();
     void tentaclePush();
     void tentacleGlide();
+    void idleMotion(double delta_t);
     void draw(bool draw_debug);
     
     ofPoint getPosition() { return b2ToOf(body->GetPosition()); };

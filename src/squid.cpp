@@ -7,8 +7,6 @@
 
 #include <algorithm>
 
-
-
 using std::cout;
 using std::endl;
 
@@ -47,12 +45,12 @@ void Squid::setup(ofPtr<b2World> phys_world)
             bodyDef.position = ofToB2(attach_at + 0.5 * offset);
             bodyDef.angle = angle;
             bodyDef.angularDamping = 2.0f;
-            bodyDef.linearDamping = 3.0;
+            bodyDef.linearDamping = tentacle_damping;
             b2Body* tentacle = phys_world->CreateBody(&bodyDef);
             b2PolygonShape box;
             box.SetAsBox(segment_length * 0.5 / kPhysicsScale, 3 / kPhysicsScale);
             fixture.shape = &box;
-            fixture.density = 0.1f;
+            fixture.density = 0.05f;
             fixture.filter.maskBits = 0x0;
             tentacle->CreateFixture(&fixture);
             tentacles.push_back(tentacle);
@@ -121,7 +119,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     }
     // Define some shorthands
     float going_slow = b2ToOf(body->GetLinearVelocity()).length() < min_velocity;
-    bool near_goal = (ofPoint(goal_x, goal_y) - pos_grid).length() > max_goal_distance;
+    bool near_goal = (ofPoint(goal_x, goal_y) - pos_grid).length() < max_goal_distance;
     //
     // Behavior State machine
     switch (behavior_state)
@@ -153,12 +151,13 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     switch (motion_state)
     {
     case STILL:
-        if (going_slow && !near_goal)
+        if (!near_goal)
         {
             motion_time = 0;
             findWaypoint();
             motion_state = PREP;
         }
+        idleMotion(delta_t);
         break;
     case PREP:
         motion_time += delta_t;
@@ -186,6 +185,12 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
         if (going_slow)
         {
             motion_state = STILL;
+        }
+        if (behavior_state == PANIC)
+        {
+            motion_time = 0;
+            findWaypoint();
+            motion_state = PREP;
         }
         break;
     }
@@ -232,6 +237,7 @@ void Squid::findWaypoint()
     }
     waypoint = (waypoint + 0.5) / kPathGridSize * ofPoint(ofGetWidth(), ofGetHeight(), 1);
     waypoint_direction = (waypoint - pos_game).normalized();
+    waypoint_distance = (waypoint - pos_game).length();
 }
 
 /*
@@ -256,7 +262,9 @@ void Squid::bodyPrep(double delta_t)
  */
 void Squid::bodyPush(double delta_t)
 {
-    body->ApplyForceToCenter(ofToB2(waypoint_direction * push_force * body->GetMass() * delta_t), true);
+    double force = push_force * body->GetMass() * delta_t;
+    force = MIN(force, force * (waypoint_distance / (2 * max_goal_distance)));
+    body->ApplyForceToCenter(ofToB2(waypoint_direction * force), true);
 }
 /*
  * Moves the tentacles outward to prepare for a push
@@ -266,11 +274,11 @@ void Squid::tentaclePrep()
     for (int i = 0; i < tentacles.size(); i++)
     {
         b2Body* tentacle = tentacles[i];
-        if (i % num_tentacles < 2)
+        if (i % num_segments < 2)
         {
             b2Vec2 outward = tentacle->GetPosition() - body->GetPosition();
             outward.Normalize();
-            tentacle->ApplyForceToCenter(tentacle->GetMass() * 20.0f * outward, true);
+            tentacle->ApplyForceToCenter(tentacle->GetMass() * tentacle_prep_force * outward, true);
         }
     }
 }
@@ -284,7 +292,7 @@ void Squid::tentaclePush()
     for (int i = 0; i < tentacles.size(); i++)
     {
         b2Body* tentacle = tentacles[i];
-        if (i % num_tentacles < 2)
+        if (i % num_segments < 2)
         {
             tentacle->ApplyForceToCenter(b2Vec2(-0.1f * waypoint_direction.x, -0.1f * waypoint_direction.y), true);
         }
@@ -309,6 +317,20 @@ void Squid::tentacleGlide()
     }
 }
 
+void Squid::idleMotion(double delta_t){
+    for (int i = 0; i < tentacles.size(); i++)
+    {
+        b2Body* tentacle = tentacles[i];
+        if (i % num_segments < 2)
+        {
+            b2Vec2 outward = tentacle->GetPosition() - body->GetPosition();
+            outward.Normalize();
+            tentacle->ApplyForceToCenter(tentacle->GetMass() * 10 * outward, true);
+        }
+    }
+    body->ApplyAngularImpulse(3 * delta_t, true);
+}
+
 void Squid::draw(bool draw_debug)
 {
     ofFill();
@@ -327,17 +349,35 @@ void Squid::draw(bool draw_debug)
     if (draw_debug)
     {
         // Draw state
+        std::string state = "";
         switch (behavior_state)
         {
         case IDLE:
-            ofDrawBitmapStringHighlight("IDLE", pos_game + kLabelOffset);
+            state += "IDLE";
             break;
         case PANIC:
-            ofDrawBitmapStringHighlight("PANIC", pos_game + kLabelOffset);
+            state += "PANIC";
             break;
         default:
             break;
         }
+        state += " / ";
+        switch (motion_state)
+        {
+        case STILL:
+            state += "STILL";
+            break;
+        case PREP:
+            state += "PREP";
+            break;
+        case PUSH:
+            state += "PUSH";
+            break;
+        case GLIDE:
+            state += "GLIDE";
+            break;
+        }
+        ofDrawBitmapStringHighlight(state, pos_game + kLabelOffset);
         // Draw the grids
         ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofSetColor(0, 255, 0, 64);

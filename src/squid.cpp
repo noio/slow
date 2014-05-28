@@ -129,6 +129,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
     bool near_face = (found_face.getCenter() - pos_game).length() < max_face_distance;
     // Update Cooldowns
     face_cooldown -= delta_t;
+
     //
     // Behavior State machine
     switch (behavior_state)
@@ -292,7 +293,7 @@ void Squid::grabFace(cv::Mat frame)
     //Build alpha channel
     cv::Mat alpha(cutout.size(), CV_8UC1);
     alpha.setTo(0);
-    cv::circle(alpha, cv::Point(alpha.cols/2,alpha.rows/2), alpha.rows/2, cv::Scalar(255), -1);
+    cv::circle(alpha, cv::Point(alpha.cols / 2, alpha.rows / 2), alpha.rows / 2, cv::Scalar(255), -1);
     vector<cv::Mat> channels;
     cv::split(cutout, channels);
     channels.push_back(cutout);

@@ -28,6 +28,8 @@ public:
     const cv::Size kPathGridSize = cv::Size(20, 10);
     const cv::Size kSectionsSize = cv::Size(4, 2);
     
+    // Settings
+    float local_flow_high = 0.3f;
     double push_force = 100000.0;
     double tentacle_prep_force = 400.0f;
     double tentacle_damping = 10.0f;
@@ -36,10 +38,14 @@ public:
     double min_velocity = 200;
     double max_goal_distance = 3;
     int num_tentacles = 9;
-    int num_segments = 5;
-    double segment_length = 40;
+    int num_segments = 4;
+    double segment_length = 30;
     double body_radius = 40;
     double body_density = 0.2;
+    
+    float face_search_window = 0.2;
+    float face_size_min = 0.6;  // This is relative to the full frame, not the face search window
+    float face_size_max = 0.05; // This is relative to the full frame, not the face search window
     
     enum BehaviorState { IDLE, SWIM, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE };
@@ -53,10 +59,8 @@ public:
     cv::Point goal_section;
     cv::Mat grid, sections;
     ofImage grid_im;
-    
-    // Settings
-    float local_flow_high = 0.3f;
-    
+    ofxCv::ObjectFinder objectfinder;
+
     // State
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;
@@ -67,11 +71,16 @@ public:
     ofPoint waypoint_direction;
     double waypoint_distance;
     cv::Rect local_area;
+    cv::Rect face_roi;
+    double frame_scale = 1.0;
 
     // METHODS
     void setup(ofPtr<b2World> phys_world);
-    void clean();
-    void update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder objectfinder, cv::Mat frame);
+    void setupPhysics(ofPtr<b2World> phys_world);
+    
+    void update(double delta_t, cv::Mat flow_high, cv::Mat frame);
+    void updateObjectFinder(cv::Mat frame);
+    
     void selectQuietGoal();
     void selectCloseGoal();
     void findWaypoint();

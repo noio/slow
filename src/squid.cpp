@@ -14,7 +14,23 @@ using std::endl;
 
 void Squid::setup(ofPtr<b2World> phys_world)
 {
-    clean();
+    // Setup the physics
+    setupPhysics(phys_world);
+    // Setup objectfinder
+    //
+    // Set up face detection
+    objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
+    //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
+    objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
+    objectfinder.setMinNeighbors(2);
+    objectfinder.setMultiScaleFactor(1.2);
+    objectfinder.setFindBiggestObject(true);
+}
+
+void Squid::setupPhysics(ofPtr<b2World> phys_world)
+{
+    tentacles = vector<b2Body*>();
+    tentacle_joints = vector<b2RevoluteJoint*>();
     // Set up physics body
     pos_game = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     b2BodyDef bodyDef;
@@ -65,22 +81,6 @@ void Squid::setup(ofPtr<b2World> phys_world)
     }
 }
 
-void Squid::clean()
-{
-    if (body != NULL)
-    {
-        body->GetWorld()->DestroyBody(body);
-        body = NULL;
-        for (int i = 0; i < tentacles.size(); i++)
-        {
-            tentacles[i]->GetWorld()->DestroyBody(tentacles[i]);
-        }
-        tentacles.clear();
-        tentacle_joints.clear();
-    }
-}
-
-
 
 /*
  This function consists of the following steps:
@@ -88,7 +88,7 @@ void Squid::clean()
  - Plan a path to goal
  - Move to goal (low level)
  */
-void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder objectfinder, cv::Mat frame)
+void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
 {
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
@@ -117,6 +117,8 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     {
         local_flow_level = 1;
     }
+    // Look for faces
+    updateObjectFinder(frame);
     // Define some shorthands
     float going_slow = b2ToOf(body->GetLinearVelocity()).length() < min_velocity;
     bool near_goal = (ofPoint(goal_x, goal_y) - pos_grid).length() < max_goal_distance;
@@ -134,7 +136,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     case PANIC:
         if (local_flow_level == 0)
         {
-            behavior_state = IDLE;
+            behavior_state = SWIM;
         }
         else
         {
@@ -144,6 +146,10 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     case FACE:
         break;
     case SWIM:
+        if (near_goal)
+        {
+            behavior_state = IDLE;
+        }
         break;
     }
     //
@@ -196,6 +202,22 @@ void Squid::update(double delta_t, cv::Mat flow_high, ofxCv::ObjectFinder object
     }
 }
 
+void Squid::updateObjectFinder(cv::Mat frame)
+{
+    // Only compute a width because the face search window is square.
+    frame_scale = ofGetWidth() / (double)frame.cols;
+    int face_search_width = MIN(frame.cols, frame.rows) * face_search_window;
+    face_roi = cv::Rect(0, 0, face_search_width, face_search_width);
+    face_roi += cv::Point(MAX(0, MIN(frame.cols - face_search_width, (pos_game.x / frame_scale - face_search_width / 2))),
+                          MAX(0, MIN(frame.rows - face_search_width, (pos_game.y / frame_scale - face_search_width / 2))));
+    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
+    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
+    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
+    // The call below uses 2 arguments including a switch "preprocess" that
+    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
+    objectfinder.update(frame(face_roi), true);
+}
+
 void Squid::selectQuietGoal()
 {
     double minVal, maxVal;
@@ -210,13 +232,23 @@ void Squid::selectQuietGoal()
     }
 }
 
+/**
+ * Moves the squid away slowly from any nearby movement
+ */
 void Squid::selectCloseGoal()
 {
-    double minVal, maxVal;
+    cv::Mat localgrid = grid(local_area);
+    ofxCv::blur(localgrid, 2);
     cv::Point minLoc, maxLoc;
+    double minVal, maxVal;
     minMaxLoc( grid(local_area), &minVal, &maxVal, &minLoc, &maxLoc );
-    goal_x = pos_grid.x;
-    goal_y = pos_grid.y;
+    if (minVal < 1)
+    {
+        minLoc = -minLoc;
+        cout << minLoc << endl;
+        goal_x = pos_grid.x + maxLoc.x - localgrid.cols / 2;
+        goal_y = pos_grid.y + maxLoc.y - localgrid.rows / 2;
+    }
 }
 
 void Squid::findWaypoint()
@@ -317,7 +349,8 @@ void Squid::tentacleGlide()
     }
 }
 
-void Squid::idleMotion(double delta_t){
+void Squid::idleMotion(double delta_t)
+{
     for (int i = 0; i < tentacles.size(); i++)
     {
         b2Body* tentacle = tentacles[i];
@@ -346,15 +379,18 @@ void Squid::draw(bool draw_debug)
 ////        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
 //        ofPopMatrix();
 //    }
-    for (int i = 0; i < num_tentacles; i ++){
+    for (int i = 0; i < num_tentacles; i ++)
+    {
         ofPolyline path;
         path.curveTo(b2ToOf(body->GetPosition()));
         ofPoint p = b2ToOf(tentacles[i * num_segments]->GetWorldPoint(b2Vec2(-0.5 * segment_length / kPhysicsScale, 0)));
         path.curveTo(p);
-        for (int j = 1; j < num_segments; j ++){
+        for (int j = 1; j < num_segments; j ++)
+        {
             ofPoint mid = b2ToOf(tentacles[i * num_segments + j]->GetPosition());
             path.curveTo(mid);
-            if (j == num_segments - 1){
+            if (j == num_segments - 1)
+            {
                 ofPoint end = b2ToOf(tentacles[i * num_segments + j]->GetWorldPoint(b2Vec2(segment_length * 0.75 / kPhysicsScale, 0.0)));
                 path.curveTo(end);
             }
@@ -413,5 +449,27 @@ void Squid::draw(bool draw_debug)
         pathfinder.path.draw();
         ofCircle(goal_x, goal_y, 0.2f);
         ofPopMatrix();
+        // Draw face search window
+        ofRectangle face_roi_rect = ofxCv::toOf(face_roi);
+        face_roi_rect.scale(frame_scale);
+        face_roi_rect.x *= frame_scale;
+        face_roi_rect.y *= frame_scale;
+        ofPushStyle();
+        ofSetLineWidth(2.0);
+        ofSetColor(ofColor::orange);
+        ofRect(face_roi_rect);
+        ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
+        ofSetColor(255, 255, 255);
+        ofRect(face_roi_rect.getPosition(), face_size_min * ofGetHeight(), face_size_min * ofGetHeight());
+        ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
+        // Draw detected faces
+        for(int i = 0; i < objectfinder.size(); i++)
+        {
+            ofRectangle object = objectfinder.getObject(i);
+            object.scale(frame_scale);
+            object.translate(face_roi_rect.position);
+            ofSetColor(ofColor::green);
+            ofRect(object);
+        }
     }
 }

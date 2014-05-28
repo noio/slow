@@ -19,18 +19,27 @@ void ofApp::setup()
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
     //
-    // Set up Box2d
-    setupPhysics();
-    //
     // Setup GUI
     setupGUI();
-    squid.setup(phys_world);
     //
     // Set up camera and video
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);
     video.play();
+    // Reset / start
+    reset();
+}
+
+void ofApp::reset()
+{
+    //
+    // Set up Box2d
+    setupPhysics();
+    squid.setup(phys_world);
+    doCapture(); // Get a single frame so we have the resolution
+    ratio = (float)ofGetWidth() / ofGetHeight();
+    capture_roi = computeCenteredROI(frame_full, ratio);
     //
     // Set up optical flow
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
@@ -42,26 +51,11 @@ void ofApp::setup()
     opticalflow.setNumIterations(3);
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
-    //
-    // Set up face detection
-    objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
-//    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
-    objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
-    objectfinder.setMinNeighbors(2);
-    objectfinder.setMultiScaleFactor(1.2);
-    objectfinder.setFindBiggestObject(true);
-    // Call resize to compute frame sizes the first time
-    resize();
-}
-
-void ofApp::setupPhysics()
-{
-    b2Vec2 gravity(0.0f, 1.0f);
-    phys_world = ofPtr<b2World> ( new b2World(gravity ) );
-    // Set up the world bounds
-    b2BodyDef boundsBodyDef;
-    boundsBodyDef.position.Set(0, 0);
-    world_bounds = phys_world.get()->CreateBody(&boundsBodyDef);
+    opticalflow.resetFlow();
+    // Position the GUI
+    gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
+    gui->setHeight(ofGetHeight());
+    gui->setScrollAreaHeight(ofGetHeight());
 }
 
 void ofApp::setupGUI()
@@ -72,6 +66,7 @@ void ofApp::setupGUI()
     gui->setTheme(OFX_UI_THEME_HACKER);
     gui->setScrollAreaHeight(ofGetHeight());
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
+    gui->addLabelButton("RESET", false);
     gui->addToggle("DEBUG", &draw_debug);
     gui->addToggle("CAMERA", &use_camera);
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
@@ -83,30 +78,19 @@ void ofApp::setupGUI()
     gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
     gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
     gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
-    // Save settings
+    // Load settings
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
-    gui->setPosition(ofGetWidth() - 200, 0);
 }
 
-void ofApp::resize()
+void ofApp::setupPhysics()
 {
-    ratio = (float)ofGetWidth() / ofGetHeight();
-    capture_roi = computeCenteredROI(frame_full, ratio);
-    frame_scale = (double)ofGetWidth() / capture_roi.width;
-    opticalflow.resetFlow();
-    resizePhysics();
-    resizeGUI();
-}
-
-void ofApp::resizePhysics()
-{
-    for (b2Fixture* f = world_bounds->GetFixtureList(); f; )
-    {
-        b2Fixture* fixtureToDestroy = f;
-        f = f->GetNext();
-        world_bounds->DestroyFixture( fixtureToDestroy );
-    }
+    b2Vec2 gravity(0.0f, 1.0f);
+    phys_world = ofPtr<b2World> ( new b2World(gravity ) );
+    // Set up the world bounds
+    b2BodyDef boundsBodyDef;
+    boundsBodyDef.position.Set(0, 0);
+    world_bounds = phys_world.get()->CreateBody(&boundsBodyDef);
     b2EdgeShape shape;
     b2AABB rec = ofToB2(ofRectangle(-kGameSizePadding, -kGameSizePadding,
                                     (ofGetWidth() + kGameSizePadding * 2), (ofGetHeight() + kGameSizePadding * 2)));
@@ -124,12 +108,7 @@ void ofApp::resizePhysics()
     world_bounds->CreateFixture(&shape, 0.0f);
 }
 
-void ofApp::resizeGUI()
-{
-    gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
-    gui->setHeight(ofGetHeight());
-    gui->setScrollAreaHeight(ofGetHeight());
-}
+
 
 //--------------------------------------------------------------
 void ofApp::update()
@@ -140,18 +119,13 @@ void ofApp::update()
     {
         ofClear(0, 0, 0, 255);
     }
-    if (resized)
-    {
-        resize();
-        resized = false;
-    }
     updateFrame();
     if ((use_camera && camera.isFrameNew()) || video.isFrameNew() )
     {
         updateFlow();
-        updateFinder();
+        squid.updateObjectFinder(frame);
     }
-    squid.update(delta_t, flow_high, objectfinder, frame);
+    squid.update(delta_t, flow_high, frame);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
 }
@@ -167,6 +141,7 @@ void ofApp::doCapture()
     {
         video.update();
         frame_full = toCv(video.getPixelsRef());
+        cv::resize(frame_full, frame_full, cv::Size(kCaptureWidth, kCaptureHeight));
     }
 }
 
@@ -211,23 +186,6 @@ void ofApp::updateFlow()
     std::swap(flow_high_prev, flow_high);
 }
 
-void ofApp::updateFinder()
-{
-    ofPoint squid_pos = squid.getPosition();
-    // Only compute a width because the face search window is square.
-    int face_search_width = MIN(frame.cols, frame.rows) * face_search_window;
-    face_roi = cv::Rect(0, 0, face_search_width, face_search_width);
-    face_roi += cv::Point(MAX(0, MIN(frame.cols - face_search_width, (squid_pos.x / frame_scale - face_search_width / 2))),
-                          MAX(0, MIN(frame.rows - face_search_width, (squid_pos.y / frame_scale - face_search_width / 2))));
-    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
-    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
-    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
-    // The call below uses 2 arguments including a switch "preprocess" that
-    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
-    objectfinder.update(frame(face_roi), true);
-}
-
-
 //--------------------------------------------------------------
 void ofApp::draw()
 {
@@ -243,28 +201,6 @@ void ofApp::draw()
         ofSetColor(224, 160, 58, 128);
         ofxCv::drawMat(flow_low, 0, 0, ofGetWidth(), ofGetHeight());
         ofDisableBlendMode();
-        // Draw face search window
-        ofRectangle face_roi_rect = toOf(face_roi);
-        face_roi_rect.scale(frame_scale);
-        face_roi_rect.x *= frame_scale;
-        face_roi_rect.y *= frame_scale;
-        ofPushStyle();
-        ofSetLineWidth(2.0);
-        ofSetColor(ofColor::orange);
-        ofRect(face_roi_rect);
-        ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
-        ofSetColor(255, 255, 255);
-        ofRect(face_roi_rect.getPosition(), face_size_min * ofGetHeight(), face_size_min * ofGetHeight());
-        ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
-        // Draw detected faces
-        for(int i = 0; i < objectfinder.size(); i++)
-        {
-            ofRectangle object = objectfinder.getObject(i);
-            object.scale(frame_scale);
-            object.translate(face_roi_rect.position);
-            ofSetColor(ofColor::green);
-            ofRect(object);
-        }
         ofPopStyle();
     }
     squid.draw(draw_debug);
@@ -322,7 +258,7 @@ void ofApp::mouseReleased(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h)
 {
-    resized = true;
+    reset();
 }
 
 //--------------------------------------------------------------
@@ -340,18 +276,18 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 {
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    if (name == "CAMERA")
+    if (name == "RESET")
     {
-        resized = true;
+        reset();
     }
     if (name == "FACE_SEARCH_WINDOW")
     {
-        face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
+        squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
     }
     if (name == "FACE_SIZE")
     {
-        face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
-        face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
+        squid.face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
+        squid.face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
     if (name == "FLOW_THRESHOLD")
     {
@@ -365,21 +301,18 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "1080x480")
     {
         ofSetWindowShape(1080, 480);
-        resized = true;
+        reset();
     }
     if (name == "SQUID_BODY_RADIUS")
     {
         squid.body_radius = (((ofxUISlider*) e.widget)->getScaledValue());
-        squid.setup(phys_world);
     }
     if (name == "SQUID_BODY_DENSITY")
     {
         squid.body_density = (((ofxUISlider*) e.widget)->getScaledValue());
-        squid.setup(phys_world);
     }
     if (name == "SQUID_TENTACLE_DAMPING")
     {
         squid.tentacle_damping = (((ofxUISlider*) e.widget)->getScaledValue());
-        squid.setup(phys_world);
     }
 }

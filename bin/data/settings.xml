@@ -1,17 +1,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>CAMERA</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>FACE_SEARCH_WINDOW</Name>
-    <Value>0.658374369</Value>
+    <Value>0.584375024</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
@@ -22,7 +22,7 @@
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
-    <HighValue>0.968750000</HighValue>
+    <HighValue>2.687500000</HighValue>
     <LowValue>0.375000089</LowValue>
 </Widget>
 <Widget>
@@ -33,7 +33,7 @@
 <Widget>
     <Kind>25</Kind>
     <Name>SQUID_BODY_RADIUS</Name>
-    <Value>39.062500000</Value>
+    <Value>35.781250000</Value>
 </Widget>
 <Widget>
     <Kind>25</Kind>

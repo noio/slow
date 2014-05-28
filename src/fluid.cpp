@@ -116,17 +116,20 @@ void FluidSolver::diffuse(vector<double>& m, const vector<double>& m0, double di
     int i, j, k, idx;
     double a = dt * diff * nx * ny;
     int row = nx + 2;
+
     for (k = 0; k < iterations; k++)
     {
         for (i = 1; i <= ny; i++)
         {
             idx = IX(i, 1);
+
             for (j = 1; j <= nx; j++)
             {
                 m[idx] = (m0[idx] + a * (m[idx - row] + m[idx + row] + m[idx - 1] + m[idx + 1])) / (1.0 + 4.0 * a);
                 idx++;
             }
         }
+
         set_boundary(boundary, m);
     }
 }
@@ -134,9 +137,11 @@ void FluidSolver::diffuse(vector<double>& m, const vector<double>& m0, double di
 void FluidSolver::decay(vector<double>& m, double d)
 {
     int i, j, idx;
+
     for (i = 1; i <= ny; i++)
     {
         idx = IX(i, 1);
+
         for (j = 1; j <= nx; j++)
         {
             m[idx] = d * m[idx];
@@ -149,28 +154,34 @@ void FluidSolver::advect(vector<double>& m, const vector<double>& m0, const vect
 {
     int i, j, i0, j0, i1, j1;
     double x, y, s0, t0, s1, t1;
+
     for (i = 1; i <= ny; i++ )
     {
         for (j = 1; j <= nx; j++ )
         {
             x = j - dt * nx * fu[IX(i, j)];
             y = i - dt * ny * fv[IX(i, j)];
+
             if (x < 0.5)
             {
                 x = 0.5;
             }
+
             if (x > nx + 0.5)
             {
                 x = nx + 0.5;
             }
+
             if (y < 0.5)
             {
                 y = 0.5;
             }
+
             if (y > ny + 0.5)
             {
                 y = ny + 0.5;
             }
+
             i0 = (int)y;
             i1 = i0 + 1;
             j0 = (int)x;
@@ -188,6 +199,7 @@ void FluidSolver::advect(vector<double>& m, const vector<double>& m0, const vect
 //            }
         }
     }
+
     set_boundary(boundary, m);
 }
 
@@ -196,9 +208,11 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
     int i, j, k, idx;
     int row = nx + 2;
     float h = 1.0 / nx;
+
     for (i = 1; i <= ny; i++)
     {
         idx = IX(i, 1);
+
         for (j = 1; j <= nx; j++)
         {
             div[idx] = -0.5 * h * (u[idx + 1] - u[idx - 1] + v[idx + row] - v[idx - row]);
@@ -206,24 +220,30 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
             idx ++;
         }
     }
+
     set_boundary(kBoundaryDensity, div);
     set_boundary(kBoundaryDensity, p);
+
     for (k = 0; k < iterations; k++ )
     {
         for (i = 1; i <= ny; i++)
         {
             idx = IX(i, 1);
+
             for (j = 1; j <= nx; j++)
             {
                 p[idx] = (div[idx] + p[idx - row] + p[idx + row] + p[idx - 1] + p[idx + 1]) / 4;
                 idx++;
             }
         }
+
         set_boundary(kBoundaryDensity, p);
     }
+
     for (i = 1; i <= ny; i++)
     {
         idx = IX(i, 1);
+
         for (j = 1; j <= nx; j++)
         {
             u[idx] -= 0.5 * (p[idx + 1] - p[idx - 1]) / h;
@@ -231,6 +251,7 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
             idx++;
         }
     }
+
     set_boundary(kBoundaryHorizontal, u);
     set_boundary(kBoundaryVertical, v);
 }
@@ -238,16 +259,19 @@ void FluidSolver::project(vector<double>& u, vector<double>& v, vector<double>& 
 void FluidSolver::set_boundary(int boundary, vector<double>& m)
 {
     int i, j;
+
     for (j = 1; j <= nx; j++)
     {
         m[IX(0, j)]    = (boundary == kBoundaryVertical) ? -2 * m[IX(1, j)] : m[IX(1, j)];
         m[IX(ny + 1, j)] = (boundary == kBoundaryVertical) ? -2 * m[IX(ny, j)] : m[IX(ny, j)];
     }
+
     for (i = 1; i <= ny; i++)
     {
         m[IX(i, 0)]    = (boundary == kBoundaryHorizontal) ? -m[IX(i, 1)] : m[IX(i, 1)];
         m[IX(i, nx + 1)] = (boundary == kBoundaryHorizontal) ? -m[IX(i, nx)] : m[IX(i, nx)];
     }
+
     m[IX(0, 0)]    = 0.5 * (m[IX(1, 0)] + m[IX(0, 1)]);
     m[IX(0, nx + 1)] = 0.5 * (m[IX(1, nx + 1)] + m[IX(0, nx)]);
     m[IX(ny + 1, 0)] = 0.5 * (m[IX(ny + 1, 1)] + m[IX(ny, 0)]);
@@ -258,6 +282,7 @@ void FluidSolver::fill_texture(unsigned char* pixels)
 {
     int i, j, idx;
     idx = 0;
+
     for (i = 1; i <= ny; i++ )
     {
         for (j = 1; j <= nx; j++ )

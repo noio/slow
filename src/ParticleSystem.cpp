@@ -53,17 +53,20 @@ vector<Particle*> ParticleSystem::getNeighbors(float x, float y, float radius)
     int n = region.size();
     float xd, yd, rsq, maxrsq;
     maxrsq = radius * radius;
+
     for(int i = 0; i < n; i++)
     {
         Particle& cur = *region[i];
         xd = cur.x - x;
         yd = cur.y - y;
         rsq = xd * xd + yd * yd;
+
         if(rsq < maxrsq)
         {
             neighbors.push_back(region[i]);
         }
     }
+
     return neighbors;
 }
 
@@ -77,14 +80,17 @@ vector<Particle*> ParticleSystem::getRegion(unsigned minX, unsigned minY, unsign
     unsigned maxYBin = maxY >> k;
     maxXBin++;
     maxYBin++;
+
     if(maxXBin > xBins)
     {
         maxXBin = xBins;
     }
+
     if(maxYBin > yBins)
     {
         maxYBin = yBins;
     }
+
     for(int y = minYBin; y < maxYBin; y++)
     {
         for(int x = minXBin; x < maxXBin; x++)
@@ -93,18 +99,22 @@ vector<Particle*> ParticleSystem::getRegion(unsigned minX, unsigned minY, unsign
             copy(cur.begin(), cur.end(), back);
         }
     }
+
     return region;
 }
 
 void ParticleSystem::setupForces()
 {
     int n = bins.size();
+
     for(int i = 0; i < n; i++)
     {
         bins[i].clear();
     }
+
     n = particles.size();
     unsigned xBin, yBin, bin;
+
     for(int i = 0; i < n; i++)
     {
         Particle& cur = particles[i];
@@ -112,6 +122,7 @@ void ParticleSystem::setupForces()
         xBin = ((unsigned) cur.x) >> k;
         yBin = ((unsigned) cur.y) >> k;
         bin = yBin * xBins + xBin;
+
         if(xBin < xBins && yBin < yBins)
         {
             bins[bin].push_back(&cur);
@@ -150,28 +161,34 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
     float minY = targetY - radius;
     float maxX = targetX + radius;
     float maxY = targetY + radius;
+
     if(minX < 0)
     {
         minX = 0;
     }
+
     if(minY < 0)
     {
         minY = 0;
     }
+
     unsigned minXBin = ((unsigned) minX) >> k;
     unsigned minYBin = ((unsigned) minY) >> k;
     unsigned maxXBin = ((unsigned) maxX) >> k;
     unsigned maxYBin = ((unsigned) maxY) >> k;
     maxXBin++;
     maxYBin++;
+
     if(maxXBin > xBins)
     {
         maxXBin = xBins;
     }
+
     if(maxYBin > yBins)
     {
         maxYBin = yBins;
     }
+
     float xd, yd, length, maxrsq;
 #ifdef USE_INVSQRT
     float xhalf;
@@ -180,18 +197,21 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
     float effect;
 #endif
     maxrsq = radius * radius;
+
     for(int y = minYBin; y < maxYBin; y++)
     {
         for(int x = minXBin; x < maxXBin; x++)
         {
             vector<Particle*>& curBin = bins[y * xBins + x];
             int n = curBin.size();
+
             for(int i = 0; i < n; i++)
             {
                 Particle& curParticle = *(curBin[i]);
                 xd = curParticle.x - targetX;
                 yd = curParticle.y - targetY;
                 length = xd * xd + yd * yd;
+
                 if(length > 0 && length < maxrsq)
                 {
 #ifdef DRAW_FORCES
@@ -231,6 +251,7 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
 void ParticleSystem::update()
 {
     int n = particles.size();
+
     for(int i = 0; i < n; i++)
     {
         if (particles[i].alive)
@@ -253,9 +274,11 @@ void ParticleSystem::draw()
 {
     int n = particles.size();
     glBegin(GL_POINTS);
+
     for(int i = 0; i < n; i++)
     {
         particles[i].draw();
     }
+
     glEnd();
 }

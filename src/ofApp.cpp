@@ -23,6 +23,7 @@ void ofApp::setup()
     setupGUI();
     //
     // Set up camera and video
+    camera.setDeviceID(1);
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);
@@ -115,16 +116,20 @@ void ofApp::update()
 {
     delta_t = ofGetLastFrameTime();
     doCapture();
+
     if (draw_debug)
     {
         ofClear(0, 0, 0, 255);
     }
+
     updateFrame();
+
     if ((use_camera && camera.isFrameNew()) || video.isFrameNew() )
     {
         updateFlow();
         squid.updateObjectFinder(frame);
     }
+
     squid.update(delta_t, flow_high, frame);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
@@ -157,6 +162,7 @@ void ofApp::updateFlow()
 {
     opticalflow.calcOpticalFlow(frame_gray);
     flow = opticalflow.getFlow();
+
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
     if (flow.cols == 1)
     {
@@ -164,6 +170,7 @@ void ofApp::updateFlow()
         flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
     }
+
     std::vector<cv::Mat> xy(2);
     cv::split(flow, xy);
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
@@ -191,9 +198,11 @@ void ofApp::draw()
 {
     ofSetColor(255, 255, 255, 255);
     ofxCv::drawMat(frame, 0, 0, ofGetWidth(), ofGetHeight());
+
 //    drawParticles();
     if (draw_debug)
     {
+        ofPushStyle();
         // Draw the optical flow maps
         ofSetColor(256, 0, 0, 196);
         ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -203,6 +212,7 @@ void ofApp::draw()
         ofDisableBlendMode();
         ofPopStyle();
     }
+
     squid.draw(draw_debug);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
     ofDrawBitmapStringHighlight("faces: " + ofToString(objectfinder.size()), kLabelOffset + ofPoint(0, 20));
@@ -219,14 +229,16 @@ void ofApp::keyPressed(int key)
 {
     switch (key)
     {
-    case 'g':
-        gui->toggleVisible();
-        break;
-    case 'd':
-        draw_debug = !draw_debug;
-        break;
-    default:
-        break;
+        case 'g':
+            gui->toggleVisible();
+            break;
+
+        case 'd':
+            draw_debug = !draw_debug;
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -276,41 +288,50 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 {
     string name = e.widget->getName();
     int kind = e.widget->getKind();
+
     if (name == "RESET")
     {
         reset();
     }
+
     if (name == "FACE_SEARCH_WINDOW")
     {
         squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
     }
+
     if (name == "FACE_SIZE")
     {
         squid.face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
         squid.face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
+
     if (name == "FLOW_THRESHOLD")
     {
         flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
         flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
+
     if (name == "FLOW_EROSION_SIZE")
     {
         flow_erosion_size = (int)(((ofxUISlider*) e.widget)->getScaledValue());
     }
+
     if (name == "1080x480")
     {
         ofSetWindowShape(1080, 480);
         reset();
     }
+
     if (name == "SQUID_BODY_RADIUS")
     {
         squid.body_radius = (((ofxUISlider*) e.widget)->getScaledValue());
     }
+
     if (name == "SQUID_BODY_DENSITY")
     {
         squid.body_density = (((ofxUISlider*) e.widget)->getScaledValue());
     }
+
     if (name == "SQUID_TENTACLE_DAMPING")
     {
         squid.tentacle_damping = (((ofxUISlider*) e.widget)->getScaledValue());

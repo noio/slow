@@ -36,7 +36,8 @@ public:
     double motion_time_prep = 0.2;
     double motion_time_push = 0.4;
     double min_velocity = 200;
-    double max_goal_distance = 3;
+    double max_goal_distance = 80;
+    double max_face_distance = 10;
     int num_tentacles = 9;
     int num_segments = 4;
     double segment_length = 30;
@@ -47,7 +48,7 @@ public:
     float face_size_min = 0.6;  // This is relative to the full frame, not the face search window
     float face_size_max = 0.05; // This is relative to the full frame, not the face search window
     
-    enum BehaviorState { IDLE, SWIM, PANIC, FACE };
+    enum BehaviorState { IDLE, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE };
     
     // MEMBERS
@@ -55,23 +56,25 @@ public:
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
     ofxPathfinder pathfinder;
-    int goal_x = 0, goal_y = 0;
     cv::Point goal_section;
     cv::Mat grid, sections;
     ofImage grid_im;
     ofxCv::ObjectFinder objectfinder;
 
-    // State
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;
     
     ofPoint pos_game;
     ofPoint pos_grid;
     double motion_time = 0.0f;
+    ofPoint goal;
     ofPoint waypoint_direction;
     double waypoint_distance;
     cv::Rect local_area;
     cv::Rect face_roi;
+    cv::Mat face_mat;
+    ofRectangle found_face;
+    bool has_face = false;
     double frame_scale = 1.0;
 
     // METHODS
@@ -82,7 +85,10 @@ public:
     void updateObjectFinder(cv::Mat frame);
     
     void selectQuietGoal();
-    void selectCloseGoal();
+    void selectFaceGoal();
+    
+    void grabFace(cv::Mat frame);
+    
     void findWaypoint();
     void bodyPush(double delta_t);
     void bodyPrep(double delta_t);

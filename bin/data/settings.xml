@@ -1,7 +1,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -17,12 +17,12 @@
     <Kind>6</Kind>
     <Name>FACE_SIZE</Name>
     <HighValue>0.604137897</HighValue>
-    <LowValue>0.145517245</LowValue>
+    <LowValue>0.316041678</LowValue>
 </Widget>
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
-    <HighValue>2.687500000</HighValue>
+    <HighValue>1.312500000</HighValue>
     <LowValue>0.375000089</LowValue>
 </Widget>
 <Widget>

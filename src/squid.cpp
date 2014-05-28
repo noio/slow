@@ -17,7 +17,6 @@ void Squid::setup(ofPtr<b2World> phys_world)
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
     setupPhysics(phys_world);
-    //
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
@@ -47,8 +46,6 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
     fixture.density = body_density;
     fixture.friction = 0.3;
     body->CreateFixture(&fixture);
-
-    //
     // Create tentacles
     for (int i = 0; i < num_tentacles; i ++)
     {
@@ -128,7 +125,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
     bool sees_face = objectfinder.size() > 0;
     bool near_face = (found_face.getCenter() - pos_game).length() < max_face_distance;
     // Update Cooldowns
-    face_cooldown -= delta_t;
+    face_cooldown_timer -= delta_t;
 
     //
     // Behavior State machine
@@ -140,7 +137,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
                 selectQuietGoal();
                 behavior_state = PANIC;
             }
-            else if (sees_face && face_cooldown < 0)
+            else if (sees_face && face_cooldown_timer < 0)
             {
                 selectFaceGoal();
                 behavior_state = FACE;
@@ -167,7 +164,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
                 behavior_state = PANIC;
             }
 
-            if (near_face && face_cooldown < 0)
+            if (near_face && face_cooldown_timer < 0)
             {
                 grabFace(frame);
                 face_cooldown_timer = face_cooldown;
@@ -285,6 +282,7 @@ void Squid::grabFace(cv::Mat frame)
 {
     frame_scale = ofGetWidth() / (float)frame.cols;
     cv::Rect face_region(found_face.x / frame_scale, found_face.y / frame_scale, found_face.width / frame_scale, found_face.height / frame_scale);
+    face_region &= cv::Rect(0,0,frame.cols,frame.rows);
     cv::Mat cutout = frame(face_region).clone();
     cv::cvtColor(cutout, cutout, CV_RGB2GRAY);
     printMatrixInfo(cutout);
@@ -342,11 +340,11 @@ void Squid::bodyPrep(double delta_t)
 
     if (angle < -0.3)
     {
-        body->ApplyAngularImpulse(20 * delta_t, true);
+        body->ApplyTorque(2.0, true);
     }
     else if (angle > 0.3)
     {
-        body->ApplyAngularImpulse(-20 * delta_t, true);
+        body->ApplyTorque(-2.0, true);
     }
 }
 
@@ -355,9 +353,10 @@ void Squid::bodyPrep(double delta_t)
  */
 void Squid::bodyPush(double delta_t)
 {
-    double force = push_force * body->GetMass() * delta_t;
+    double force = push_force * body->GetMass();
     force = MIN(force, force * (waypoint_distance / (2 * max_goal_distance)));
-    body->ApplyForceToCenter(ofToB2(waypoint_direction * force), true);
+    body->ApplyLinearImpulse(ofToB2(waypoint_direction * force), body->GetPosition(), true);
+//    body->ApplyForceToCenter(ofToB2(waypoint_direction * force), true);
 }
 /*
  * Moves the tentacles outward to prepare for a push

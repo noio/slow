@@ -29,12 +29,13 @@ public:
     const cv::Size kSectionsSize = cv::Size(4, 2);
     
     // Settings
-    float local_flow_high = 0.3f;
-    double push_force = 100000.0;
+    double scale = 1.0f;
+    double local_flow_high = 0.3f;
+    double push_force = 100.0;
     double tentacle_prep_force = 400.0f;
     double tentacle_damping = 10.0f;
     double motion_time_prep = 0.1;
-    double motion_time_push = 0.4;
+    double motion_time_push = 0.3;
     double face_cooldown = 10.0;
     double min_velocity = 200;
     double max_goal_distance = 80;
@@ -45,9 +46,9 @@ public:
     double body_radius = 40;
     double body_density = 0.2;
     
-    float face_search_window = 0.2;
-    float face_size_min = 0.6;  // This is relative to the full frame, not the face search window
-    float face_size_max = 0.05; // This is relative to the full frame, not the face search window
+    double face_search_window = 0.2;
+    double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
+    double face_size_max = 0.05; // This is relative to the full frame, not the face search window
     
     enum BehaviorState { IDLE, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE };

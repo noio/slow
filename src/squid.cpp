@@ -14,9 +14,9 @@ using std::endl;
 
 void Squid::setup(ofPtr<b2World> phys_world)
 {
+    goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
     setupPhysics(phys_world);
-    // Setup objectfinder
     //
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
@@ -25,6 +25,7 @@ void Squid::setup(ofPtr<b2World> phys_world)
     objectfinder.setMinNeighbors(2);
     objectfinder.setMultiScaleFactor(1.2);
     objectfinder.setFindBiggestObject(true);
+    has_face = false;
 }
 
 void Squid::setupPhysics(ofPtr<b2World> phys_world)
@@ -126,7 +127,8 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
     bool near_goal = (goal - pos_game).length() < max_goal_distance;
     bool sees_face = objectfinder.size() > 0;
     bool near_face = (found_face.getCenter() - pos_game).length() < max_face_distance;
-
+    // Update Cooldowns
+    face_cooldown -= delta_t;
     //
     // Behavior State machine
     switch (behavior_state)
@@ -137,7 +139,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
                 selectQuietGoal();
                 behavior_state = PANIC;
             }
-            else if (sees_face && !has_face)
+            else if (sees_face && face_cooldown < 0)
             {
                 selectFaceGoal();
                 behavior_state = FACE;
@@ -164,9 +166,10 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
                 behavior_state = PANIC;
             }
 
-            if (near_face)
+            if (near_face && face_cooldown < 0)
             {
                 grabFace(frame);
+                face_cooldown_timer = face_cooldown;
                 selectQuietGoal();
                 behavior_state = IDLE;
             }
@@ -281,8 +284,24 @@ void Squid::grabFace(cv::Mat frame)
 {
     frame_scale = ofGetWidth() / (float)frame.cols;
     cv::Rect face_region(found_face.x / frame_scale, found_face.y / frame_scale, found_face.width / frame_scale, found_face.height / frame_scale);
-    face_mat = frame(face_region).clone();
+    cv::Mat cutout = frame(face_region).clone();
+    cv::cvtColor(cutout, cutout, CV_RGB2GRAY);
+    printMatrixInfo(cutout);
+    cv::equalizeHist(cutout, cutout);
+//    cv::threshold(cutout, cutout, 128, 255, cv::THRESH_BINARY);
+    //Build alpha channel
+    cv::Mat alpha(cutout.size(), CV_8UC1);
+    alpha.setTo(0);
+    cv::circle(alpha, cv::Point(alpha.cols/2,alpha.rows/2), alpha.rows/2, cv::Scalar(255), -1);
+    vector<cv::Mat> channels;
+    cv::split(cutout, channels);
+    channels.push_back(cutout);
+    channels.push_back(cutout);
+    channels.push_back(alpha);
+    cv::merge(channels, face_mat);
     printMatrixInfo(face_mat);
+    ofxCv::toOf(face_mat, face_im);
+    face_im.update();
 //    ofxCv::toOf(face_mat, face_im);
     has_face = true;
 }
@@ -419,7 +438,11 @@ void Squid::draw(bool draw_debug)
         ofPushMatrix();
         ofTranslate(pos_game);
         ofRotate(body->GetAngle() * RAD_TO_DEG);
-        ofxCv::drawMat(face_mat, 0, 0);
+        double face_scale = face_im.width / (body_radius * 2);
+//        ofScale(face_scale, face_scale);
+//        ofxCv::drawMat(face_mat, 0, 0);
+        ofEnableAlphaBlending();
+        face_im.draw(-body_radius, -body_radius, body_radius * 2, body_radius * 2);
         ofPopMatrix();
     }
 

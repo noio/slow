@@ -33,8 +33,9 @@ public:
     double push_force = 100000.0;
     double tentacle_prep_force = 400.0f;
     double tentacle_damping = 10.0f;
-    double motion_time_prep = 0.2;
+    double motion_time_prep = 0.1;
     double motion_time_push = 0.4;
+    double face_cooldown = 10.0;
     double min_velocity = 200;
     double max_goal_distance = 80;
     double max_face_distance = 10;
@@ -67,12 +68,14 @@ public:
     ofPoint pos_game;
     ofPoint pos_grid;
     double motion_time = 0.0f;
+    double face_cooldown_timer = 0.0f;
     ofPoint goal;
     ofPoint waypoint_direction;
     double waypoint_distance;
     cv::Rect local_area;
     cv::Rect face_roi;
     cv::Mat face_mat;
+    ofImage face_im;
     ofRectangle found_face;
     bool has_face = false;
     double frame_scale = 1.0;

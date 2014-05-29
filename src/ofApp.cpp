@@ -17,6 +17,11 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
+    contourfinder.setSimplify(true);
+    contourfinder.setMinArea(10);
+    // Load textures
+    motion_texture_a.loadImage("assets/motion_texture_a.png");
+    motion_texture_a.getTextureReference().setTextureWrap(GL_REPEAT, GL_REPEAT);
     // Setup GUI
     setupGUI();
 
@@ -125,21 +130,14 @@ void ofApp::update()
     delta_t = ofGetLastFrameTime();
     doCapture();
 
-    if (draw_debug)
+    if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) )
     {
-        ofClear(0, 0, 0, 255);
-    }
-
-    updateFrame();
-
-    if ((use_camera && camera.isFrameNew()) || video.isFrameNew() )
-    {
+        updateFrame();
         updateFlow();
         squid.updateObjectFinder(frame);
     }
 
     squid.update(delta_t, flow_high, frame, fluid);
-    // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     fluid.update();
 }
@@ -195,9 +193,9 @@ void ofApp::updateFlow()
     flow_high = flow_high > 0; // & flow_low_prev > 0;
     cv::erode(flow_high, flow_high, open_kernel);
 //    cv::dilate(flow_high, flow_high, open_kernel_small);
-    contourfinder.findContours(flow_high);
     flow_behind = flow_high_prev & (255 - flow_high);
     flow_new = flow_high & ( 255 - flow_high_prev);
+    contourfinder.findContours(flow_high);
     std::swap(flow_low_prev, flow_low);
     std::swap(flow_high_prev, flow_high);
 }
@@ -224,11 +222,58 @@ void ofApp::draw()
 
     ofEnableAlphaBlending();
     fluid.draw();
-    ofDisableBlendMode();
+    ofDisableAlphaBlending();
+    drawMotionEffects();
     squid.draw(draw_debug);
-//    ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
-    ofDrawBitmapStringHighlight("faces: " + ofToString(objectfinder.size()), kLabelOffset + ofPoint(0, 20));
+}
+
+void ofApp::drawMotionEffects()
+{
+    float flow_scale = ofGetWidth() / (float)flow_high.cols;
+    ofPushMatrix();
+    ofScale(flow_scale, flow_scale);
+
+    for (int ci = 0; ci < contourfinder.size(); ci++)
+    {
+        ofPolyline polyline = contourfinder.getPolyline(ci).getSmoothed(10);
+        polyline.simplify(1.5f);
+        ofPoint centroid = polyline.getCentroid2D();
+        ofPoint flow_at_centroid = toOf(flow.at<Point2f>(centroid.y, centroid.x));
+        ofPoint flow_at_centroid_normalized = flow_at_centroid.normalized();
+        
+        fluid.addTemporalForce(centroid * flow_scale, flow_at_centroid * 10, ofColor::blueSteel, -0.001f * polyline.getArea());
+        
+        for (float j = 1; j < polyline.size(); j += 2.0f)
+        {
+
+            ofPoint dir = polyline.getNormalAtIndexInterpolated(j) * -10.0f;
+            ofPoint pos = polyline.getPointAtIndexInterpolated(j);
+//            fluid.addTemporalForce(pos * flow_scale, dir, ofColor::blueSteel, 3.0f);
+            
+        }
+
+//        ofMesh mesh;
+//        ofTessellator().tessellateToMesh(polyline, OF_POLY_WINDING_ODD, mesh, true);
+//        ofFill();
+//
+//        float c = flow_at_centroid_normalized.x;
+//        float s = flow_at_centroid_normalized.y;
+//        for (int j = 0; j < mesh.getNumVertices(); j++) {
+//            ofPoint p = mesh.getVertex(j);
+//            p = ofPoint(p.x * c + p.y * s, p.x * -s + p.y * c); //rotation
+//            mesh.addTexCoord(p);
+//        }
+//        ofEnableAlphaBlending();
+//        ofSetColor(255,255,255);
+//        mesh.drawFaces();
+//        ofSetColor(255, 0, 0);
+//        motion_texture_a.getTextureReference().bind();
+//        mesh.drawFaces();
+//        motion_texture_a.getTextureReference().unbind();
+    }
+
+    ofPopMatrix();
 }
 
 

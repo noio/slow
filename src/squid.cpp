@@ -98,30 +98,34 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
     pos_grid = pos_game / game_size * kPathGridSize;
-    //
-    // Subsample the flow grid to get a pathfinding grid
-    cv::resize(flow_high, grid, kPathGridSize, 0, 0, CV_INTER_AREA);
-    grid.convertTo(grid, CV_32F, 1 / 255.0f);
-    ofxCv::dilate(grid, 1); // Dilation creates a margin around movement.
-    grid = 1.0f - grid;
-    cv::threshold(grid, grid, 0.2, 1.0, CV_THRESH_TOZERO);
-    cv::resize(grid, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
-    ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
-    //
-    // Check if current area or goal is crowded.
-    local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
-    local_area = local_area & cv::Rect(cv::Point(0, 0), kPathGridSize);
-    float local_sum = cv::sum(1.0f - grid(local_area))[0] / local_area.area();
     int local_flow_level = 0;
 
-    // Any nearby motion scares the squid; causing it to re-select a goal.
-    if (local_sum > local_flow_high)
+    //
+    // Subsample the flow grid to get a pathfinding grid
+    if (flow_high.size().area() > 0)
     {
-        local_flow_level = 2;
-    }
-    else if (local_sum > 0.0f)
-    {
-        local_flow_level = 1;
+        cv::resize(flow_high, grid, kPathGridSize, 0, 0, CV_INTER_AREA);
+        grid.convertTo(grid, CV_32F, 1 / 255.0f);
+        ofxCv::dilate(grid, 1); // Dilation creates a margin around movement.
+        grid = 1.0f - grid;
+        cv::threshold(grid, grid, 0.2, 1.0, CV_THRESH_TOZERO);
+        cv::resize(grid, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
+        ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
+        //
+        // Check if current area or goal is crowded.
+        local_area = cv::Rect(pos_grid.x - 2, pos_grid.y - 2, 5, 5);
+        local_area = local_area & cv::Rect(cv::Point(0, 0), kPathGridSize);
+        float local_sum = cv::sum(1.0f - grid(local_area))[0] / local_area.area();
+
+        // Any nearby motion scares the squid; causing it to re-select a goal.
+        if (local_sum > local_flow_high)
+        {
+            local_flow_level = 2;
+        }
+        else if (local_sum > 0.0f)
+        {
+            local_flow_level = 1;
+        }
     }
 
     // Define some shorthands
@@ -476,25 +480,26 @@ void Squid::draw(bool draw_debug)
             }
         }
     }
+
     // Draw body
-    ofSetColor(255, 255, 255, 255);
     float body_radius_s = body_radius * scale;
     // Trasnform to body position
     ofPushMatrix();
     ofTranslate(pos_game);
     ofRotate(body->GetAngle() * RAD_TO_DEG);
     ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
+    ofSetColor(255, 0, 0);
     body_outer_im.draw(body_draw_rect);
-    
+    ofSetColor(255, 255, 255, 255);
     // Draw face
+
     if (has_face)
     {
         face_im.draw(body_draw_rect);
     }
-    
+
     body_inner_im.draw(body_draw_rect);
     ofPopMatrix();
-    // Draw rest of squid
 
     if (draw_debug)
     {

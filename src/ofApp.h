@@ -31,6 +31,8 @@ public:
 
     void updateFrame();
     void updateFlow();
+    
+    void drawMotionEffects();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -46,10 +48,11 @@ public:
     // Components
     ofVideoPlayer video;
     ofVideoGrabber camera;
+    
+    ofImage motion_texture_a;
 
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
-    ofxCv::ObjectFinder objectfinder;
     ofxFluid fluid;
     
     ofPtr<b2World> phys_world;

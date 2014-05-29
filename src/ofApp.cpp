@@ -11,19 +11,21 @@ using std::endl;
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    //
     // Generic openframeworks setup
     ofSetFrameRate(40);
     ofSetBackgroundAuto(false);
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
-    //
     // Setup GUI
     setupGUI();
-    //
-    // Set up camera and video
-    camera.setDeviceID(1);
+
+    // Use an external camera if one is connected
+    if (camera.listDevices().size() > 1)
+    {
+        camera.setDeviceID(1);
+    }
+
     camera.initGrabber(kCaptureWidth, kCaptureHeight);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);
@@ -53,6 +55,12 @@ void ofApp::reset()
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
     opticalflow.resetFlow();
+    // Set up fluid
+    fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
+    fluid.dissipation = 0.99;
+    fluid.velocityDissipation = 0.99;
+    fluid.setGravity(ofVec2f(0.0,0.0));
+    
     // Position the GUI
     gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
     gui->setHeight(ofGetHeight());
@@ -73,12 +81,13 @@ void ofApp::setupGUI()
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
     gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
-    gui->addSlider("FLOW_EROSION_SIZE", 1, 7, 5);
+    gui->addIntSlider("FLOW_EROSION_SIZE", 1, 7, 5);
     gui->addLabelButton("1080x480", false);
     gui->autoSizeToFitWidgets();
-    gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
-    gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
-    gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
+    gui->addSlider("SQUID_SCALE", 0.5, 2.0, &squid.scale);
+//    gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
+//    gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
+//    gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
     // Load settings
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
@@ -129,10 +138,10 @@ void ofApp::update()
         updateFlow();
         squid.updateObjectFinder(frame);
     }
-
-    squid.update(delta_t, flow_high, frame);
+    squid.update(delta_t, flow_high, frame, fluid);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
+    fluid.update();
 }
 
 void ofApp::doCapture()
@@ -212,8 +221,12 @@ void ofApp::draw()
         ofDisableBlendMode();
         ofPopStyle();
     }
-
+    ofEnableAlphaBlending();
+    fluid.draw();
+    ofDisableBlendMode();
     squid.draw(draw_debug);
+//    ofEnableBlendMode(OF_BLENDMODE_ADD);
+
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
     ofDrawBitmapStringHighlight("faces: " + ofToString(objectfinder.size()), kLabelOffset + ofPoint(0, 20));
 }
@@ -313,27 +326,11 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 
     if (name == "FLOW_EROSION_SIZE")
     {
-        flow_erosion_size = (int)(((ofxUISlider*) e.widget)->getScaledValue());
+        flow_erosion_size = (int)(((ofxUIIntSlider*) e.widget)->getScaledValue());
     }
 
     if (name == "1080x480")
     {
         ofSetWindowShape(1080, 480);
         reset();
-    }
-
-    if (name == "SQUID_BODY_RADIUS")
-    {
-        squid.body_radius = (((ofxUISlider*) e.widget)->getScaledValue());
-    }
-
-    if (name == "SQUID_BODY_DENSITY")
-    {
-        squid.body_density = (((ofxUISlider*) e.widget)->getScaledValue());
-    }
-
-    if (name == "SQUID_TENTACLE_DAMPING")
-    {
-        squid.tentacle_damping = (((ofxUISlider*) e.widget)->getScaledValue());
-    }
-}
+    }}

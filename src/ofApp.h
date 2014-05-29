@@ -7,6 +7,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxUI.h"
+#include "ofxFluid.h"
 #include "ofxDelaunay.h"
 #include "Box2D/Box2D.h"
 
@@ -49,6 +50,7 @@ public:
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder;
     ofxCv::ObjectFinder objectfinder;
+    ofxFluid fluid;
     
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;

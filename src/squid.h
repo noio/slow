@@ -8,6 +8,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxPathfinder.h"
+#include "ofxFluid.h"
 
 #include "Box2D/Box2D.h"
 
@@ -29,12 +30,13 @@ public:
     const cv::Size kSectionsSize = cv::Size(4, 2);
     
     // Settings
-    double scale = 1.0f;
+    float scale = 1.0f;
     double local_flow_high = 0.3f;
-    double push_force = 100.0;
+    double push_force = 150.0;
+    double panic_force_multiplier = 2.0;
     double tentacle_prep_force = 400.0f;
-    double tentacle_damping = 10.0f;
-    double motion_time_prep = 0.1;
+    double tentacle_damping = 5.0f;
+    double motion_time_prep = 0.15;
     double motion_time_push = 0.3;
     double face_cooldown = 10.0;
     double min_velocity = 200;
@@ -57,6 +59,10 @@ public:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
+    ofImage body_outer_im;
+    ofImage body_inner_im;
+    ofImage tentacle_outer_im;
+    ofImage tentacle_inner_im;
     ofxPathfinder pathfinder;
     cv::Point goal_section;
     cv::Mat grid, sections;
@@ -85,7 +91,7 @@ public:
     void setup(ofPtr<b2World> phys_world);
     void setupPhysics(ofPtr<b2World> phys_world);
     
-    void update(double delta_t, cv::Mat flow_high, cv::Mat frame);
+    void update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& fluid);
     void updateObjectFinder(cv::Mat frame);
     
     void selectQuietGoal();

@@ -20,6 +20,8 @@ void Squid::setup(ofPtr<b2World> phys_world)
     // Load textures
     body_outer_im.loadImage("assets/body_outer.png");
     body_inner_im.loadImage("assets/body_inner.png");
+    tentacle_outer_im.loadImage("assets/tentacle_outer.png");
+    tentacle_inner_im.loadImage("assets/tentacle_inner.png");
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
@@ -55,7 +57,7 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
     {
         // Add the knee
         double angle = TWO_PI * (i / (double)num_tentacles);
-        ofPoint offset = ofPoint(cos(angle) * segment_length * scale, sin(angle) * segment_length * scale);
+        ofPoint offset = segment_join_length * ofPoint(cos(angle) * segment_length * scale, sin(angle) * segment_length * scale);
         ofPoint body_offset = ofPoint(cos(angle) * body_radius * scale, sin(angle) * body_radius * scale);
         ofPoint attach_at = body_offset + pos_game;
         b2Body* previous = body;
@@ -68,7 +70,7 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
             bodyDef.linearDamping = tentacle_damping;
             b2Body* tentacle = phys_world->CreateBody(&bodyDef);
             b2PolygonShape box;
-            box.SetAsBox(0.5 * scale * segment_length / kPhysicsScale, scale * segment_length * 0.25 / kPhysicsScale);
+            box.SetAsBox(0.5 * scale * segment_length / kPhysicsScale, 0.5 * scale * segment_width / kPhysicsScale);
             fixture.shape = &box;
             fixture.density = 0.05f;
             fixture.filter.maskBits = 0x0;
@@ -149,7 +151,8 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
             break;
 
         case PANIC:
-            fluid.addTemporalForce(getPosition(), -waypoint_direction*10, ofColor::red,body_radius * kFluidScale);
+            fluid.addTemporalForce(getPosition(), -waypoint_direction * 10, ofColor::red, body_radius * kFluidScale);
+
             if (local_flow_level == 0)
             {
                 behavior_state = IDLE;
@@ -212,8 +215,6 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
             motion_time += delta_t;
             tentaclePush();
             bodyPush(delta_t);
-
-
 
             if (motion_time > motion_time_push)
             {
@@ -287,6 +288,7 @@ void Squid::selectFaceGoal()
 void Squid::grabFace(cv::Mat frame)
 {
     frame_scale = ofGetWidth() / (float)frame.cols;
+    found_face.scaleFromCenter(face_grab_padding);
     cv::Rect face_region(found_face.x / frame_scale, found_face.y / frame_scale, found_face.width / frame_scale, found_face.height / frame_scale);
     face_region &= cv::Rect(0, 0, frame.cols, frame.rows);
     cv::Mat cutout = frame(face_region).clone();
@@ -360,9 +362,12 @@ void Squid::bodyPrep(double delta_t)
 void Squid::bodyPush(double delta_t)
 {
     double force = push_force * body->GetMass() * scale;
-    if (behavior_state == PANIC){
+
+    if (behavior_state == PANIC)
+    {
         force *= panic_force_multiplier;
     }
+
     force = MIN(force, force * (waypoint_distance / (2 * max_goal_distance)));
     body->ApplyLinearImpulse(ofToB2(waypoint_direction * force), body->GetPosition(), true);
 //    body->ApplyForceToCenter(ofToB2(waypoint_direction * force), true);
@@ -391,6 +396,7 @@ void Squid::tentaclePrep()
 void Squid::tentaclePush()
 {
     b2Vec2 force = tentacles[0]->GetMass() * -1 * b2Vec2(waypoint_direction.x, waypoint_direction.y);
+
     // Limb muscles
     for (int i = 0; i < tentacles.size(); i++)
     {
@@ -440,57 +446,55 @@ void Squid::idleMotion(double delta_t)
 
 void Squid::draw(bool draw_debug)
 {
+    ofEnableAlphaBlending();
+    // Draw Tentacles
+    ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
+
+    for (int i = 0; i < num_tentacles; i ++)
+    {
+        for (int layer = 0; layer < 2; layer ++)
+        {
+            for (int j = 0; j < num_segments; j ++)
+            {
+                b2Body* tentacle = tentacles[i * num_segments + j];
+                ofPushMatrix();
+                ofTranslate(b2ToOf(tentacle->GetPosition()));
+                ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
+
+                if (layer == 0)
+                {
+                    ofSetColor(255, 255, 255, 255);
+                    tentacle_outer_im.draw(tentacle_draw_rect);
+                }
+                else if (layer == 1)
+                {
+                    ofSetColor(255, 0, 0, 255);
+                    tentacle_inner_im.draw(tentacle_draw_rect);
+                }
+
+                ofPopMatrix();
+            }
+        }
+    }
+    // Draw body
     ofSetColor(255, 255, 255, 255);
     float body_radius_s = body_radius * scale;
     // Trasnform to body position
     ofPushMatrix();
-    ofEnableAlphaBlending();
     ofTranslate(pos_game);
     ofRotate(body->GetAngle() * RAD_TO_DEG);
     ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
     body_outer_im.draw(body_draw_rect);
+    
     // Draw face
     if (has_face)
     {
         face_im.draw(body_draw_rect);
     }
+    
     body_inner_im.draw(body_draw_rect);
     ofPopMatrix();
     // Draw rest of squid
-    ofNoFill();
-
-//    for (int i = 0; i < tentacles.size(); i ++)
-//    {
-//        ofSetColor(255, 255 * (1.0 - ((float)i / (num_segments * num_tentacles))), 255 * (float)i / (num_segments * num_tentacles));
-//        ofPushMatrix();
-//        ofTranslate(b2ToOf(tentacles[i]->GetPosition()));
-//        ofRotateZ(tentacles[i]->GetAngle() * RAD_TO_DEG);
-//        ofRect(-segment_length / 2, -3, segment_length, 6);
-////        ofRotate(float degrees)(b2ToOf(tentacles[i]->GetPosition()), 3);
-//        ofPopMatrix();
-//    }
-    for (int i = 0; i < num_tentacles; i ++)
-    {
-        ofPolyline path;
-        path.curveTo(b2ToOf(body->GetPosition()));
-        ofPoint p = b2ToOf(tentacles[i * num_segments]->GetWorldPoint(b2Vec2(-0.5 * segment_length / kPhysicsScale, 0)));
-        path.curveTo(p);
-
-        for (int j = 1; j < num_segments; j ++)
-        {
-            ofPoint mid = b2ToOf(tentacles[i * num_segments + j]->GetPosition());
-            path.curveTo(mid);
-
-            if (j == num_segments - 1)
-            {
-                ofPoint end = b2ToOf(tentacles[i * num_segments + j]->GetWorldPoint(b2Vec2(segment_length * 0.75 / kPhysicsScale, 0.0)));
-                path.curveTo(end);
-            }
-        }
-
-        ofSetLineWidth(10);
-        path.draw();
-    }
 
     if (draw_debug)
     {

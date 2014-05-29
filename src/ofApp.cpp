@@ -59,8 +59,7 @@ void ofApp::reset()
     fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
     fluid.dissipation = 0.99;
     fluid.velocityDissipation = 0.99;
-    fluid.setGravity(ofVec2f(0.0,0.0));
-    
+    fluid.setGravity(ofVec2f(0.0, 0.0));
     // Position the GUI
     gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
     gui->setHeight(ofGetHeight());
@@ -138,6 +137,7 @@ void ofApp::update()
         updateFlow();
         squid.updateObjectFinder(frame);
     }
+
     squid.update(delta_t, flow_high, frame, fluid);
     // Update physics
     phys_world->Step(1.0f / kFrameRate, 6, 2);
@@ -221,12 +221,12 @@ void ofApp::draw()
         ofDisableBlendMode();
         ofPopStyle();
     }
+
     ofEnableAlphaBlending();
     fluid.draw();
     ofDisableBlendMode();
     squid.draw(draw_debug);
 //    ofEnableBlendMode(OF_BLENDMODE_ADD);
-
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
     ofDrawBitmapStringHighlight("faces: " + ofToString(objectfinder.size()), kLabelOffset + ofPoint(0, 20));
 }
@@ -333,4 +333,5 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     {
         ofSetWindowShape(1080, 480);
         reset();
-    }}
+    }
+}

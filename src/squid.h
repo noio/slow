@@ -44,9 +44,12 @@ public:
     double max_face_distance = 10;
     int num_tentacles = 9;
     int num_segments = 4;
-    double segment_length = 30;
+    float segment_join_length = 0.9;
+    float segment_length = 30.0;
+    float segment_width = 10.0;
     double body_radius = 40;
     double body_density = 0.2;
+    float face_grab_padding = 1.2;
     
     double face_search_window = 0.2;
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window

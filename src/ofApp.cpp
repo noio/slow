@@ -105,7 +105,7 @@ void ofApp::setupGUI()
 
 void ofApp::setupPhysics()
 {
-    b2Vec2 gravity(0.0f, 1.0f);
+    b2Vec2 gravity(0.0f, 3.0f);
     phys_world = ofPtr<b2World> ( new b2World(gravity ) );
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
@@ -175,7 +175,6 @@ void ofApp::updateFlow()
 {
     opticalflow.calcOpticalFlow(frame_gray);
     flow = opticalflow.getFlow();
-
     std::swap(flow_low_prev, flow_low);
     std::swap(flow_high_prev, flow_high);
 
@@ -218,12 +217,21 @@ void ofApp::draw()
     {
         ofPushStyle();
         // Draw the optical flow maps
-        ofSetColor(256, 0, 0, 196);
         ofEnableBlendMode(OF_BLENDMODE_ADD);
-        ofxCv::drawMat(flow_high, 0, 0, ofGetWidth(), ofGetHeight());
         ofSetColor(224, 160, 58, 128);
         ofxCv::drawMat(flow_low, 0, 0, ofGetWidth(), ofGetHeight());
         ofDisableBlendMode();
+        ofPushMatrix();
+        ofSetLineWidth(4.0);
+        ofSetColor(255, 0, 0);
+        ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
+
+        for (int i = 0; i < contourfinder.size(); i ++)
+        {
+            contourfinder.getPolyline(i).draw();
+        }
+
+        ofPopMatrix();
         ofPopStyle();
     }
 
@@ -231,7 +239,7 @@ void ofApp::draw()
     fluid.draw();
     ofDisableAlphaBlending();
     drawMotionEffects();
-//    
+//
 //    ofSetLineWidth(3.0f);
 //    ofSetColor(ofColor::pink);
 //    ofPolyline test;
@@ -242,7 +250,6 @@ void ofApp::draw()
 //        ofLine(p, p + (30.0f * n));
 //    }
 //    test.draw();
-    
     squid.draw(draw_debug);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
 }
@@ -253,11 +260,16 @@ void ofApp::drawMotionEffects()
     drawFluid();
 }
 
-void ofApp::drawFluid(){
+void ofApp::drawFluid()
+{
     float flow_scale = ofGetWidth() / (float)flow_high.cols;
-    for (int i = 0; i < flow_low.rows; i += 5){
-        for (int j = 0; j < flow_low.cols; j += 5){
-            if (flow_high.at<uchar>(i,j)){
+
+    for (int i = 0; i < flow_low.rows; i += 5)
+    {
+        for (int j = 0; j < flow_low.cols; j += 5)
+        {
+            if (flow_high.at<uchar>(i, j))
+            {
                 ofPoint p = ofPoint(j, i);
                 ofPoint motion_dir = toOf(flow.at<Point2f>(i, j));
                 Point3_<uchar> frame_color = frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
@@ -268,7 +280,8 @@ void ofApp::drawFluid(){
     }
 }
 
-void ofApp::drawJaggies(){
+void ofApp::drawJaggies()
+{
     float flow_scale = ofGetWidth() / (float)flow_high.cols;
 
     for (int ci = 0; ci < contourfinder.size(); ci++)
@@ -280,27 +293,34 @@ void ofApp::drawJaggies(){
         cv::Point2f center = contourfinder.getCenter(ci);
         ofPoint motion_dir = toOf(flow.at<Point2f>(center.y, center.x));
         ofColor contour_color = getPersistentColor(label);
-
         ofSetLineWidth(2.0f);
-        for (int ip = 0; ip < contour.size(); ip++){
+
+        for (int ip = 0; ip < contour.size(); ip++)
+        {
             ofPoint p = contour[ip] * flow_scale;
             // For some reason the line winds such that the normals point inwards.
             ofPoint n = -(contour.getNormalAtIndex(ip));
+
             // Check if the normal is on the side of the motion
-            if (motion_dir.dot(n) > 0.5){
+            if (motion_dir.dot(n) > 0.5)
+            {
                 fluid.addTemporalForce(p, motion_dir * fluid_motion_speed, contour_color, fluid_motion_radius);
             }
-            if (ip % 2 == 0){
+
+            if (ip % 2 == 0)
+            {
                 jaggies_a.addVertex(p + n * jaggy_offset);
                 jaggies_b.addVertex(p);
-            } else {
+            }
+            else
+            {
                 jaggies_a.addVertex(p);
                 jaggies_b.addVertex(p + n * jaggy_offset);
             }
         }
+
         jaggies_a.close();
         jaggies_b.close();
-
         ofSetLineWidth(10.0f);
         ofSetColor(ofColor::white);
         jaggies_a.draw();
@@ -309,7 +329,8 @@ void ofApp::drawJaggies(){
     }
 }
 
-ofColor ofApp::getPersistentColor(int i){
+ofColor ofApp::getPersistentColor(int i)
+{
     float h = fmod( (float) i * 17.0f, 255.0f );
     return ofColor::fromHsb(h, 200, 200);
 }
@@ -336,7 +357,7 @@ void ofApp::keyPressed(int key)
         case ' ':
             ofSleepMillis(20000);
             break;
-            
+
         default:
             break;
     }

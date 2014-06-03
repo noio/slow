@@ -17,7 +17,7 @@ const int kCaptureHeight = 720;
 //const int kScreenWidth = 1080;
 //const int kScreenHeight = 480;
 
-const double kGameSizePadding = 30.0;
+const double kGameSizePadding = 100.0;
 const double kPhysicsScale = 30.0;
 const double kFluidScale = 0.25;
 

@@ -62,4 +62,8 @@ inline void printMatrixInfo(const cv::Mat& mat) {
     printf("Matrix: %s %dx%d \n", r.c_str(), mat.cols, mat.rows );
 }
 
+inline ofPoint getScreenSize(){
+    return ofPoint(ofGetWidth(), ofGetHeight());
+}
+
 #endif

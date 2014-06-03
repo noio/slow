@@ -200,6 +200,7 @@
 		D29DD28C195CD81267F3C8A1 /* Distance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Distance.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h; sourceTree = SOURCE_ROOT; };
 		D347FB65D19015303863922A /* Wrappers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Wrappers.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Wrappers.cpp; sourceTree = SOURCE_ROOT; };
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
+		E2353E76193E054C007C9FB7 /* fgfsm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fgfsm.h; sourceTree = "<group>"; };
 		E254A36018F583F7007C3AFA /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E254A36E18F583F7007C3AFA /* Delaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delaunay.cpp; sourceTree = "<group>"; };
 		E254A36F18F583F7007C3AFA /* Delaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delaunay.h; sourceTree = "<group>"; };
@@ -1161,6 +1162,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E2353E76193E054C007C9FB7 /* fgfsm.h */,
 				E258394F191BBB1A0049E948 /* libs */,
 				E256414318EAC8650030858B /* constants.h */,
 				E2DB5C5E1919187800885AC3 /* utilities.h */,

@@ -30,25 +30,31 @@ public:
     const cv::Size kSectionsSize = cv::Size(4, 2);
     
     // Settings
+    
     float scale = 1.0f;
+    int num_tentacles = 9;
+    int num_segments = 4;
+    ofPoint tentacle_attach_scale = ofPoint(0.85, 0.25);
+    ofPoint tentacle_attach_offset = ofPoint(0.0, 0.375);
+    float segment_join_length = 0.9;
+    float segment_length = 30.0;
+    float segment_width = 6.0;
+    
+    double body_radius = 40;
+    double body_density = 0.2;
+    
     double local_flow_high = 0.3f;
-    double push_force = 150.0;
+    double push_force = 120.0;
     double panic_force_multiplier = 2.0;
     double tentacle_prep_force = 400.0f;
     double tentacle_damping = 5.0f;
     double motion_time_prep = 0.15;
     double motion_time_push = 0.3;
     double face_cooldown = 10.0;
-    double min_velocity = 200;
+    double min_velocity = 150;
     double max_goal_distance = 80;
     double max_face_distance = 10;
-    int num_tentacles = 9;
-    int num_segments = 4;
-    float segment_join_length = 0.9;
-    float segment_length = 30.0;
-    float segment_width = 10.0;
-    double body_radius = 40;
-    double body_density = 0.2;
+    
     float face_grab_padding = 1.2;
     
     double face_search_window = 0.2;
@@ -62,8 +68,7 @@ public:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_outer_im;
-    ofImage body_inner_im;
+    ofImage body_front_im, body_back_im;
     ofImage tentacle_outer_im;
     ofImage tentacle_inner_im;
     ofxPathfinder pathfinder;
@@ -89,6 +94,8 @@ public:
     ofRectangle found_face;
     bool has_face = false;
     double frame_scale = 1.0;
+    
+    ofColor main_color;
 
     // METHODS
     void setup(ofPtr<b2World> phys_world);

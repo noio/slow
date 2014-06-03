@@ -3,6 +3,8 @@
 #include "constants.h"
 #include "utilities.h"
 
+#include "math.h"
+
 using namespace ofxCv;
 
 using std::cout;
@@ -18,7 +20,7 @@ void ofApp::setup()
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
     contourfinder.setSimplify(true);
-    contourfinder.setMinArea(10);
+    contourfinder.setMinArea(80);
     // Load textures
     motion_texture_a.loadImage("assets/motion_texture_a.png");
     motion_texture_a.getTextureReference().setTextureWrap(GL_REPEAT, GL_REPEAT);
@@ -87,12 +89,16 @@ void ofApp::setupGUI()
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
     gui->addIntSlider("FLOW_EROSION_SIZE", 1, 7, 5);
     gui->addLabelButton("1080x480", false);
-    gui->autoSizeToFitWidgets();
-    gui->addSlider("SQUID_SCALE", 0.5, 2.0, &squid.scale);
+    gui->addSlider("SQUID_SCALE", 0.5f, 2.0f, &squid.scale);
+    gui->addSlider("JAGGY_SPACING", 1.0f, 100.0f, &jaggy_spacing);
+    gui->addSlider("JAGGY_OFFSET", 0.5f, 30.0f, &jaggy_offset);
+    gui->addSlider("FLUID_MOTION_SPEED", 1.0f, 50.0f, &fluid_motion_speed);
+    gui->addSlider("FLUID_MOTION_RADIUS", 1.0f, 10.0f, &fluid_motion_radius);
 //    gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
 //    gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
 //    gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
     // Load settings
+    gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     gui->loadSettings("settings.xml");
 }
@@ -170,6 +176,9 @@ void ofApp::updateFlow()
     opticalflow.calcOpticalFlow(frame_gray);
     flow = opticalflow.getFlow();
 
+    std::swap(flow_low_prev, flow_low);
+    std::swap(flow_high_prev, flow_high);
+
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
     if (flow.cols == 1)
     {
@@ -196,8 +205,6 @@ void ofApp::updateFlow()
     flow_behind = flow_high_prev & (255 - flow_high);
     flow_new = flow_high & ( 255 - flow_high_prev);
     contourfinder.findContours(flow_high);
-    std::swap(flow_low_prev, flow_low);
-    std::swap(flow_high_prev, flow_high);
 }
 
 //--------------------------------------------------------------
@@ -224,56 +231,87 @@ void ofApp::draw()
     fluid.draw();
     ofDisableAlphaBlending();
     drawMotionEffects();
+//    
+//    ofSetLineWidth(3.0f);
+//    ofSetColor(ofColor::pink);
+//    ofPolyline test;
+//    test.arc(ofGetWidth() / 2, ofGetHeight() / 2, 30.0f, 10.0f, 0.0f, 360.0f, 20);
+//    for (int i = 0; i < test.size(); i ++){
+//        ofPoint p = test[i];
+//        ofPoint n = test.getNormalAtIndex(i);
+//        ofLine(p, p + (30.0f * n));
+//    }
+//    test.draw();
+    
     squid.draw(draw_debug);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
 }
 
 void ofApp::drawMotionEffects()
 {
+    // drawJaggies();
+    drawFluid();
+}
+
+void ofApp::drawFluid(){
     float flow_scale = ofGetWidth() / (float)flow_high.cols;
-    ofPushMatrix();
-    ofScale(flow_scale, flow_scale);
+    for (int i = 0; i < flow_low.rows; i += 5){
+        for (int j = 0; j < flow_low.cols; j += 5){
+            if (flow_high.at<uchar>(i,j)){
+                ofPoint p = ofPoint(j, i);
+                ofPoint motion_dir = toOf(flow.at<Point2f>(i, j));
+                Point3_<uchar> frame_color = frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
+                ofColor color = ofColor(frame_color.x, frame_color.y, frame_color.z);
+                fluid.addTemporalForce(p * flow_scale, motion_dir * flow_scale, color, fluid_motion_radius, 0.5f, 0.5f );
+            }
+        }
+    }
+}
+
+void ofApp::drawJaggies(){
+    float flow_scale = ofGetWidth() / (float)flow_high.cols;
 
     for (int ci = 0; ci < contourfinder.size(); ci++)
     {
-        ofPolyline polyline = contourfinder.getPolyline(ci).getSmoothed(10);
-        polyline.simplify(1.5f);
-        ofPoint centroid = polyline.getCentroid2D();
-        ofPoint flow_at_centroid = toOf(flow.at<Point2f>(centroid.y, centroid.x));
-        ofPoint flow_at_centroid_normalized = flow_at_centroid.normalized();
-        
-        fluid.addTemporalForce(centroid * flow_scale, flow_at_centroid * 10, ofColor::blueSteel, -0.001f * polyline.getArea());
-        
-        for (float j = 1; j < polyline.size(); j += 2.0f)
-        {
+        ofPolyline contour = contourfinder.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
+        ofPolyline jaggies_a;
+        ofPolyline jaggies_b;
+        int label = contourfinder.getTracker().getLabelFromIndex(ci);
+        cv::Point2f center = contourfinder.getCenter(ci);
+        ofPoint motion_dir = toOf(flow.at<Point2f>(center.y, center.x));
+        ofColor contour_color = getPersistentColor(label);
 
-            ofPoint dir = polyline.getNormalAtIndexInterpolated(j) * -10.0f;
-            ofPoint pos = polyline.getPointAtIndexInterpolated(j);
-//            fluid.addTemporalForce(pos * flow_scale, dir, ofColor::blueSteel, 3.0f);
-            
+        ofSetLineWidth(2.0f);
+        for (int ip = 0; ip < contour.size(); ip++){
+            ofPoint p = contour[ip] * flow_scale;
+            // For some reason the line winds such that the normals point inwards.
+            ofPoint n = -(contour.getNormalAtIndex(ip));
+            // Check if the normal is on the side of the motion
+            if (motion_dir.dot(n) > 0.5){
+                fluid.addTemporalForce(p, motion_dir * fluid_motion_speed, contour_color, fluid_motion_radius);
+            }
+            if (ip % 2 == 0){
+                jaggies_a.addVertex(p + n * jaggy_offset);
+                jaggies_b.addVertex(p);
+            } else {
+                jaggies_a.addVertex(p);
+                jaggies_b.addVertex(p + n * jaggy_offset);
+            }
         }
+        jaggies_a.close();
+        jaggies_b.close();
 
-//        ofMesh mesh;
-//        ofTessellator().tessellateToMesh(polyline, OF_POLY_WINDING_ODD, mesh, true);
-//        ofFill();
-//
-//        float c = flow_at_centroid_normalized.x;
-//        float s = flow_at_centroid_normalized.y;
-//        for (int j = 0; j < mesh.getNumVertices(); j++) {
-//            ofPoint p = mesh.getVertex(j);
-//            p = ofPoint(p.x * c + p.y * s, p.x * -s + p.y * c); //rotation
-//            mesh.addTexCoord(p);
-//        }
-//        ofEnableAlphaBlending();
-//        ofSetColor(255,255,255);
-//        mesh.drawFaces();
-//        ofSetColor(255, 0, 0);
-//        motion_texture_a.getTextureReference().bind();
-//        mesh.drawFaces();
-//        motion_texture_a.getTextureReference().unbind();
+        ofSetLineWidth(10.0f);
+        ofSetColor(ofColor::white);
+        jaggies_a.draw();
+        ofSetColor(contour_color);
+        jaggies_b.draw();
     }
+}
 
-    ofPopMatrix();
+ofColor ofApp::getPersistentColor(int i){
+    float h = fmod( (float) i * 17.0f, 255.0f );
+    return ofColor::fromHsb(h, 200, 200);
 }
 
 
@@ -295,6 +333,10 @@ void ofApp::keyPressed(int key)
             draw_debug = !draw_debug;
             break;
 
+        case ' ':
+            ofSleepMillis(20000);
+            break;
+            
         default:
             break;
     }

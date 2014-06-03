@@ -23,6 +23,8 @@ const double kFluidScale = 0.25;
 
 const double kFrameRate = 40.0;
 
+const int kFlowSubsample = 4;
+
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480;
 

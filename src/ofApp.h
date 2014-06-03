@@ -33,6 +33,10 @@ public:
     void updateFlow();
     
     void drawMotionEffects();
+    void drawFluid();
+    void drawJaggies();
+    
+    ofColor getPersistentColor(int i);
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -80,4 +84,8 @@ public:
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
     int flow_erosion_size = 5;
+    float jaggy_spacing = 20.0f;
+    float jaggy_offset = 10.0f;
+    float fluid_motion_speed = 5.0f;
+    float fluid_motion_radius = 10.0f;
 };

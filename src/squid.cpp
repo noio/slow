@@ -18,8 +18,8 @@ void Squid::setup(ofPtr<b2World> phys_world)
     // Setup the physics
     setupPhysics(phys_world);
     // Load textures
-    body_outer_im.loadImage("assets/body_outer.png");
-    body_inner_im.loadImage("assets/body_inner.png");
+    body_back_im.loadImage("assets/body_back.png");
+    body_front_im.loadImage("assets/body_front.png");
     tentacle_outer_im.loadImage("assets/tentacle_outer.png");
     tentacle_inner_im.loadImage("assets/tentacle_inner.png");
     // Set up face detection
@@ -28,8 +28,9 @@ void Squid::setup(ofPtr<b2World> phys_world)
     objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
     objectfinder.setMinNeighbors(2);
     objectfinder.setMultiScaleFactor(1.2);
-    objectfinder.setFindBiggestObject(true);
+    objectfinder.setFindBiggestObject(false);
     has_face = false;
+    main_color = ofColor::red;
 }
 
 void Squid::setupPhysics(ofPtr<b2World> phys_world)
@@ -57,8 +58,9 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
     {
         // Add the knee
         double angle = TWO_PI * (i / (double)num_tentacles);
-        ofPoint offset = segment_join_length * ofPoint(cos(angle) * segment_length * scale, sin(angle) * segment_length * scale);
-        ofPoint body_offset = ofPoint(cos(angle) * body_radius * scale, sin(angle) * body_radius * scale);
+        ofPoint direction = ofPoint(cos(angle), sin(angle));
+        ofPoint offset = segment_join_length * segment_length * scale * direction;
+        ofPoint body_offset = body_radius * scale * (tentacle_attach_scale * direction + tentacle_attach_offset);
         ofPoint attach_at = body_offset + pos_game;
         b2Body* previous = body;
 
@@ -100,10 +102,12 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     pos_grid = pos_game / game_size * kPathGridSize;
     int local_flow_level = 0;
 
-    //
-    // Subsample the flow grid to get a pathfinding grid
+//    main_color = ofColor::fromHsb(main_color.getHue() + delta_t, 200.0, 200.0);
+    main_color.setHue(main_color.getHue() + 2);
+    
     if (flow_high.size().area() > 0)
     {
+        // Subsample the flow grid to get a pathfinding grid
         cv::resize(flow_high, grid, kPathGridSize, 0, 0, CV_INTER_AREA);
         grid.convertTo(grid, CV_32F, 1 / 255.0f);
         ofxCv::dilate(grid, 1); // Dilation creates a margin around movement.
@@ -155,7 +159,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
             break;
 
         case PANIC:
-            fluid.addTemporalForce(getPosition(), -waypoint_direction * 10, ofColor::red, body_radius * kFluidScale);
+            fluid.addTemporalForce(getPosition(), -waypoint_direction * 10, main_color, body_radius * scale * kFluidScale);
 
             if (local_flow_level == 0)
             {
@@ -169,11 +173,6 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
             break;
 
         case FACE:
-            if (local_flow_level == 2)
-            {
-                selectQuietGoal();
-                behavior_state = PANIC;
-            }
 
             if (near_face && face_cooldown_timer < 0)
             {
@@ -191,7 +190,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     switch (motion_state)
     {
         case STILL:
-            if (!near_goal || behavior_state == FACE)
+            if (!near_goal)
             {
                 motion_time = 0;
                 findWaypoint();
@@ -296,24 +295,16 @@ void Squid::grabFace(cv::Mat frame)
     cv::Rect face_region(found_face.x / frame_scale, found_face.y / frame_scale, found_face.width / frame_scale, found_face.height / frame_scale);
     face_region &= cv::Rect(0, 0, frame.cols, frame.rows);
     cv::Mat cutout = frame(face_region).clone();
-    cv::cvtColor(cutout, cutout, CV_RGB2GRAY);
-    printMatrixInfo(cutout);
-    cv::equalizeHist(cutout, cutout);
-//    cv::threshold(cutout, cutout, 128, 255, cv::THRESH_BINARY);
-    //Build alpha channel
-    cv::Mat alpha(cutout.size(), CV_8UC1);
-    alpha.setTo(0);
-    cv::circle(alpha, cv::Point(alpha.cols / 2, alpha.rows / 2), alpha.rows / 2, cv::Scalar(255), -1);
+    cv::resize(cutout, cutout, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
+    cv::Mat mask, bgd, fgd;
+    cv::grabCut(cutout, mask, cv::Rect(1, 1, cutout.cols - 2, cutout.rows - 2), bgd, fgd, 1, cv::GC_INIT_WITH_RECT);
+    mask = (mask == cv::GC_FGD) | (mask == cv::GC_PR_FGD);
     vector<cv::Mat> channels;
     cv::split(cutout, channels);
-    channels.push_back(cutout);
-    channels.push_back(cutout);
-    channels.push_back(alpha);
+    channels.push_back(mask);
     cv::merge(channels, face_mat);
-    printMatrixInfo(face_mat);
     ofxCv::toOf(face_mat, face_im);
     face_im.update();
-//    ofxCv::toOf(face_mat, face_im);
     has_face = true;
 }
 
@@ -444,8 +435,10 @@ void Squid::idleMotion(double delta_t)
             tentacle->ApplyForceToCenter(tentacle->GetMass() * 10 * outward, true);
         }
     }
-
-    body->ApplyTorque(3.0, true);
+    
+    if (abs(body->GetAngle()) > 0.1){
+        body->ApplyTorque(-3.0 * body->GetAngle(), true);
+    }
 }
 
 void Squid::draw(bool draw_debug)
@@ -472,7 +465,7 @@ void Squid::draw(bool draw_debug)
                 }
                 else if (layer == 1)
                 {
-                    ofSetColor(255, 0, 0, 255);
+                    ofSetColor(main_color);
                     tentacle_inner_im.draw(tentacle_draw_rect);
                 }
 
@@ -488,8 +481,8 @@ void Squid::draw(bool draw_debug)
     ofTranslate(pos_game);
     ofRotate(body->GetAngle() * RAD_TO_DEG);
     ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
-    ofSetColor(255, 0, 0);
-    body_outer_im.draw(body_draw_rect);
+    ofSetColor(main_color);
+    body_back_im.draw(body_draw_rect);
     ofSetColor(255, 255, 255, 255);
     // Draw face
 
@@ -498,7 +491,7 @@ void Squid::draw(bool draw_debug)
         face_im.draw(body_draw_rect);
     }
 
-    body_inner_im.draw(body_draw_rect);
+    body_front_im.draw(body_draw_rect);
     ofPopMatrix();
 
     if (draw_debug)

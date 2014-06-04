@@ -43,6 +43,7 @@ void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* fluid)
     objectfinder.setMinNeighbors(2);
     objectfinder.setMultiScaleFactor(1.2);
     objectfinder.setFindBiggestObject(false);
+    objectfinder.getTracker().setSmoothingRate(0.1);
     has_face = false;
     main_color = ofColor::red;
 }
@@ -107,7 +108,7 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
  - Plan a path to goal
  - Move to goal (low level)
  */
-void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& fluid)
+void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
 {
     this->frame = frame;
     playlist.update();
@@ -116,6 +117,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     pos_section = pos_game / game_size * ofPoint(kSectionsSize.width, kSectionsSize.height);
 //    main_color = ofColor::fromHsb(main_color.getHue() + delta_t, 200.0, 200.0);
     main_color.setHue(main_color.getHue() + 2);
+    main_color.setSaturation(16 + 255 * local_flow);
 
     if (flow_high.size().area() > 0) {
         // Subsample the flow grid to get "sections"
@@ -143,6 +145,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     // Update State machines
     updateBehaviorState(delta_t);
     updateMotionState(delta_t);
+    
 }
 
 void Squid::updateBehaviorState(double delta_t)
@@ -277,10 +280,8 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case FACE:
             switchMotionState(LOCK);
-            hint_progress = 0;
-            playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 255.0));
-            playlist.addKeyFrame(Action::tween(4000.f, &hint_progress, 1.0));
-            playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 0.0));
+            showCaptureHint();
+            clearFace();
             break;
     }
 
@@ -392,6 +393,11 @@ void Squid::selectFaceGoal()
     goal = found_face.getCenter();
 }
 
+void Squid::clearFace(){
+    has_face = false;
+    face_anim.clear();
+}
+
 void Squid::grabFace(bool do_cut)
 {
     frame_scale = ofGetWidth() / (float)frame.cols;
@@ -418,12 +424,18 @@ void Squid::grabFace(bool do_cut)
     vector<cv::Mat> channels;
     cv::split(cutout, channels);
     channels.push_back(mask);
-    cv::merge(channels, face_mat);
-    toOf(face_mat, face_im);
+    cv::merge(channels, cutout);
+    face_anim.push_back(cutout);
     face_im.update();
     has_face = true;
 }
 
+void Squid::showCaptureHint(){
+    hint_progress = 0;
+    playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 255.0));
+    playlist.addKeyFrame(Action::tween(4000.f, &hint_progress, 1.0));
+    playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 0.0));
+}
 
 /*
  * Applies a force to the body to propel it to goal
@@ -563,6 +575,9 @@ void Squid::drawBody(){
     
     // Draw face
     if (has_face) {
+        toOf(face_anim[face_anim_current_frame], face_im);
+        face_anim_current_frame = (face_anim_current_frame + 1) % face_anim.size();
+        face_im.update();
         face_im.draw(body_draw_rect);
     }
     

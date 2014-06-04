@@ -141,7 +141,7 @@ void ofApp::update()
         squid.updateObjectFinder(frame);
     }
 
-    squid.update(delta_t, flow_high, frame, fluid);
+    squid.update(delta_t, flow_high, frame);
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     fluid.update();
 }

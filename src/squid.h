@@ -16,6 +16,7 @@
 #include <vector>
 
 using std::vector;
+using std::deque;
 
 ////////// CONSTANTS //////////
 
@@ -84,7 +85,7 @@ public:
     cv::Mat frame;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
-    cv::Mat face_mat;
+    deque<cv::Mat> face_anim;
     ofImage face_im;
     ofxFluid* fluid;
 
@@ -96,6 +97,7 @@ public:
     ofPoint pos_game, pos_section;
     
     ofRectangle found_face;
+    int face_anim_current_frame = 0;
     bool has_face = false;
     int face_detection_count = 0;
     double frame_scale = 1.0;
@@ -126,7 +128,7 @@ public:
     void setup(ofPtr<b2World> phys_world, ofxFluid* fluid);
     void setupPhysics(ofPtr<b2World> phys_world);
     
-    void update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& fluid);
+    void update(double delta_t, cv::Mat flow_high, cv::Mat frame);
     void updateObjectFinder(cv::Mat frame);
     
     void updateBehaviorState(double delta_t);
@@ -140,7 +142,10 @@ public:
     void selectFaceGoal();
     bool currentGoalIsQuiet();
     
+    void clearFace();
     void grabFace(bool do_cut);
+    
+    void showCaptureHint();
     
     void bodyPush(double delta_t);
     void turnToAngle(float target_angle, double delta_t);

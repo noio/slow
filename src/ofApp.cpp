@@ -28,8 +28,7 @@ void ofApp::setup()
     setupGUI();
 
     // Use an external camera if one is connected
-    if (camera.listDevices().size() > 1)
-    {
+    if (camera.listDevices().size() > 1) {
         camera.setDeviceID(1);
     }
 
@@ -136,8 +135,7 @@ void ofApp::update()
     delta_t = ofGetLastFrameTime();
     doCapture();
 
-    if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) )
-    {
+    if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) ) {
         updateFrame();
         updateFlow();
         squid.updateObjectFinder(frame);
@@ -150,13 +148,10 @@ void ofApp::update()
 
 void ofApp::doCapture()
 {
-    if (use_camera)
-    {
+    if (use_camera) {
         camera.update();
         frame_full = toCv(camera);
-    }
-    else
-    {
+    } else {
         video.update();
         frame_full = toCv(video.getPixelsRef());
         cv::resize(frame_full, frame_full, cv::Size(kCaptureWidth, kCaptureHeight));
@@ -179,8 +174,7 @@ void ofApp::updateFlow()
     std::swap(flow_high_prev, flow_high);
 
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
-    if (flow.cols == 1)
-    {
+    if (flow.cols == 1) {
         flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
@@ -213,8 +207,7 @@ void ofApp::draw()
     ofxCv::drawMat(frame, 0, 0, ofGetWidth(), ofGetHeight());
 
 //    drawParticles();
-    if (draw_debug)
-    {
+    if (draw_debug) {
         ofPushStyle();
         // Draw the optical flow maps
         ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -226,8 +219,7 @@ void ofApp::draw()
         ofSetColor(255, 0, 0);
         ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
 
-        for (int i = 0; i < contourfinder.size(); i ++)
-        {
+        for (int i = 0; i < contourfinder.size(); i ++) {
             contourfinder.getPolyline(i).draw();
         }
 
@@ -264,12 +256,9 @@ void ofApp::drawFluid()
 {
     float flow_scale = ofGetWidth() / (float)flow_high.cols;
 
-    for (int i = 0; i < flow_low.rows; i += 5)
-    {
-        for (int j = 0; j < flow_low.cols; j += 5)
-        {
-            if (flow_high.at<uchar>(i, j))
-            {
+    for (int i = 0; i < flow_low.rows; i += 5) {
+        for (int j = 0; j < flow_low.cols; j += 5) {
+            if (flow_high.at<uchar>(i, j)) {
                 ofPoint p = ofPoint(j, i);
                 ofPoint motion_dir = toOf(flow.at<Point2f>(i, j));
                 Point3_<uchar> frame_color = frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
@@ -284,8 +273,7 @@ void ofApp::drawJaggies()
 {
     float flow_scale = ofGetWidth() / (float)flow_high.cols;
 
-    for (int ci = 0; ci < contourfinder.size(); ci++)
-    {
+    for (int ci = 0; ci < contourfinder.size(); ci++) {
         ofPolyline contour = contourfinder.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
         ofPolyline jaggies_a;
         ofPolyline jaggies_b;
@@ -295,25 +283,20 @@ void ofApp::drawJaggies()
         ofColor contour_color = getPersistentColor(label);
         ofSetLineWidth(2.0f);
 
-        for (int ip = 0; ip < contour.size(); ip++)
-        {
+        for (int ip = 0; ip < contour.size(); ip++) {
             ofPoint p = contour[ip] * flow_scale;
             // For some reason the line winds such that the normals point inwards.
             ofPoint n = -(contour.getNormalAtIndex(ip));
 
             // Check if the normal is on the side of the motion
-            if (motion_dir.dot(n) > 0.5)
-            {
+            if (motion_dir.dot(n) > 0.5) {
                 fluid.addTemporalForce(p, motion_dir * fluid_motion_speed, contour_color, fluid_motion_radius);
             }
 
-            if (ip % 2 == 0)
-            {
+            if (ip % 2 == 0) {
                 jaggies_a.addVertex(p + n * jaggy_offset);
                 jaggies_b.addVertex(p);
-            }
-            else
-            {
+            } else {
                 jaggies_a.addVertex(p);
                 jaggies_b.addVertex(p + n * jaggy_offset);
             }
@@ -344,8 +327,7 @@ void ofApp::exit()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-    switch (key)
-    {
+    switch (key) {
         case 'g':
             gui->toggleVisible();
             break;
@@ -410,35 +392,29 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     string name = e.widget->getName();
     int kind = e.widget->getKind();
 
-    if (name == "RESET")
-    {
+    if (name == "RESET") {
         reset();
     }
 
-    if (name == "FACE_SEARCH_WINDOW")
-    {
+    if (name == "FACE_SEARCH_WINDOW") {
         squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
     }
 
-    if (name == "FACE_SIZE")
-    {
+    if (name == "FACE_SIZE") {
         squid.face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
         squid.face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
 
-    if (name == "FLOW_THRESHOLD")
-    {
+    if (name == "FLOW_THRESHOLD") {
         flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
         flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
 
-    if (name == "FLOW_EROSION_SIZE")
-    {
+    if (name == "FLOW_EROSION_SIZE") {
         flow_erosion_size = (int)(((ofxUIIntSlider*) e.widget)->getScaledValue());
     }
 
-    if (name == "1080x480")
-    {
+    if (name == "1080x480") {
         ofSetWindowShape(1080, 480);
         reset();
     }

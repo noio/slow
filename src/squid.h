@@ -33,13 +33,13 @@ public:
     // Settings
     
     float scale = 1.0f;
-    int num_tentacles = 9;
-    int num_segments = 8;
+    int num_tentacles = 7;
+    int num_segments = 7;
     ofPoint tentacle_attach_scale = ofPoint(0.80, 0.2);
     ofPoint tentacle_attach_offset = ofPoint(0.0, 0.175);
     float segment_join_length = 0.9;
-    float segment_length = 15.0;
-    float segment_width = 3.0;
+    float segment_length = 20.0;
+    float segment_width = 6.0;
     float tentacle_density = 0.01f;
     double tentacle_damping = 3.0f;
     
@@ -60,6 +60,7 @@ public:
     float max_goal_distance_close = 80;
     float max_goal_distance_far = 200;
     double max_face_distance = 10;
+    float goal_bottom_margin = 2.0; // relative to body_radius
     
     float face_grab_padding = 2.0;
     
@@ -74,9 +75,7 @@ public:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_front_im, body_back_im, face_mask_im;
-    ofImage tentacle_outer_im;
-    ofImage tentacle_inner_im;
+    ofImage body_front_im, body_back_im, tentacle_front_im, tentacle_back_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
     cv::Mat frame;
     cv::Mat face_mask_mat;

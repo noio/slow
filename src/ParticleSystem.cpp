@@ -54,15 +54,13 @@ vector<Particle*> ParticleSystem::getNeighbors(float x, float y, float radius)
     float xd, yd, rsq, maxrsq;
     maxrsq = radius * radius;
 
-    for(int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < n; i++) {
         Particle& cur = *region[i];
         xd = cur.x - x;
         yd = cur.y - y;
         rsq = xd * xd + yd * yd;
 
-        if(rsq < maxrsq)
-        {
+        if(rsq < maxrsq) {
             neighbors.push_back(region[i]);
         }
     }
@@ -81,20 +79,16 @@ vector<Particle*> ParticleSystem::getRegion(unsigned minX, unsigned minY, unsign
     maxXBin++;
     maxYBin++;
 
-    if(maxXBin > xBins)
-    {
+    if(maxXBin > xBins) {
         maxXBin = xBins;
     }
 
-    if(maxYBin > yBins)
-    {
+    if(maxYBin > yBins) {
         maxYBin = yBins;
     }
 
-    for(int y = minYBin; y < maxYBin; y++)
-    {
-        for(int x = minXBin; x < maxXBin; x++)
-        {
+    for(int y = minYBin; y < maxYBin; y++) {
+        for(int x = minXBin; x < maxXBin; x++) {
             vector<Particle*>& cur = bins[y * xBins + x];
             copy(cur.begin(), cur.end(), back);
         }
@@ -107,24 +101,21 @@ void ParticleSystem::setupForces()
 {
     int n = bins.size();
 
-    for(int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < n; i++) {
         bins[i].clear();
     }
 
     n = particles.size();
     unsigned xBin, yBin, bin;
 
-    for(int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < n; i++) {
         Particle& cur = particles[i];
         cur.resetForce();
         xBin = ((unsigned) cur.x) >> k;
         yBin = ((unsigned) cur.y) >> k;
         bin = yBin * xBins + xBin;
 
-        if(xBin < xBins && yBin < yBins)
-        {
+        if(xBin < xBins && yBin < yBins) {
             bins[bin].push_back(&cur);
         }
     }
@@ -162,13 +153,11 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
     float maxX = targetX + radius;
     float maxY = targetY + radius;
 
-    if(minX < 0)
-    {
+    if(minX < 0) {
         minX = 0;
     }
 
-    if(minY < 0)
-    {
+    if(minY < 0) {
         minY = 0;
     }
 
@@ -179,13 +168,11 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
     maxXBin++;
     maxYBin++;
 
-    if(maxXBin > xBins)
-    {
+    if(maxXBin > xBins) {
         maxXBin = xBins;
     }
 
-    if(maxYBin > yBins)
-    {
+    if(maxYBin > yBins) {
         maxYBin = yBins;
     }
 
@@ -198,22 +185,18 @@ void ParticleSystem::addForce(float targetX, float targetY, float radius, float 
 #endif
     maxrsq = radius * radius;
 
-    for(int y = minYBin; y < maxYBin; y++)
-    {
-        for(int x = minXBin; x < maxXBin; x++)
-        {
+    for(int y = minYBin; y < maxYBin; y++) {
+        for(int x = minXBin; x < maxXBin; x++) {
             vector<Particle*>& curBin = bins[y * xBins + x];
             int n = curBin.size();
 
-            for(int i = 0; i < n; i++)
-            {
+            for(int i = 0; i < n; i++) {
                 Particle& curParticle = *(curBin[i]);
                 xd = curParticle.x - targetX;
                 yd = curParticle.y - targetY;
                 length = xd * xd + yd * yd;
 
-                if(length > 0 && length < maxrsq)
-                {
+                if(length > 0 && length < maxrsq) {
 #ifdef DRAW_FORCES
                     glVertex2f(targetX, targetY);
                     glVertex2f(curParticle.x, curParticle.y);
@@ -252,10 +235,8 @@ void ParticleSystem::update()
 {
     int n = particles.size();
 
-    for(int i = 0; i < n; i++)
-    {
-        if (particles[i].alive)
-        {
+    for(int i = 0; i < n; i++) {
+        if (particles[i].alive) {
             particles[i].update(timeStep);
         }
     }
@@ -264,8 +245,7 @@ void ParticleSystem::update()
 // Clean out dead particles
 void ParticleSystem::clean()
 {
-    while (particles.size() > maxParticles || (particles.size() && !particles.front().alive))
-    {
+    while (particles.size() > maxParticles || (particles.size() && !particles.front().alive)) {
         particles.pop_front();
     }
 }
@@ -275,8 +255,7 @@ void ParticleSystem::draw()
     int n = particles.size();
     glBegin(GL_POINTS);
 
-    for(int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < n; i++) {
         particles[i].draw();
     }
 

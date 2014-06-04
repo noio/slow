@@ -29,9 +29,9 @@ void Squid::setup(ofPtr<b2World> phys_world)
     face_mask_im.loadImage("assets/face_mask.png");
     face_mask_mat = toCv(face_mask_im);
     cv::cvtColor(face_mask_mat, face_mask_mat, CV_RGB2GRAY);
-    cv::resize(face_mask_mat, face_mask_mat, cv::Size(body_radius*scale*2, body_radius*scale*2));
-    tentacle_outer_im.loadImage("assets/tentacle_outer.png");
-    tentacle_inner_im.loadImage("assets/tentacle_inner.png");
+    cv::resize(face_mask_mat, face_mask_mat, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
+    tentacle_back_im.loadImage("assets/tentacle_back.png");
+    tentacle_front_im.loadImage("assets/tentacle_front.png");
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
@@ -64,18 +64,16 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
     body->CreateFixture(&fixture);
 
     // Create tentacles
-    for (int i = 0; i < num_tentacles; i ++)
-    {
+    for (int i = 0; i < num_tentacles; i ++) {
         // Add the knee
-        double angle = TWO_PI * (i / (double)num_tentacles);
+        double angle = TWO_PI * (i / (double)num_tentacles) - PI / 2;
         ofPoint direction = ofPoint(cos(angle), sin(angle));
         ofPoint offset = segment_join_length * segment_length * scale * direction;
         ofPoint body_offset = body_radius * scale * (tentacle_attach_scale * direction + tentacle_attach_offset);
         ofPoint attach_at = body_offset + pos_game;
         b2Body* previous = body;
 
-        for (int j = 0; j < num_segments; j ++)
-        {
+        for (int j = 0; j < num_segments; j ++) {
             bodyDef.position = ofToB2(attach_at + 0.5 * offset);
             bodyDef.angle = angle;
             bodyDef.angularDamping = 1.0f;
@@ -114,8 +112,7 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
 //    main_color = ofColor::fromHsb(main_color.getHue() + delta_t, 200.0, 200.0);
     main_color.setHue(main_color.getHue() + 2);
 
-    if (flow_high.size().area() > 0)
-    {
+    if (flow_high.size().area() > 0) {
         // Subsample the flow grid to get "sections"
         cv::Mat flow_high_float;
         flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
@@ -139,174 +136,182 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     on_goal = (goal - pos_game).length() < max_goal_distance_close;
     facing_goal = abs(ofWrapRadians(goal_angle - body->GetAngle() + PI / 2)) < DEG_TO_RAD * 30;
     sees_face = objectfinder.size() > 0;
-
     // Update State machines
     updateBehaviorState(delta_t);
     updateMotionState(delta_t);
 }
 
-void Squid::updateBehaviorState(double delta_t){
+void Squid::updateBehaviorState(double delta_t)
+{
     time_in_behavior_state += delta_t;
+
     //
     // Behavior State machine
-    switch (behavior_state)
-    {
+    switch (behavior_state) {
         case IDLE:
-            if (local_flow >= 1)
-            {
+            if (local_flow >= 1) {
                 switchBehaviorState(PANIC);
                 break;
             }
-            if (sees_face){
+
+            if (sees_face) {
                 switchBehaviorState(FACE);
                 break;
             }
+
             if (time_in_behavior_state > idle_move_cooldown) {
                 selectQuietGoalInRegion(local_area);
                 switchBehaviorState(IDLE);
                 break;
             }
-            
+
             break;
-            
+
         case PANIC:
-            if (!currentGoalIsQuiet())
-            {
+            if (!currentGoalIsQuiet()) {
                 selectQuietGoal();
             }
-            
-            if (on_goal)
-            {
+
+            if (on_goal) {
                 switchBehaviorState(IDLE);
             }
-            
+
             break;
-            
+
         case FACE:
-            if (sees_face){
+            if (sees_face) {
                 goal = found_face.getCenter();
             }
-            if (time_in_behavior_state > face_pose_time){
+
+            if (time_in_behavior_state > face_pose_time) {
                 grabFace(true);
                 switchBehaviorState(PANIC);
                 break;
             }
+
             grabFace(false);
             break;
     }
-
-    
 }
-void Squid::updateMotionState(double delta_t){
+void Squid::updateMotionState(double delta_t)
+{
     time_in_motion_state += delta_t;
 
-    switch (motion_state)
-    {
+    switch (motion_state) {
         case STILL:
-            if (!on_goal)
-            {
+            if (!on_goal) {
                 switchMotionState(PREP);
-            }
-            else
-            {
+            } else {
                 turnUpright(delta_t);
             }
-            
+
             break;
-            
+
         case PREP:
             tentaclePrep();
             turnToGoal(delta_t);
             squishPrep(delta_t);
-            
-            if (time_in_motion_state > motion_time_prep && facing_goal)
-            {
+
+            if (time_in_motion_state > motion_time_prep && (facing_goal || behavior_state == PANIC)) {
                 switchMotionState(PUSH);
             }
-            
+
             break;
-            
+
         case PUSH:
             squishPush(delta_t);
             bodyPush(delta_t);
-            
-            if (time_in_motion_state > motion_time_push)
-            {
+
+            if (time_in_motion_state > motion_time_push) {
                 switchMotionState(GLIDE);
             }
-            
+
             break;
-            
+
         case GLIDE:
             tentacleGlide();
-            
-            if (going_slow)
-            {
+
+            if (going_slow) {
                 switchMotionState(STILL);
             }
-            
+
             break;
-        
+
         case LOCK:
             bodyPush(delta_t);
             turnUpright(delta_t);
             break;
     }
-
 }
-void Squid::switchBehaviorState(BehaviorState next){
+void Squid::switchBehaviorState(BehaviorState next)
+{
     time_in_behavior_state = 0;
+
     switch (behavior_state) {
         case IDLE:
             break;
-            
+
         case PANIC:
             break;
 
         case FACE:
             break;
     }
-    switch (next){
+
+    switch (next) {
         case IDLE:
             break;
-            
+
         case PANIC:
             switchMotionState(STILL);
             selectQuietGoal();
             break;
-            
+
         case FACE:
             switchMotionState(LOCK);
             break;
     }
+
     behavior_state = next;
 }
-void Squid::switchMotionState(MotionState next){
+void Squid::switchMotionState(MotionState next)
+{
     time_in_motion_state = 0;
-    switch (motion_state){
+
+    switch (motion_state) {
         case STILL:
             break;
+
         case PREP:
             break;
+
         case PUSH:
             break;
+
         case GLIDE:
             break;
+
         case LOCK:
             break;
     }
-    switch (next){
+
+    switch (next) {
         case STILL:
             break;
+
         case PREP:
             break;
+
         case PUSH:
             break;
+
         case GLIDE:
             break;
+
         case LOCK:
             break;
     }
+
     motion_state = next;
 }
 
@@ -325,8 +330,7 @@ void Squid::updateObjectFinder(cv::Mat frame)
     // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
     objectfinder.update(frame(face_roi), true);
 
-    if (objectfinder.size() > 0)
-    {
+    if (objectfinder.size() > 0) {
         int label = objectfinder.getLabel(0);
         found_face = toOf(objectfinder.getTracker().getSmoothed(label));
         found_face.scale(frame_scale);
@@ -344,13 +348,13 @@ void Squid::selectQuietGoalInRegion(cv::Rect bounds)
     minLoc.x += bounds.x;
     minLoc.y += bounds.y;
 
-    if (goal_section != minLoc)
-    {
+    if (goal_section != minLoc) {
         goal_section = minLoc;
         goal = (toOf(goal_section) + ofPoint(ofRandomuf(), ofRandomuf())) / kSectionsSize * ofPoint(ofGetWidth(), ofGetHeight());
     }
+
     goal.set(ofClamp(goal.x, body_radius * scale, ofGetWidth() - body_radius * scale),
-             ofClamp(goal.y, body_radius * scale, ofGetHeight() - body_radius * scale));
+             ofClamp(goal.y, body_radius * scale, ofGetHeight() - body_radius * scale * goal_bottom_margin));
 }
 
 void Squid::selectQuietGoal()
@@ -378,17 +382,21 @@ void Squid::grabFace(bool do_cut)
     cv::Rect face_region(extract.x / frame_scale, extract.y / frame_scale, extract.width / frame_scale, extract.height / frame_scale);
     face_region &= cv::Rect(0, 0, frame.cols, frame.rows);
     cv::Mat cutout = frame(face_region).clone();
-    int padding = cutout.cols / 4;
+    int padding = cutout.cols / 8;
     cv::copyMakeBorder(cutout, cutout, padding, padding, padding, padding, cv::BORDER_REPLICATE);
     cv::resize(cutout, cutout, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
     cv::Mat mask;
     cv::Mat bgd, fgd;
-    if (do_cut){
+
+    if (do_cut) {
         cv::grabCut(cutout, mask, cv::Rect(1, 1, cutout.cols - 2, cutout.rows - 2), bgd, fgd, 1, cv::GC_INIT_WITH_RECT);
         mask = ((mask == cv::GC_FGD) | (mask == cv::GC_PR_FGD)) & face_mask_mat;
+        ofxCv::dilate(mask, 16);
+        ofxCv::erode(mask, 16);
     } else {
         mask = face_mask_mat;
     }
+
     vector<cv::Mat> channels;
     cv::split(cutout, channels);
     channels.push_back(mask);
@@ -406,9 +414,11 @@ void Squid::bodyPush(double delta_t)
 {
     double force = push_force * body->GetMass() * scale;
     force *= MIN(1.0, goal_distance / (2 * body_radius * scale));
-    if (behavior_state == PANIC){
+
+    if (behavior_state == PANIC) {
         force *= panic_force_multiplier;
     }
+
     body->ApplyLinearImpulse(ofToB2(goal_direction * force), body->GetPosition(), true);
 }
 
@@ -416,16 +426,14 @@ void Squid::turnToAngle(float target_angle, double delta_t)
 {
     float goal_angle_relative = ofWrapRadians(target_angle - body->GetAngle() + PI / 2);
     float multiplier = MIN(1.0, abs(goal_angle_relative) / PI);
-    if (behavior_state == PANIC){
+
+    if (behavior_state == PANIC) {
         multiplier *= panic_force_multiplier;
     }
 
-    if (goal_angle_relative > 0.2)
-    {
+    if (goal_angle_relative > 0.2) {
         body->ApplyTorque(300.0 * multiplier, true);
-    }
-    else if (goal_angle_relative < -0.2)
-    {
+    } else if (goal_angle_relative < -0.2) {
         body->ApplyTorque(-300.0 * multiplier, true);
     }
 }
@@ -440,11 +448,13 @@ void Squid::turnUpright(double delta_t)
     turnToAngle(-PI / 2, delta_t);
 }
 
-void Squid::squishPrep(double delta_t){
+void Squid::squishPrep(double delta_t)
+{
     squish += (0.8 - squish) * 0.1;
 }
 
-void Squid::squishPush(double delta_t){
+void Squid::squishPush(double delta_t)
+{
     squish += (1.0 - squish) * 0.2;
 }
 
@@ -455,12 +465,10 @@ void Squid::tentaclePrep()
 {
     b2Vec2 tentacle_center = body->GetWorldPoint( ofToB2( tentacle_attach_offset * body_radius * scale) );
 
-    for (int i = 0; i < tentacles.size(); i++)
-    {
+    for (int i = 0; i < tentacles.size(); i++) {
         b2Body* tentacle = tentacles[i];
 
-        if (i % num_segments < 2)
-        {
+        if (i % num_segments < 2) {
             b2Vec2 outward = tentacle->GetPosition() - tentacle_center;
             outward.Normalize();
             tentacle->ApplyForceToCenter(tentacle->GetMass() * tentacle_prep_force * outward, true);
@@ -475,8 +483,7 @@ void Squid::tentaclePrep()
  */
 void Squid::tentacleGlide()
 {
-    for (int i = 0; i < tentacles.size(); i++)
-    {
+    for (int i = 0; i < tentacles.size(); i++) {
         b2Body* tentacle = tentacles[i];
         // Apply tensor friction
         b2Vec2 velocity = tentacle->GetLinearVelocity();
@@ -495,31 +502,45 @@ void Squid::draw(bool draw_debug)
     // Draw Tentacles
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
 
-    for (int i = 0; i < num_tentacles; i ++)
-    {
-        for (int layer = 0; layer < 2; layer ++)
-        {
-            for (int j = 0; j < num_segments; j ++)
-            {
-                b2Body* tentacle = tentacles[i * num_segments + j];
+    for (int i = 0; i < num_tentacles; i ++) {
+        ofPolyline p;
+
+        for (int j = 0; j < num_segments; j ++) {
+            b2Body* tentacle = tentacles[i * num_segments + j];
+
+            // Tentacle start
+            if (j == 0) {
+                p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(- segment_length / 2, 0)))));
+            }
+
+            p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(segment_length / 2, 0)))));
+
+            // Tentacle end
+            if (j == num_segments - 1) {
+                p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(segment_length, 0)))));
+            }
+
+            for (int layer = 0; layer < 2; layer ++) {
                 ofPushMatrix();
                 ofTranslate(b2ToOf(tentacle->GetPosition()));
                 ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
                 int alpha = j / (float)num_segments * 255;
-                if (layer == 0)
-                {
+
+                if (layer == 0) {
                     ofSetColor(255, 255, 255, alpha);
-                    tentacle_outer_im.draw(tentacle_draw_rect);
-                }
-                else if (layer == 1)
-                {
+                    tentacle_back_im.draw(tentacle_draw_rect);
+                } else if (layer == 1) {
                     ofSetColor(main_color, alpha);
-                    tentacle_inner_im.draw(tentacle_draw_rect);
+                    tentacle_front_im.draw(tentacle_draw_rect);
                 }
 
                 ofPopMatrix();
             }
         }
+
+        ofSetColor(ofColor::white);
+        ofSetLineWidth(2.0f * scale);
+        p.draw();
     }
 
     // Draw body
@@ -536,23 +557,20 @@ void Squid::draw(bool draw_debug)
 
     // Draw face
 
-    if (has_face)
-    {
+    if (has_face) {
         face_im.draw(body_draw_rect);
     }
+
     body_draw_rect.scaleFromCenter(1 / squish, 1.0);
     body_draw_rect.height *= squish;
-
     body_front_im.draw(body_draw_rect);
     ofPopMatrix();
 
-    if (draw_debug)
-    {
+    if (draw_debug) {
         // Draw state
         std::string state = "";
 
-        switch (behavior_state)
-        {
+        switch (behavior_state) {
             case IDLE:
                 state += "IDLE";
                 break;
@@ -568,8 +586,7 @@ void Squid::draw(bool draw_debug)
 
         state += " / ";
 
-        switch (motion_state)
-        {
+        switch (motion_state) {
             case STILL:
                 state += "STILL";
                 break;
@@ -585,7 +602,7 @@ void Squid::draw(bool draw_debug)
             case GLIDE:
                 state += "GLIDE";
                 break;
-                
+
             case LOCK:
                 state += "LOCK";
                 break;
@@ -630,8 +647,7 @@ void Squid::draw(bool draw_debug)
         ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
 
         // Draw detected faces
-        if(objectfinder.size())
-        {
+        if(objectfinder.size()) {
             ofSetColor(ofColor::green);
             ofRect(found_face);
         }

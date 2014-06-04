@@ -10,6 +10,7 @@
 #include <algorithm>
 
 using namespace ofxCv;
+using namespace Playlist;
 
 using std::cout;
 using std::endl;
@@ -17,8 +18,9 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> phys_world)
+void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* fluid)
 {
+    this->fluid = fluid;
     squish = 1.0f;
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
@@ -26,12 +28,14 @@ void Squid::setup(ofPtr<b2World> phys_world)
     // Load textures
     body_back_im.loadImage("assets/body_back.png");
     body_front_im.loadImage("assets/body_front.png");
+    body_accent_im.loadImage("assets/body_accent.png");
+    hint_im.loadImage("assets/hint.png");
+    tentacle_back_im.loadImage("assets/tentacle_back.png");
+    tentacle_front_im.loadImage("assets/tentacle_front.png");
     face_mask_im.loadImage("assets/face_mask.png");
     face_mask_mat = toCv(face_mask_im);
     cv::cvtColor(face_mask_mat, face_mask_mat, CV_RGB2GRAY);
     cv::resize(face_mask_mat, face_mask_mat, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
-    tentacle_back_im.loadImage("assets/tentacle_back.png");
-    tentacle_front_im.loadImage("assets/tentacle_front.png");
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
@@ -106,6 +110,7 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
 void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& fluid)
 {
     this->frame = frame;
+    playlist.update();
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
     pos_section = pos_game / game_size * ofPoint(kSectionsSize.width, kSectionsSize.height);
@@ -135,7 +140,6 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& f
     going_slow = b2ToOf(body->GetLinearVelocity()).length() < (min_velocity * scale);
     on_goal = (goal - pos_game).length() < max_goal_distance_close;
     facing_goal = abs(ofWrapRadians(goal_angle - body->GetAngle() + PI / 2)) < DEG_TO_RAD * 30;
-    sees_face = objectfinder.size() > 0;
     // Update State machines
     updateBehaviorState(delta_t);
     updateMotionState(delta_t);
@@ -225,6 +229,10 @@ void Squid::updateMotionState(double delta_t)
             if (time_in_motion_state > motion_time_push) {
                 switchMotionState(GLIDE);
             }
+            
+            if (behavior_state == PANIC){
+                squirt();
+            }
 
             break;
 
@@ -269,6 +277,10 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case FACE:
             switchMotionState(LOCK);
+            hint_progress = 0;
+            playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 255.0));
+            playlist.addKeyFrame(Action::tween(4000.f, &hint_progress, 1.0));
+            playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 0.0));
             break;
     }
 
@@ -331,11 +343,18 @@ void Squid::updateObjectFinder(cv::Mat frame)
     objectfinder.update(frame(face_roi), true);
 
     if (objectfinder.size() > 0) {
-        int label = objectfinder.getLabel(0);
-        found_face = toOf(objectfinder.getTracker().getSmoothed(label));
-        found_face.scale(frame_scale);
-        found_face.x += face_roi.x * frame_scale;
-        found_face.y += face_roi.y * frame_scale;
+        face_detection_count ++;
+        if (face_detection_count > face_detection_threshold){
+            int label = objectfinder.getLabel(0);
+            found_face = toOf(objectfinder.getTracker().getSmoothed(label));
+            found_face.scale(frame_scale);
+            found_face.x += face_roi.x * frame_scale;
+            found_face.y += face_roi.y * frame_scale;
+            sees_face = true;
+        }
+    } else {
+        face_detection_count = 0;
+        sees_face = false;
     }
 }
 
@@ -365,7 +384,6 @@ void Squid::selectQuietGoal()
 bool Squid::currentGoalIsQuiet()
 {
     float flow_in_goal_section = sections.at<float>(goal_section.y , goal_section.x);
-    cout << flow_in_goal_section << endl;
     return flow_in_goal_section <= 0.2;
 }
 
@@ -448,6 +466,11 @@ void Squid::turnUpright(double delta_t)
     turnToAngle(-PI / 2, delta_t);
 }
 
+void Squid::squirt(){
+    ofPoint dir = ofVec2f(0,1).rotateRad(body->GetAngle());
+    fluid->addTemporalForce(pos_game, dir * scale * 25, main_color, 0.1 * body_radius * scale,  1.0f);
+}
+
 void Squid::squishPrep(double delta_t)
 {
     squish += (0.8 - squish) * 0.1;
@@ -498,34 +521,88 @@ void Squid::tentacleGlide()
 
 void Squid::draw(bool draw_debug)
 {
+    drawTentacles();
+    drawBody();
+    
+    // Draw Hint
+    if (hint_alpha > 0){
+        ofPushMatrix();
+        ofRectangle hint_draw_rect(-body_radius, -body_radius, body_radius * 2, body_radius * 2);
+        hint_draw_rect.scaleFromCenter(scale * 1.5);
+        if (sees_face){
+            ofTranslate(found_face.getCenter());
+        } else {
+            ofTranslate(pos_game);
+        }
+        ofPolyline p;
+        ofSetLineWidth(4*scale);
+        p.arc(0, 0, hint_draw_rect.width/2, hint_draw_rect.width/2, hint_progress * 360, true, 100);
+        p.draw();
+        ofRotate(-360.0 * hint_progress);
+        ofSetColor(255,255,255,hint_alpha);
+        hint_im.draw(hint_draw_rect);
+        ofPopMatrix();
+    }
+
+    if (draw_debug) {
+        drawDebug();
+    }
+}
+
+void Squid::drawBody(){
+    // Draw body
+    float body_radius_s = body_radius * scale;
+    // Trasnform to body position
+    ofPushMatrix();
+    ofTranslate(pos_game);
+    ofRotate(body->GetAngle() * RAD_TO_DEG);
+    //    ofRectangle body_draw_rect(-body_radius_s / squish, -body_radius_s, body_radius_s * 2 / squish, body_radius_s * 2 * squish);
+    ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
+    body_back_im.draw(body_draw_rect);
+    ofSetColor(255, 255, 255, 255);
+    
+    // Draw face
+    if (has_face) {
+        face_im.draw(body_draw_rect);
+    }
+    
+    body_draw_rect.scaleFromCenter(1 / squish, 1.0);
+    body_draw_rect.height *= squish;
+    body_front_im.draw(body_draw_rect);
+    ofSetColor(main_color);
+    body_accent_im.draw(body_draw_rect);
+    ofPopMatrix();
+}
+
+void Squid::drawTentacles(){
     ofEnableAlphaBlending();
     // Draw Tentacles
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
-
+    
     for (int i = 0; i < num_tentacles; i ++) {
         ofPolyline p;
-
+        
         for (int j = 0; j < num_segments; j ++) {
             b2Body* tentacle = tentacles[i * num_segments + j];
-
+            
             // Tentacle start
             if (j == 0) {
                 p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(- segment_length / 2, 0)))));
             }
-
+            
             p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(segment_length / 2, 0)))));
-
+            
             // Tentacle end
             if (j == num_segments - 1) {
                 p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(segment_length, 0)))));
             }
-
+            
             for (int layer = 0; layer < 2; layer ++) {
                 ofPushMatrix();
                 ofTranslate(b2ToOf(tentacle->GetPosition()));
                 ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
                 int alpha = j / (float)num_segments * 255;
-
+                
                 if (layer == 0) {
                     ofSetColor(255, 255, 255, alpha);
                     tentacle_back_im.draw(tentacle_draw_rect);
@@ -533,123 +610,102 @@ void Squid::draw(bool draw_debug)
                     ofSetColor(main_color, alpha);
                     tentacle_front_im.draw(tentacle_draw_rect);
                 }
-
+                
                 ofPopMatrix();
             }
         }
-
+        
         ofSetColor(ofColor::white);
         ofSetLineWidth(2.0f * scale);
         p.draw();
     }
 
-    // Draw body
-    float body_radius_s = body_radius * scale;
-    // Trasnform to body position
+}
+
+void Squid::drawDebug(){
+    // Draw state
+    std::string state = "";
+    
+    switch (behavior_state) {
+        case IDLE:
+            state += "IDLE";
+            break;
+            
+        case PANIC:
+            state += "PANIC";
+            break;
+            
+        case FACE:
+            state += "FACE";
+            break;
+    }
+    
+    state += " / ";
+    
+    switch (motion_state) {
+        case STILL:
+            state += "STILL";
+            break;
+            
+        case PREP:
+            state += "PREP";
+            break;
+            
+        case PUSH:
+            state += "PUSH";
+            break;
+            
+        case GLIDE:
+            state += "GLIDE";
+            break;
+            
+        case LOCK:
+            state += "LOCK";
+            break;
+    }
+    
+    ofSetLineWidth(1.0f);
+    ofDrawBitmapStringHighlight(state, pos_game + kLabelOffset);
+    ofCircle(goal, max_goal_distance_close);
+    // Draw the grids
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
+    ofSetColor(255, 0, 255, 128);
+    drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight(), GL_NEAREST);
+    ofDisableBlendMode();
+    ofSetColor(0, 255, 0, 255);
+    // Draw the local area
+    ofSetColor(0, 255, 255, 255);
     ofPushMatrix();
-    ofTranslate(pos_game);
-    ofRotate(body->GetAngle() * RAD_TO_DEG);
-//    ofRectangle body_draw_rect(-body_radius_s / squish, -body_radius_s, body_radius_s * 2 / squish, body_radius_s * 2 * squish);
-    ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
-    ofSetColor(main_color);
-    body_back_im.draw(body_draw_rect);
-    ofSetColor(255, 255, 255, 255);
-
-    // Draw face
-
-    if (has_face) {
-        face_im.draw(body_draw_rect);
-    }
-
-    body_draw_rect.scaleFromCenter(1 / squish, 1.0);
-    body_draw_rect.height *= squish;
-    body_front_im.draw(body_draw_rect);
+    ofScale(ofGetWidth() / kSectionsSize.width, ofGetHeight() / kSectionsSize.height);
+    ofRectangle debug_local_area = toOf(local_area);
+    ofNoFill();
+    ofRect(debug_local_area);
     ofPopMatrix();
-
-    if (draw_debug) {
-        // Draw state
-        std::string state = "";
-
-        switch (behavior_state) {
-            case IDLE:
-                state += "IDLE";
-                break;
-
-            case PANIC:
-                state += "PANIC";
-                break;
-
-            case FACE:
-                state += "FACE";
-                break;
-        }
-
-        state += " / ";
-
-        switch (motion_state) {
-            case STILL:
-                state += "STILL";
-                break;
-
-            case PREP:
-                state += "PREP";
-                break;
-
-            case PUSH:
-                state += "PUSH";
-                break;
-
-            case GLIDE:
-                state += "GLIDE";
-                break;
-
-            case LOCK:
-                state += "LOCK";
-                break;
-        }
-
-        ofSetLineWidth(1.0f);
-        ofDrawBitmapStringHighlight(state, pos_game + kLabelOffset);
-        ofCircle(goal, max_goal_distance_close);
-        // Draw the grids
-        ofEnableBlendMode(OF_BLENDMODE_ADD);
-        ofSetColor(255, 0, 255, 128);
-        drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight(), GL_NEAREST);
-        ofDisableBlendMode();
-        ofSetColor(0, 255, 0, 255);
-        // Draw the local area
-        ofSetColor(0, 255, 255, 255);
-        ofPushMatrix();
-        ofScale(ofGetWidth() / kSectionsSize.width, ofGetHeight() / kSectionsSize.height);
-        ofRectangle debug_local_area = toOf(local_area);
-        ofNoFill();
-        ofRect(debug_local_area);
-        ofPopMatrix();
-        ofSetColor(255, 0, 0);
-        ofNoFill();
-        ofRect(pos_game + ofPoint(0, 20), body_radius * scale, 12);
-        ofFill();
-        ofRect(pos_game + ofPoint(0, 20), ofClamp(local_flow, 0, 1) * body_radius * scale, 12);
-        // Draw face search window
-        ofRectangle face_roi_rect = toOf(face_roi);
-        face_roi_rect.scale(frame_scale);
-        face_roi_rect.x *= frame_scale;
-        face_roi_rect.y *= frame_scale;
-        ofPushStyle();
-        ofNoFill();
-        ofSetColor(ofColor::orange);
-        ofRect(face_roi_rect);
-        ofFill();
-        ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
-        ofSetColor(255, 255, 255);
-        ofNoFill();
-        ofRect(face_roi_rect.getPosition(), face_size_min * ofGetHeight(), face_size_min * ofGetHeight());
-        ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
-
-        // Draw detected faces
-        if(objectfinder.size()) {
-            ofSetColor(ofColor::green);
-            ofRect(found_face);
-        }
+    ofSetColor(255, 0, 0);
+    ofNoFill();
+    ofRect(pos_game + ofPoint(0, 20), body_radius * scale, 12);
+    ofFill();
+    ofRect(pos_game + ofPoint(0, 20), ofClamp(local_flow, 0, 1) * body_radius * scale, 12);
+    // Draw face search window
+    ofRectangle face_roi_rect = toOf(face_roi);
+    face_roi_rect.scale(frame_scale);
+    face_roi_rect.x *= frame_scale;
+    face_roi_rect.y *= frame_scale;
+    ofPushStyle();
+    ofNoFill();
+    ofSetColor(ofColor::orange);
+    ofRect(face_roi_rect);
+    ofFill();
+    ofDrawBitmapStringHighlight("face search window", face_roi_rect.getPosition() + kLabelOffset, ofColor::orange, ofColor::black);
+    ofSetColor(255, 255, 255);
+    ofNoFill();
+    ofRect(face_roi_rect.getPosition(), face_size_min * ofGetHeight(), face_size_min * ofGetHeight());
+    ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
+    
+    // Draw detected faces
+    if(objectfinder.size()) {
+        ofSetColor(ofColor::green);
+        ofRect(found_face);
     }
+
 }

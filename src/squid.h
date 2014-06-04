@@ -9,6 +9,7 @@
 #include "ofxCv.h"
 #include "ofxPathfinder.h"
 #include "ofxFluid.h"
+#include "ofxPlaylist.h"
 
 #include "Box2D/Box2D.h"
 
@@ -57,10 +58,12 @@ public:
     double face_pose_time = 5.0;
     
     double min_velocity = 150;
-    float max_goal_distance_close = 80;
+    float max_goal_distance_close = 60;
     float max_goal_distance_far = 200;
     double max_face_distance = 10;
     float goal_bottom_margin = 2.0; // relative to body_radius
+    
+    int face_detection_threshold = 3;
     
     float face_grab_padding = 2.0;
     
@@ -75,13 +78,15 @@ public:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_front_im, body_back_im, tentacle_front_im, tentacle_back_im, face_mask_im;
+    ofImage body_front_im, body_back_im, body_accent_im, tentacle_front_im, tentacle_back_im, hint_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
+    ofxPlaylist playlist;
     cv::Mat frame;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
     cv::Mat face_mat;
     ofImage face_im;
+    ofxFluid* fluid;
 
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;
@@ -92,6 +97,7 @@ public:
     
     ofRectangle found_face;
     bool has_face = false;
+    int face_detection_count = 0;
     double frame_scale = 1.0;
 
     ofPoint goal;
@@ -102,6 +108,9 @@ public:
     float local_flow;
     
     float squish = 1.0f;
+    
+    float hint_alpha = 0.0f;
+    float hint_progress = 0.0f;
     
     ofColor main_color;
     
@@ -114,7 +123,7 @@ public:
     bool sees_face;
 
     // METHODS
-    void setup(ofPtr<b2World> phys_world);
+    void setup(ofPtr<b2World> phys_world, ofxFluid* fluid);
     void setupPhysics(ofPtr<b2World> phys_world);
     
     void update(double delta_t, cv::Mat flow_high, cv::Mat frame, ofxFluid& fluid);
@@ -125,8 +134,6 @@ public:
     
     void switchBehaviorState(BehaviorState next);
     void switchMotionState(MotionState next);
-    
-    void computeHelpers();
     
     void selectQuietGoalInRegion(cv::Rect bounds);
     void selectQuietGoal();
@@ -141,9 +148,14 @@ public:
     void turnUpright(double delta_t);
     void squishPrep(double delta_t);
     void squishPush(double delta_t);
+    void squirt();
     void tentaclePrep();
     void tentacleGlide();
+    
     void draw(bool draw_debug);
+    void drawBody();
+    void drawTentacles();
+    void drawDebug();
     
     ofPoint getPosition() { return b2ToOf(body->GetPosition()); };
 };

@@ -45,7 +45,7 @@ void ofApp::reset()
     //
     // Set up Box2d
     setupPhysics();
-    squid.setup(phys_world);
+    squid.setup(phys_world, &fluid);
     doCapture(); // Get a single frame so we have the resolution
     ratio = (float)ofGetWidth() / ofGetHeight();
     capture_roi = computeCenteredROI(frame_full, ratio);
@@ -260,7 +260,7 @@ void ofApp::drawFluid()
         for (int j = 0; j < flow_low.cols; j += 5) {
             if (flow_high.at<uchar>(i, j)) {
                 ofPoint p = ofPoint(j, i);
-                ofPoint motion_dir = toOf(flow.at<Point2f>(i, j));
+                ofPoint motion_dir = toOf(flow.at<Point2f>(i, j)) * 0;
                 Point3_<uchar> frame_color = frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
                 ofColor color = ofColor(frame_color.x, frame_color.y, frame_color.z);
                 fluid.addTemporalForce(p * flow_scale, motion_dir * flow_scale, color, fluid_motion_radius, 0.5f, 0.5f );

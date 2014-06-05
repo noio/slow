@@ -45,7 +45,6 @@ void FlowCam::update(double delta_t){
 void FlowCam::updateFrame()
 {
     cv::flip(frame_full(capture_roi), frame, 1);
-    printMatrixInfo(frame);
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
     cv::pyrDown(frame_gray, frame_gray);
     cv::pyrDown(frame_gray, frame_gray);
@@ -116,7 +115,6 @@ void FlowCam::doCapture()
         frame_full = toCv(video.getPixelsRef());
         cv::resize(frame_full, frame_full, cv::Size(capture_width, capture_height));
     }
-    printMatrixInfo(frame_full);
 }
 
 void FlowCam::computeRoi(){

@@ -22,8 +22,6 @@ public:
     void draw();
     void exit();
     
-    void reset();
-    
     void setupPhysics();
     void setupGUI();
 

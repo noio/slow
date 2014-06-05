@@ -24,18 +24,11 @@ void ofApp::setup()
     // Setup GUI
     setupGUI();
 
-    // Reset / start
-    reset();
-}
 
-void ofApp::reset()
-{
-    // TODO Merge this into setup?
-    //
     // Set up Box2d
     setupPhysics();
     squid.setup(phys_world, &fluid, &flowcam);
-
+    
     // Set up fluid
     fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
     fluid.dissipation = 0.99;
@@ -45,7 +38,9 @@ void ofApp::reset()
     gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
     gui->setHeight(ofGetHeight());
     gui->setScrollAreaHeight(ofGetHeight());
+
 }
+
 
 void ofApp::setupGUI()
 {
@@ -279,7 +274,7 @@ void ofApp::mouseReleased(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h)
 {
-    reset();
+    setup();
 }
 
 //--------------------------------------------------------------
@@ -299,7 +294,7 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     int kind = e.widget->getKind();
 
     if (name == "RESET") {
-        reset();
+        setup();
     }
     
     if (name == "CAMERA"){
@@ -326,6 +321,6 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
 
     if (name == "1080x480") {
         ofSetWindowShape(1080, 480);
-        reset();
+        setup();
     }
 }

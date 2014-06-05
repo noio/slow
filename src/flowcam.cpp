@@ -10,6 +10,9 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
         camera.setDeviceID(1);
     }
     // Camera and video grabber
+    if (camera.isInitialized()) {
+        camera.close();
+    }
     camera.initGrabber(in_capture_width, in_capture_height);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);

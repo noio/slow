@@ -1,10 +1,7 @@
 
-////////// INCLUDES //////////
 #include "squid.h"
 #include "constants.h"
-
 #include "ofxCv.h"
-
 #include <algorithm>
 
 using namespace ofxCv;
@@ -13,28 +10,18 @@ using namespace Playlist;
 using std::cout;
 using std::endl;
 
-
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* in_fluid, FlowCam* in_flowcam)
+void Squid::setup(ofPtr<b2World> in_phys_world, ofxFluid* in_fluid, FlowCam* in_flowcam)
 {
+    phys_world = in_phys_world;
     fluid = in_fluid;
     flowcam = in_flowcam;
     squish = 1.0f;
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
-    setupPhysics(phys_world);
-    // Load textures
-    body_back_im.loadImage("assets/body_back.png");
-    body_front_im.loadImage("assets/body_front.png");
-    body_accent_im.loadImage("assets/body_accent.png");
-    hint_im.loadImage("assets/hint.png");
-    tentacle_back_im.loadImage("assets/tentacle_back.png");
-    tentacle_front_im.loadImage("assets/tentacle_front.png");
-    face_mask_im.loadImage("assets/face_mask.png");
-    face_mask_mat = toCv(face_mask_im);
-    cv::cvtColor(face_mask_mat, face_mask_mat, CV_RGB2GRAY);
-    cv::resize(face_mask_mat, face_mask_mat, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
+    setupPhysics();
+    setupTextures();
     // Set up face detection
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
@@ -47,8 +34,15 @@ void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* in_fluid, FlowCam* in_flo
     main_color = ofColor::red;
 }
 
-void Squid::setupPhysics(ofPtr<b2World> phys_world)
+void Squid::setupPhysics()
 {
+    // Clean up old physics if any
+    if (body != NULL){
+        body->GetWorld()->DestroyBody(body);
+        for (int i = 0; i < tentacles.size(); i ++) {
+            tentacles[i]->GetWorld()->DestroyBody(tentacles[i]);
+        }
+    }
     tentacles = vector<b2Body*>();
     tentacle_joints = vector<b2RevoluteJoint*>();
     // Set up physics body
@@ -100,6 +94,19 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
     }
 }
 
+void Squid::setupTextures(){
+    // Load textures
+    body_back_im.loadImage("assets/body_back.png");
+    body_front_im.loadImage("assets/body_front.png");
+    body_accent_im.loadImage("assets/body_accent.png");
+    hint_im.loadImage("assets/hint.png");
+    tentacle_back_im.loadImage("assets/tentacle_back.png");
+    tentacle_front_im.loadImage("assets/tentacle_front.png");
+    face_mask_im.loadImage("assets/face_mask.png");
+    face_mask_mat = toCv(face_mask_im);
+    cv::cvtColor(face_mask_mat, face_mask_mat, CV_RGB2GRAY);
+    cv::resize(face_mask_mat, face_mask_mat, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
+}
 
 /*
  This function consists of the following steps:
@@ -112,14 +119,10 @@ void Squid::update(double delta_t)
     updateFlow();
     updateObjectFinder();
     playlist.update();
+    // Some position and direction helpers
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
     pos_section = pos_game / game_size * ofPoint(kSectionsSize.width, kSectionsSize.height);
-//    main_color = ofColor::fromHsb(main_color.getHue() + delta_t, 200.0, 200.0);
-    main_color.setHue(main_color.getHue() + 2);
-    main_color.setSaturation(16 + 255 * local_flow);
-
-
     ofPoint to_goal = (goal - pos_game);
     goal_distance = to_goal.length();
     goal_direction = to_goal.normalized();
@@ -131,24 +134,24 @@ void Squid::update(double delta_t)
     // Update State machines
     updateBehaviorState(delta_t);
     updateMotionState(delta_t);
-    
+    // Display mood
+    main_color.setHue(main_color.getHue() + 2);
+    main_color.setSaturation(16 + 255 * local_flow);
 }
 
 void Squid::updateFlow(){
-    if (flowcam->flow_high.size().area() > 0) {
-        // Subsample the flow grid to get "sections"
-        cv::Mat flow_high_float;
-        flowcam->flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
-        cv::resize(flow_high_float, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
-        ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
-        cv::Mat noise(kSectionsSize, CV_32F); // Add some noise to avoid (0,0) bias when looking for minimum
-        cv::randu(noise, 0, 0.1);
-        sections += noise;
-        local_area = cv::Rect(pos_section.x - 1, pos_section.y - 1, 3, 3);
-        local_area = local_area & cv::Rect(cv::Point(0, 0), kSectionsSize);
-        float local_flow_sum = cv::sum(sections(local_area))[0] / local_area.area();
-        local_flow = 0.9 * local_flow + 0.1 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
-    }
+    // Subsample the flow grid to get "sections"
+    cv::Mat flow_high_float;
+    flowcam->flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
+    cv::resize(flow_high_float, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
+    ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
+    cv::Mat noise(kSectionsSize, CV_32F); // Add some noise to avoid (0,0) bias when looking for minimum
+    cv::randu(noise, 0, 0.1);
+    sections += noise;
+    local_area = cv::Rect(pos_section.x - 1, pos_section.y - 1, 3, 3);
+    local_area = local_area & cv::Rect(cv::Point(0, 0), kSectionsSize);
+    float local_flow_sum = cv::sum(sections(local_area))[0] / local_area.area();
+    local_flow = 0.9 * local_flow + 0.1 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
 }
 
 void Squid::updateObjectFinder()
@@ -726,5 +729,10 @@ void Squid::drawDebug(){
         ofSetColor(ofColor::green);
         ofRect(found_face);
     }
+}
 
+void Squid::setScale(float in_scale){
+    scale = in_scale;
+    setupPhysics();
+    setupTextures();
 }

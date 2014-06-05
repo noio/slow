@@ -16,7 +16,8 @@ class ofApp : public ofBaseApp
 {
 
 public:
-
+    ofApp();
+    
     void setup();
     void update();
     void draw();
@@ -57,6 +58,8 @@ public:
     ofPtr<ofxUIScrollableCanvas> gui;
     
     double delta_t;
+    
+    bool need_setup = false;
     
     // Settings
     bool draw_debug = false;

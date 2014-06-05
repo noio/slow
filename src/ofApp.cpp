@@ -10,6 +10,11 @@ using namespace ofxCv;
 using std::cout;
 using std::endl;
 
+ofApp::ofApp(){
+    gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
+    phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 0.3f)) );
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -21,32 +26,23 @@ void ofApp::setup()
     ofEnableAlphaBlending();
     // Flow camera
     flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight());
-    // Setup GUI
-    setupGUI();
-
-
     // Set up Box2d
     setupPhysics();
     squid.setup(phys_world, &fluid, &flowcam);
-    
     // Set up fluid
     fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
     fluid.dissipation = 0.99;
     fluid.velocityDissipation = 0.99;
     fluid.setGravity(ofVec2f(0.0, 0.0));
-    // Position the GUI
-    gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
-    gui->setHeight(ofGetHeight());
-    gui->setScrollAreaHeight(ofGetHeight());
-
+    // Gui Setup
+    setupGUI();
+    need_setup = false;
 }
-
 
 void ofApp::setupGUI()
 {
-    //
     // Set up control panel
-    gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
+    gui->removeWidgets();
     gui->setTheme(OFX_UI_THEME_HACKER);
     gui->setScrollAreaHeight(ofGetHeight());
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
@@ -58,28 +54,31 @@ void ofApp::setupGUI()
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
     gui->addIntSlider("FLOW_EROSION_SIZE", 1, 7, 5);
     gui->addLabelButton("1080x480", false);
-    gui->addSlider("SQUID_SCALE", 0.5f, 2.0f, &squid.scale);
+    gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
     gui->addSlider("JAGGY_SPACING", 1.0f, 100.0f, &jaggy_spacing);
     gui->addSlider("JAGGY_OFFSET", 0.5f, 30.0f, &jaggy_offset);
     gui->addSlider("FLUID_MOTION_SPEED", 1.0f, 50.0f, &fluid_motion_speed);
     gui->addSlider("FLUID_MOTION_RADIUS", 1.0f, 10.0f, &fluid_motion_radius);
-//    gui->addMinimalSlider("SQUID_BODY_RADIUS", 10, 100, 40);
-//    gui->addMinimalSlider("SQUID_BODY_DENSITY", 0.1, 1.0, 0.2);
-//    gui->addMinimalSlider("SQUID_TENTACLE_DAMPING", 1.0, 20.0, 8.0);
-    // Load settings
-    gui->autoSizeToFitWidgets();
+    // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
+    // Position the GUI
+    gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
+    gui->setHeight(ofGetHeight());
+    gui->setScrollAreaHeight(ofGetHeight());
+    gui->autoSizeToFitWidgets();
+    // Load settings
     gui->loadSettings("settings.xml");
 }
 
 void ofApp::setupPhysics()
 {
-    b2Vec2 gravity(0.0f, 3.0f);
-    phys_world = ofPtr<b2World> ( new b2World(gravity) );
+    if (world_bounds != NULL){
+        world_bounds->GetWorld()->DestroyBody(world_bounds);
+    }
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
     boundsBodyDef.position.Set(0, 0);
-    world_bounds = phys_world.get()->CreateBody(&boundsBodyDef);
+    world_bounds = phys_world->CreateBody(&boundsBodyDef);
     b2EdgeShape shape;
     b2AABB rec = ofToB2(ofRectangle(-kGameSizePadding, -kGameSizePadding,
                                     (ofGetWidth() + kGameSizePadding * 2), (ofGetHeight() + kGameSizePadding * 2)));
@@ -102,11 +101,12 @@ void ofApp::setupPhysics()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+    if (need_setup){
+        setup();
+    }
     delta_t = ofGetLastFrameTime();
-    
     flowcam.update(delta_t);
     squid.update(delta_t);
-    
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     fluid.update();
 }
@@ -274,7 +274,7 @@ void ofApp::mouseReleased(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h)
 {
-    setup();
+    need_setup = true;
 }
 
 //--------------------------------------------------------------
@@ -294,7 +294,7 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     int kind = e.widget->getKind();
 
     if (name == "RESET") {
-        setup();
+        need_setup = true;
     }
     
     if (name == "CAMERA"){
@@ -318,9 +318,14 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "FLOW_EROSION_SIZE") {
         flowcam.setFlowErosionSize((int)(((ofxUIIntSlider*) e.widget)->getScaledValue()));
     }
+    
+    if (name == "SQUID_SCALE") {
+        squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
+    }
+    
 
     if (name == "1080x480") {
         ofSetWindowShape(1080, 480);
-        setup();
+        need_setup = true;
     }
 }

@@ -3,8 +3,6 @@
 #include "squid.h"
 #include "constants.h"
 
-#include "fgfsm.h"
-
 #include "ofxCv.h"
 
 #include <algorithm>
@@ -18,9 +16,10 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* fluid)
+void Squid::setup(ofPtr<b2World> phys_world, ofxFluid* in_fluid, FlowCam* in_flowcam)
 {
-    this->fluid = fluid;
+    fluid = in_fluid;
+    flowcam = in_flowcam;
     squish = 1.0f;
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
@@ -108,9 +107,10 @@ void Squid::setupPhysics(ofPtr<b2World> phys_world)
  - Plan a path to goal
  - Move to goal (low level)
  */
-void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
+void Squid::update(double delta_t)
 {
-    this->frame = frame;
+    updateFlow();
+    updateObjectFinder();
     playlist.update();
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
@@ -119,20 +119,6 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
     main_color.setHue(main_color.getHue() + 2);
     main_color.setSaturation(16 + 255 * local_flow);
 
-    if (flow_high.size().area() > 0) {
-        // Subsample the flow grid to get "sections"
-        cv::Mat flow_high_float;
-        flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
-        cv::resize(flow_high_float, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
-        ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
-        cv::Mat noise(kSectionsSize, CV_32F); // Add some noise to avoid (0,0) bias when looking for minimum
-        cv::randu(noise, 0, 0.1);
-        sections += noise;
-        local_area = cv::Rect(pos_section.x - 1, pos_section.y - 1, 3, 3);
-        local_area = local_area & cv::Rect(cv::Point(0, 0), kSectionsSize);
-        float local_flow_sum = cv::sum(sections(local_area))[0] / local_area.area();
-        local_flow = 0.9 * local_flow + 0.1 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
-    }
 
     ofPoint to_goal = (goal - pos_game);
     goal_distance = to_goal.length();
@@ -146,6 +132,55 @@ void Squid::update(double delta_t, cv::Mat flow_high, cv::Mat frame)
     updateBehaviorState(delta_t);
     updateMotionState(delta_t);
     
+}
+
+void Squid::updateFlow(){
+    if (flowcam->flow_high.size().area() > 0) {
+        // Subsample the flow grid to get "sections"
+        cv::Mat flow_high_float;
+        flowcam->flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
+        cv::resize(flow_high_float, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
+        ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
+        cv::Mat noise(kSectionsSize, CV_32F); // Add some noise to avoid (0,0) bias when looking for minimum
+        cv::randu(noise, 0, 0.1);
+        sections += noise;
+        local_area = cv::Rect(pos_section.x - 1, pos_section.y - 1, 3, 3);
+        local_area = local_area & cv::Rect(cv::Point(0, 0), kSectionsSize);
+        float local_flow_sum = cv::sum(sections(local_area))[0] / local_area.area();
+        local_flow = 0.9 * local_flow + 0.1 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
+    }
+}
+
+void Squid::updateObjectFinder()
+{
+    // Only compute a width because the face search window is square.
+    cv::Mat frame = flowcam->frame;
+    frame_scale = ofGetWidth() / (double)frame.cols;
+    int face_search_width = MIN(frame.cols, frame.rows) * face_search_window;
+    face_roi = cv::Rect(0, 0, face_search_width, face_search_width);
+    face_roi += cv::Point(MAX(0, MIN(frame.cols - face_search_width, (pos_game.x / frame_scale - face_search_width / 2))),
+                          MAX(0, MIN(frame.rows - face_search_width, (pos_game.y / frame_scale - face_search_width / 2))));
+    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
+    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
+    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
+    // The call below uses 2 arguments including a switch "preprocess" that
+    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
+    objectfinder.update(frame(face_roi), true);
+    
+    if (objectfinder.size() > 0) {
+        face_detection_count ++;
+        if (face_detection_count > face_detection_threshold){
+            int label = objectfinder.getLabel(0);
+            found_face = toOf(objectfinder.getTracker().getSmoothed(label));
+            found_face.scale(frame_scale);
+            found_face.x += face_roi.x * frame_scale;
+            found_face.y += face_roi.y * frame_scale;
+            sees_face = true;
+        }
+    } else {
+        face_detection_count = 0;
+        sees_face = false;
+    }
 }
 
 void Squid::updateBehaviorState(double delta_t)
@@ -328,37 +363,6 @@ void Squid::switchMotionState(MotionState next)
     motion_state = next;
 }
 
-void Squid::updateObjectFinder(cv::Mat frame)
-{
-    // Only compute a width because the face search window is square.
-    frame_scale = ofGetWidth() / (double)frame.cols;
-    int face_search_width = MIN(frame.cols, frame.rows) * face_search_window;
-    face_roi = cv::Rect(0, 0, face_search_width, face_search_width);
-    face_roi += cv::Point(MAX(0, MIN(frame.cols - face_search_width, (pos_game.x / frame_scale - face_search_width / 2))),
-                          MAX(0, MIN(frame.rows - face_search_width, (pos_game.y / frame_scale - face_search_width / 2))));
-    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
-    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
-    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
-    // The call below uses 2 arguments including a switch "preprocess" that
-    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
-    objectfinder.update(frame(face_roi), true);
-
-    if (objectfinder.size() > 0) {
-        face_detection_count ++;
-        if (face_detection_count > face_detection_threshold){
-            int label = objectfinder.getLabel(0);
-            found_face = toOf(objectfinder.getTracker().getSmoothed(label));
-            found_face.scale(frame_scale);
-            found_face.x += face_roi.x * frame_scale;
-            found_face.y += face_roi.y * frame_scale;
-            sees_face = true;
-        }
-    } else {
-        face_detection_count = 0;
-        sees_face = false;
-    }
-}
-
 
 void Squid::selectQuietGoalInRegion(cv::Rect bounds)
 {
@@ -400,12 +404,12 @@ void Squid::clearFace(){
 
 void Squid::grabFace(bool do_cut)
 {
-    frame_scale = ofGetWidth() / (float)frame.cols;
+    frame_scale = ofGetWidth() / (float)flowcam->frame.cols;
     ofRectangle extract = ofRectangle(found_face);
     extract.scaleFromCenter(face_grab_padding);
     cv::Rect face_region(extract.x / frame_scale, extract.y / frame_scale, extract.width / frame_scale, extract.height / frame_scale);
-    face_region &= cv::Rect(0, 0, frame.cols, frame.rows);
-    cv::Mat cutout = frame(face_region).clone();
+    face_region &= cv::Rect(0, 0, flowcam->frame.cols, flowcam->frame.rows);
+    cv::Mat cutout = flowcam->frame(face_region).clone();
     int padding = cutout.cols / 8;
     cv::copyMakeBorder(cutout, cutout, padding, padding, padding, padding, cv::BORDER_REPLICATE);
     cv::resize(cutout, cutout, cv::Size(body_radius * scale * 2, body_radius * scale * 2));

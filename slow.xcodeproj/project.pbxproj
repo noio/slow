@@ -33,9 +33,9 @@
 		E249202F193F338300528EA5 /* ofxEventKeyframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2492016193F338300528EA5 /* ofxEventKeyframe.cpp */; };
 		E2492030193F338300528EA5 /* ofxKeyframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2492018193F338300528EA5 /* ofxKeyframe.cpp */; };
 		E2492031193F338300528EA5 /* ofxPlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E249201A193F338300528EA5 /* ofxPlaylist.cpp */; };
+		E249203B19406E8C00528EA5 /* flowcam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E249203919406E8C00528EA5 /* flowcam.cpp */; };
 		E254A37618F583F7007C3AFA /* Delaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A36E18F583F7007C3AFA /* Delaunay.cpp */; };
 		E254A37718F583F7007C3AFA /* ofxDelaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */; };
-		E256418018EB08730030858B /* fluid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E256417E18EB08730030858B /* fluid.cpp */; };
 		E25839B5191BBB1A0049E948 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2583953191BBB1A0049E948 /* b2BroadPhase.cpp */; };
 		E25839B6191BBB1A0049E948 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2583955191BBB1A0049E948 /* b2CollideCircle.cpp */; };
 		E25839B7191BBB1A0049E948 /* b2CollideEdge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2583956191BBB1A0049E948 /* b2CollideEdge.cpp */; };
@@ -215,7 +215,6 @@
 		D29DD28C195CD81267F3C8A1 /* Distance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Distance.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h; sourceTree = SOURCE_ROOT; };
 		D347FB65D19015303863922A /* Wrappers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Wrappers.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Wrappers.cpp; sourceTree = SOURCE_ROOT; };
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
-		E2353E76193E054C007C9FB7 /* fgfsm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fgfsm.h; sourceTree = "<group>"; };
 		E2491FFB193F338300528EA5 /* easing_terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = easing_terms_of_use.html; sourceTree = "<group>"; };
 		E2491FFC193F338300528EA5 /* ofxEasing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxEasing.cpp; sourceTree = "<group>"; };
 		E2491FFD193F338300528EA5 /* ofxEasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxEasing.h; sourceTree = "<group>"; };
@@ -250,6 +249,8 @@
 		E249201A193F338300528EA5 /* ofxPlaylist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPlaylist.cpp; sourceTree = "<group>"; };
 		E249201B193F338300528EA5 /* ofxPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPlaylist.h; sourceTree = "<group>"; };
 		E249201C193F338300528EA5 /* ofxPlaylistAEHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPlaylistAEHelper.h; sourceTree = "<group>"; };
+		E249203919406E8C00528EA5 /* flowcam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flowcam.cpp; sourceTree = "<group>"; };
+		E249203A19406E8C00528EA5 /* flowcam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flowcam.h; sourceTree = "<group>"; };
 		E254A36018F583F7007C3AFA /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E254A36E18F583F7007C3AFA /* Delaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delaunay.cpp; sourceTree = "<group>"; };
 		E254A36F18F583F7007C3AFA /* Delaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delaunay.h; sourceTree = "<group>"; };
@@ -257,8 +258,6 @@
 		E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDelaunay.cpp; sourceTree = "<group>"; };
 		E254A37318F583F7007C3AFA /* ofxDelaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDelaunay.h; sourceTree = "<group>"; };
 		E256414318EAC8650030858B /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
-		E256417E18EB08730030858B /* fluid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fluid.cpp; sourceTree = "<group>"; };
-		E256417F18EB08730030858B /* fluid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fluid.h; sourceTree = "<group>"; };
 		E2583951191BBB1A0049E948 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		E2583953191BBB1A0049E948 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
 		E2583954191BBB1A0049E948 /* b2BroadPhase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2BroadPhase.h; sourceTree = "<group>"; };
@@ -1270,16 +1269,15 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E2353E76193E054C007C9FB7 /* fgfsm.h */,
 				E258394F191BBB1A0049E948 /* libs */,
+				E249203A19406E8C00528EA5 /* flowcam.h */,
+				E249203919406E8C00528EA5 /* flowcam.cpp */,
 				E256414318EAC8650030858B /* constants.h */,
 				E2DB5C5E1919187800885AC3 /* utilities.h */,
-				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E29D5C2F18FD2C9B00890C23 /* squid.h */,
 				E29D5C3018FD2E0C00890C23 /* squid.cpp */,
-				E256417F18EB08730030858B /* fluid.h */,
-				E256417E18EB08730030858B /* fluid.cpp */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
+				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */,
 				E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
@@ -1428,6 +1426,7 @@
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
 				E25839D3191BBB1A0049E948 /* b2EdgeAndPolygonContact.cpp in Sources */,
 				E2E9315318F42F7F007BC76B /* ofxUITabBar.cpp in Sources */,
+				E249203B19406E8C00528EA5 /* flowcam.cpp in Sources */,
 				E2E9313F18F42F7F007BC76B /* ofxUIImageSlider.cpp in Sources */,
 				E2E4288F1937338900CF93F7 /* ofxFluid.cpp in Sources */,
 				E25839B8191BBB1A0049E948 /* b2CollidePolygon.cpp in Sources */,
@@ -1458,7 +1457,6 @@
 				E29D5C3118FD2E0C00890C23 /* squid.cpp in Sources */,
 				E2E9313918F42F7F007BC76B /* ofxUIEventArgs.cpp in Sources */,
 				E249202F193F338300528EA5 /* ofxEventKeyframe.cpp in Sources */,
-				E256418018EB08730030858B /* fluid.cpp in Sources */,
 				E2E9314218F42F7F007BC76B /* ofxUILabelButton.cpp in Sources */,
 				E25839E2191BBB1A0049E948 /* b2Rope.cpp in Sources */,
 				E25839CD191BBB1A0049E948 /* b2ChainAndCircleContact.cpp in Sources */,

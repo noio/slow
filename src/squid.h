@@ -5,6 +5,8 @@
 ////////// IMPORTS //////////
 #include "utilities.h"
 
+#include "flowcam.h"
+
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxPathfinder.h"
@@ -31,6 +33,47 @@ public:
     
     enum BehaviorState { IDLE, PANIC, FACE };
     enum MotionState { STILL, PREP, PUSH, GLIDE, LOCK };
+    
+    // METHODS
+    void setup(ofPtr<b2World> phys_world, ofxFluid* fluid, FlowCam* flowcam);
+    void setupPhysics(ofPtr<b2World> phys_world);
+    
+    void update(double delta_t);
+    
+    void updateFlow();
+    void updateObjectFinder();
+    void updateBehaviorState(double delta_t);
+    void updateMotionState(double delta_t);
+    
+    void switchBehaviorState(BehaviorState next);
+    void switchMotionState(MotionState next);
+    
+    void selectQuietGoalInRegion(cv::Rect bounds);
+    void selectQuietGoal();
+    void selectFaceGoal();
+    bool currentGoalIsQuiet();
+    
+    void clearFace();
+    void grabFace(bool do_cut);
+    
+    void showCaptureHint();
+    
+    void bodyPush(double delta_t);
+    void turnToAngle(float target_angle, double delta_t);
+    void turnToGoal(double delta_t);
+    void turnUpright(double delta_t);
+    void squishPrep(double delta_t);
+    void squishPush(double delta_t);
+    void squirt();
+    void tentaclePrep();
+    void tentacleGlide();
+    
+    void draw(bool draw_debug);
+    void drawBody();
+    void drawTentacles();
+    void drawDebug();
+    
+    ofPoint getPosition() { return b2ToOf(body->GetPosition()); };
 
     // Settings
     
@@ -82,12 +125,12 @@ public:
     ofImage body_front_im, body_back_im, body_accent_im, tentacle_front_im, tentacle_back_im, hint_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
     ofxPlaylist playlist;
-    cv::Mat frame;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
     deque<cv::Mat> face_anim;
     ofImage face_im;
     ofxFluid* fluid;
+    FlowCam* flowcam;
 
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;
@@ -124,45 +167,6 @@ public:
     bool facing_goal;
     bool sees_face;
 
-    // METHODS
-    void setup(ofPtr<b2World> phys_world, ofxFluid* fluid);
-    void setupPhysics(ofPtr<b2World> phys_world);
-    
-    void update(double delta_t, cv::Mat flow_high, cv::Mat frame);
-    void updateObjectFinder(cv::Mat frame);
-    
-    void updateBehaviorState(double delta_t);
-    void updateMotionState(double delta_t);
-    
-    void switchBehaviorState(BehaviorState next);
-    void switchMotionState(MotionState next);
-    
-    void selectQuietGoalInRegion(cv::Rect bounds);
-    void selectQuietGoal();
-    void selectFaceGoal();
-    bool currentGoalIsQuiet();
-    
-    void clearFace();
-    void grabFace(bool do_cut);
-    
-    void showCaptureHint();
-    
-    void bodyPush(double delta_t);
-    void turnToAngle(float target_angle, double delta_t);
-    void turnToGoal(double delta_t);
-    void turnUpright(double delta_t);
-    void squishPrep(double delta_t);
-    void squishPush(double delta_t);
-    void squirt();
-    void tentaclePrep();
-    void tentacleGlide();
-    
-    void draw(bool draw_debug);
-    void drawBody();
-    void drawTentacles();
-    void drawDebug();
-    
-    ofPoint getPosition() { return b2ToOf(body->GetPosition()); };
-};
+    };
 
 #endif

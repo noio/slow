@@ -19,48 +19,23 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
-    contourfinder.setSimplify(true);
-    contourfinder.setMinArea(80);
-    // Load textures
-    motion_texture_a.loadImage("assets/motion_texture_a.png");
-    motion_texture_a.getTextureReference().setTextureWrap(GL_REPEAT, GL_REPEAT);
+    // Flow camera
+    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight());
     // Setup GUI
     setupGUI();
 
-    // Use an external camera if one is connected
-    if (camera.listDevices().size() > 1) {
-        camera.setDeviceID(1);
-    }
-
-    camera.initGrabber(kCaptureWidth, kCaptureHeight);
-    video.loadMovie("videos/damrak/damrak_3.mov");
-    video.setVolume(0);
-    video.play();
     // Reset / start
     reset();
 }
 
 void ofApp::reset()
 {
+    // TODO Merge this into setup?
     //
     // Set up Box2d
     setupPhysics();
-    squid.setup(phys_world, &fluid);
-    doCapture(); // Get a single frame so we have the resolution
-    ratio = (float)ofGetWidth() / ofGetHeight();
-    capture_roi = computeCenteredROI(frame_full, ratio);
-    //
-    // Set up optical flow
-    open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-                                            cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
-                                            cv::Point(flow_erosion_size, flow_erosion_size));
-    opticalflow.setPyramidScale(0.5);
-    opticalflow.setNumLevels(2);
-    opticalflow.setWindowSize(7);
-    opticalflow.setNumIterations(3);
-    opticalflow.setPolyN(5);
-    opticalflow.setPolySigma(1.2);
-    opticalflow.resetFlow();
+    squid.setup(phys_world, &fluid, &flowcam);
+
     // Set up fluid
     fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
     fluid.dissipation = 0.99;
@@ -82,7 +57,7 @@ void ofApp::setupGUI()
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
     gui->addLabelButton("RESET", false);
     gui->addToggle("DEBUG", &draw_debug);
-    gui->addToggle("CAMERA", &use_camera);
+    gui->addToggle("CAMERA", false);
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
     gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
@@ -105,7 +80,7 @@ void ofApp::setupGUI()
 void ofApp::setupPhysics()
 {
     b2Vec2 gravity(0.0f, 3.0f);
-    phys_world = ofPtr<b2World> ( new b2World(gravity ) );
+    phys_world = ofPtr<b2World> ( new b2World(gravity) );
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
     boundsBodyDef.position.Set(0, 0);
@@ -133,94 +108,35 @@ void ofApp::setupPhysics()
 void ofApp::update()
 {
     delta_t = ofGetLastFrameTime();
-    doCapture();
-
-    if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) ) {
-        updateFrame();
-        updateFlow();
-        squid.updateObjectFinder(frame);
-    }
-
-    squid.update(delta_t, flow_high, frame);
+    
+    flowcam.update(delta_t);
+    squid.update(delta_t);
+    
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     fluid.update();
 }
 
-void ofApp::doCapture()
-{
-    if (use_camera) {
-        camera.update();
-        frame_full = toCv(camera);
-    } else {
-        video.update();
-        frame_full = toCv(video.getPixelsRef());
-        cv::resize(frame_full, frame_full, cv::Size(kCaptureWidth, kCaptureHeight));
-    }
-}
-
-void ofApp::updateFrame()
-{
-    cv::flip(frame_full(capture_roi), frame, 1);
-    cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-    cv::pyrDown(frame_gray, frame_gray);
-    cv::pyrDown(frame_gray, frame_gray);
-}
-
-void ofApp::updateFlow()
-{
-    opticalflow.calcOpticalFlow(frame_gray);
-    flow = opticalflow.getFlow();
-    std::swap(flow_low_prev, flow_low);
-    std::swap(flow_high_prev, flow_high);
-
-    // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
-    if (flow.cols == 1) {
-        flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
-        flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
-        flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
-    }
-
-    std::vector<cv::Mat> xy(2);
-    cv::split(flow, xy);
-    cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
-    //
-    // Compute the low speed mask
-    cv::threshold(magnitude, magnitude, flow_threshold_low, 1, cv::THRESH_TOZERO);
-    flow_low = magnitude > 0;
-    cv::erode(flow_low, flow_low, open_kernel);
-    cv::dilate(flow_low, flow_low, open_kernel);
-    //
-    // Compute the high speed mask
-    cv::threshold(magnitude, flow_high, flow_threshold_high, 1, cv::THRESH_TOZERO);
-    flow_high = flow_high > 0; // & flow_low_prev > 0;
-    cv::erode(flow_high, flow_high, open_kernel);
-//    cv::dilate(flow_high, flow_high, open_kernel_small);
-    flow_behind = flow_high_prev & (255 - flow_high);
-    flow_new = flow_high & ( 255 - flow_high_prev);
-    contourfinder.findContours(flow_high);
-}
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
     ofSetColor(255, 255, 255, 255);
-    ofxCv::drawMat(frame, 0, 0, ofGetWidth(), ofGetHeight());
+    ofxCv::drawMat(flowcam.frame, 0, 0, ofGetWidth(), ofGetHeight());
 
-//    drawParticles();
     if (draw_debug) {
         ofPushStyle();
         // Draw the optical flow maps
         ofEnableBlendMode(OF_BLENDMODE_ADD);
         ofSetColor(224, 160, 58, 128);
-        ofxCv::drawMat(flow_low, 0, 0, ofGetWidth(), ofGetHeight());
+        ofxCv::drawMat(flowcam.flow_low, 0, 0, ofGetWidth(), ofGetHeight());
         ofDisableBlendMode();
         ofPushMatrix();
         ofSetLineWidth(4.0);
         ofSetColor(255, 0, 0);
-        ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
+        ofScale(ofGetWidth() / (float)flowcam.flow_high.cols, ofGetHeight() / (float)flowcam.flow_high.rows);
 
-        for (int i = 0; i < contourfinder.size(); i ++) {
-            contourfinder.getPolyline(i).draw();
+        for (int i = 0; i < flowcam.contourfinder.size(); i ++) {
+            flowcam.contourfinder.getPolyline(i).draw();
         }
 
         ofPopMatrix();
@@ -231,17 +147,7 @@ void ofApp::draw()
     fluid.draw();
     ofDisableAlphaBlending();
     drawMotionEffects();
-//
-//    ofSetLineWidth(3.0f);
-//    ofSetColor(ofColor::pink);
-//    ofPolyline test;
-//    test.arc(ofGetWidth() / 2, ofGetHeight() / 2, 30.0f, 10.0f, 0.0f, 360.0f, 20);
-//    for (int i = 0; i < test.size(); i ++){
-//        ofPoint p = test[i];
-//        ofPoint n = test.getNormalAtIndex(i);
-//        ofLine(p, p + (30.0f * n));
-//    }
-//    test.draw();
+    
     squid.draw(draw_debug);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
 }
@@ -254,14 +160,14 @@ void ofApp::drawMotionEffects()
 
 void ofApp::drawFluid()
 {
-    float flow_scale = ofGetWidth() / (float)flow_high.cols;
+    float flow_scale = ofGetWidth() / (float)flowcam.flow_high.cols;
 
-    for (int i = 0; i < flow_low.rows; i += 5) {
-        for (int j = 0; j < flow_low.cols; j += 5) {
-            if (flow_high.at<uchar>(i, j)) {
+    for (int i = 0; i < flowcam.flow_low.rows; i += 5) {
+        for (int j = 0; j < flowcam.flow_low.cols; j += 5) {
+            if (flowcam.flow_high.at<uchar>(i, j)) {
                 ofPoint p = ofPoint(j, i);
-                ofPoint motion_dir = toOf(flow.at<Point2f>(i, j)) * 0;
-                Point3_<uchar> frame_color = frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
+                ofPoint motion_dir = toOf(flowcam.flow.at<Point2f>(i, j));
+                Point3_<uchar> frame_color = flowcam.frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
                 ofColor color = ofColor(frame_color.x, frame_color.y, frame_color.z);
                 fluid.addTemporalForce(p * flow_scale, motion_dir * flow_scale, color, fluid_motion_radius, 0.5f, 0.5f );
             }
@@ -271,15 +177,15 @@ void ofApp::drawFluid()
 
 void ofApp::drawJaggies()
 {
-    float flow_scale = ofGetWidth() / (float)flow_high.cols;
+    float flow_scale = ofGetWidth() / (float)flowcam.flow_high.cols;
 
-    for (int ci = 0; ci < contourfinder.size(); ci++) {
-        ofPolyline contour = contourfinder.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
+    for (int ci = 0; ci < flowcam.contourfinder.size(); ci++) {
+        ofPolyline contour = flowcam.contourfinder.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
         ofPolyline jaggies_a;
         ofPolyline jaggies_b;
-        int label = contourfinder.getTracker().getLabelFromIndex(ci);
-        cv::Point2f center = contourfinder.getCenter(ci);
-        ofPoint motion_dir = toOf(flow.at<Point2f>(center.y, center.x));
+        int label = flowcam.contourfinder.getTracker().getLabelFromIndex(ci);
+        cv::Point2f center = flowcam.contourfinder.getCenter(ci);
+        ofPoint motion_dir = toOf(flowcam.flow.at<Point2f>(center.y, center.x));
         ofColor contour_color = getPersistentColor(label);
         ofSetLineWidth(2.0f);
 
@@ -395,6 +301,10 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "RESET") {
         reset();
     }
+    
+    if (name == "CAMERA"){
+        flowcam.setUseCamera( ((ofxUIToggle*) e.widget)->getValue() );
+    }
 
     if (name == "FACE_SEARCH_WINDOW") {
         squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
@@ -406,12 +316,12 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     }
 
     if (name == "FLOW_THRESHOLD") {
-        flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
-        flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
+        flowcam.flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
+        flowcam.flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
 
     if (name == "FLOW_EROSION_SIZE") {
-        flow_erosion_size = (int)(((ofxUIIntSlider*) e.widget)->getScaledValue());
+        flowcam.setFlowErosionSize((int)(((ofxUIIntSlider*) e.widget)->getScaledValue()));
     }
 
     if (name == "1080x480") {

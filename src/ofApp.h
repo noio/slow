@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Squid.h"
-#include "Fluid.h"
+#include "squid.h"
+#include "flowcam.h"
 #include "ParticleSystem.h"
 
 #include "ofMain.h"
@@ -26,8 +26,6 @@ public:
     
     void setupPhysics();
     void setupGUI();
-    
-    void doCapture();
 
     void updateFrame();
     void updateFlow();
@@ -50,13 +48,7 @@ public:
     void guiEvent(ofxUIEventArgs& e);
 
     // Components
-    ofVideoPlayer video;
-    ofVideoGrabber camera;
-    
-    ofImage motion_texture_a;
-
-    ofxCv::FlowFarneback opticalflow;
-    ofxCv::ContourFinder contourfinder;
+    FlowCam flowcam;
     ofxFluid fluid;
     
     ofPtr<b2World> phys_world;
@@ -66,24 +58,11 @@ public:
     
     ofPtr<ofxUIScrollableCanvas> gui;
     
-    // Matrices
-    cv::Mat open_kernel;
-    cv::Mat frame_full, frame, frame_gray;
-    cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
-    
-    // Sizes
     double delta_t;
-    double ratio;
-    cv::Rect capture_roi;
     
     // Settings
     bool draw_debug = false;
-    bool use_camera = false;
-    bool resized = true;
         
-    float flow_threshold_low = 0.1f;
-    float flow_threshold_high = 0.5f;
-    int flow_erosion_size = 5;
     float jaggy_spacing = 20.0f;
     float jaggy_offset = 10.0f;
     float fluid_motion_speed = 5.0f;

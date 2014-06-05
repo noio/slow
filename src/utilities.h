@@ -32,13 +32,6 @@ inline b2AABB ofToB2 (const ofRectangle rect){
     return output;
 }
 
-inline cv::Rect computeCenteredROI (cv::Mat input, double ratio){
-    int w = std::min(input.cols, static_cast<int>(round(input.rows * ratio)));
-    int h = std::min(input.rows, static_cast<int>(round(input.cols / ratio)));
-    cv::Rect roi = cv::Rect((input.cols - w) / 2, (input.rows - h) / 2, w, h);
-    return roi;
-}
-
 inline void printMatrixInfo(const cv::Mat& mat) {
     cv::string r;
     

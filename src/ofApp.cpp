@@ -10,9 +10,10 @@ using namespace ofxCv;
 using std::cout;
 using std::endl;
 
-ofApp::ofApp(){
+ofApp::ofApp()
+{
     gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
-    phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 0.3f)) );
+    phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
 }
 
 //--------------------------------------------------------------
@@ -72,9 +73,10 @@ void ofApp::setupGUI()
 
 void ofApp::setupPhysics()
 {
-    if (world_bounds != NULL){
+    if (world_bounds != NULL) {
         world_bounds->GetWorld()->DestroyBody(world_bounds);
     }
+
     // Set up the world bounds
     b2BodyDef boundsBodyDef;
     boundsBodyDef.position.Set(0, 0);
@@ -101,9 +103,10 @@ void ofApp::setupPhysics()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (need_setup){
+    if (need_setup) {
         setup();
     }
+
     delta_t = ofGetLastFrameTime();
     flowcam.update(delta_t);
     squid.update(delta_t);
@@ -142,7 +145,6 @@ void ofApp::draw()
     fluid.draw();
     ofDisableAlphaBlending();
     drawMotionEffects();
-    
     squid.draw(draw_debug);
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
 }
@@ -296,8 +298,8 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "RESET") {
         need_setup = true;
     }
-    
-    if (name == "CAMERA"){
+
+    if (name == "CAMERA") {
         flowcam.setUseCamera( ((ofxUIToggle*) e.widget)->getValue() );
     }
 
@@ -318,11 +320,10 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "FLOW_EROSION_SIZE") {
         flowcam.setFlowErosionSize((int)(((ofxUIIntSlider*) e.widget)->getScaledValue()));
     }
-    
+
     if (name == "SQUID_SCALE") {
         squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
     }
-    
 
     if (name == "1080x480") {
         ofSetWindowShape(1080, 480);

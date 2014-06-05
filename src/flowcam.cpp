@@ -3,16 +3,19 @@
 
 using namespace ofxCv;
 
-void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height){
+void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height)
+{
     // Initialize the camera first, before we do other stuff that depends on having a frame
     // Use an external camera if one is connected
     if (camera.listDevices().size() > 1) {
         camera.setDeviceID(1);
     }
+
     // Camera and video grabber
     if (camera.isInitialized()) {
         camera.close();
     }
+
     camera.initGrabber(in_capture_width, in_capture_height);
     video.loadMovie("videos/damrak/damrak_3.mov");
     video.setVolume(0);
@@ -36,8 +39,10 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     opticalflow.resetFlow();
 }
 
-void FlowCam::update(double delta_t){
+void FlowCam::update(double delta_t)
+{
     doCapture();
+
     if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) || frame.empty() ) {
         updateFrame();
         updateFlow();
@@ -59,14 +64,14 @@ void FlowCam::updateFlow()
     flow = opticalflow.getFlow();
     std::swap(flow_low_prev, flow_low); // TODO: Remove this whole flow_low_prev thing?
     std::swap(flow_high_prev, flow_high);
-    
+
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
     if (flow.cols == 1) {
         flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
     }
-    
+
     std::vector<cv::Mat> xy(2);
     cv::split(flow, xy);
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
@@ -88,19 +93,22 @@ void FlowCam::updateFlow()
 }
 
 
-void FlowCam::setFlowErosionSize(int in_flow_erosion_size){
+void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
+{
     flow_erosion_size = in_flow_erosion_size;
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
                                             cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
                                             cv::Point(flow_erosion_size, flow_erosion_size));
 }
 
-void FlowCam::setUseCamera(bool in_use_camera){
+void FlowCam::setUseCamera(bool in_use_camera)
+{
     use_camera = in_use_camera;
     computeRoi();
 }
 
-void FlowCam::setScreenSize(int in_screen_width, int in_screen_height){
+void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
+{
     screen_width = in_screen_width;
     screen_height = in_screen_height;
     computeRoi();
@@ -120,7 +128,8 @@ void FlowCam::doCapture()
     }
 }
 
-void FlowCam::computeRoi(){
+void FlowCam::computeRoi()
+{
     doCapture(); // Get a single frame so we have the cam resolution
     float ratio = (float)screen_width / screen_height;
     int w = std::min(frame_full.cols, static_cast<int>(round(frame_full.rows * ratio)));

@@ -31,7 +31,7 @@ public:
     // CONST
     const cv::Size kSectionsSize = cv::Size(8, 4);
     
-    enum BehaviorState { IDLE, PANIC, FACE };
+    enum BehaviorState { IDLE, PANIC, FACE, GRABBED };
     enum MotionState { STILL, PREP, PUSH, GLIDE, LOCK };
     
     // METHODS
@@ -53,6 +53,7 @@ public:
     double motion_time_push = 0.3;
     double idle_move_cooldown = 10.0;
     double face_pose_time = 5.0;
+    double grab_time = 4.0;
     
     double min_velocity = 150;
     float max_goal_distance_close = 60;
@@ -64,8 +65,11 @@ public:
     
     float face_grab_padding = 2.0;
     
+    float local_area_radius = 200;
+    float core_area_radius = 80;
+    
     float local_flow_min = 0.05f;
-    float local_flow_max = 0.1f;
+    float local_flow_max = 0.08f;
     
     double face_search_window = 0.2;
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
@@ -85,7 +89,9 @@ private:
     void switchMotionState(MotionState next);
     
     void selectQuietGoalInRegion(cv::Rect bounds);
+    void selectQuietGoalAdjacent();
     void selectQuietGoal();
+    void moveGoalWithFlow();
     void selectFaceGoal();
     bool currentGoalIsQuiet();
     
@@ -153,12 +159,15 @@ private:
     int face_detection_count = 0;
     double frame_scale = 1.0;
     
+    cv::Mat sections;
     ofPoint goal;
     cv::Point2i goal_section;
-    cv::Rect local_area;
+
+    ofRectangle local_area;
+    ofRectangle core_area;
     
-    cv::Mat sections;
-    float local_flow;
+    float local_flow = 0.0f;
+    float core_flow = 0.0f;
     
     float squish = 1.0f;
     

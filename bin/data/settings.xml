@@ -1,7 +1,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -11,19 +11,19 @@
 <Widget>
     <Kind>4</Kind>
     <Name>FACE_SEARCH_WINDOW</Name>
-    <Value>0.584375024</Value>
+    <Value>0.628906250</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
     <Name>FACE_SIZE</Name>
-    <HighValue>0.604137897</HighValue>
+    <HighValue>0.601875007</HighValue>
     <LowValue>0.168020844</LowValue>
 </Widget>
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
     <HighValue>1.562500000</HighValue>
-    <LowValue>0.578125000</LowValue>
+    <LowValue>0.630769253</LowValue>
 </Widget>
 <Widget>
     <Kind>42</Kind>

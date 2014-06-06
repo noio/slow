@@ -238,6 +238,7 @@ void ParticleSystem::update()
     for(int i = 0; i < n; i++) {
         if (particles[i].alive) {
             particles[i].update(timeStep);
+            particles[i].bounceOffWalls(0, 0, width, height);
         }
     }
 }

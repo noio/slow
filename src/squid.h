@@ -4,8 +4,8 @@
 
 ////////// IMPORTS //////////
 #include "utilities.h"
-
 #include "flowcam.h"
+#include "motionvisualizer.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -35,12 +35,14 @@ public:
     enum MotionState { STILL, PREP, PUSH, GLIDE, LOCK };
     
     // METHODS
-    void setup(ofPtr<b2World> phys_world, ofxFluid* fluid, FlowCam* flowcam);
+    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer);
     void update(double delta_t);
     void draw(bool draw_debug);
     
     // GETTERS & SETTERS
-    ofPoint getPosition() { return b2ToOf(body->GetPosition()); };
+    ofPoint getPosition() const;
+    float getBodyAngle() const;
+    ofPoint getGoalDirection() const;
     void setScale(float in_scale);
 
     // PUBLIC SETTINGS
@@ -68,8 +70,8 @@ public:
     float local_area_radius = 200;
     float core_area_radius = 80;
     
-    float local_flow_min = 0.05f;
-    float local_flow_max = 0.08f;
+    float local_flow_min = 0.01f;
+    float local_flow_max = 0.02f;
     
     double face_search_window = 0.2;
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
@@ -143,8 +145,8 @@ private:
     cv::Rect face_roi;
     deque<cv::Mat> face_anim;
     ofImage face_im;
-    ofxFluid* fluid;
     FlowCam* flowcam;
+    MotionVisualizer *visualizer;
     
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;

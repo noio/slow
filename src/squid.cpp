@@ -12,11 +12,11 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> in_phys_world, ofxFluid* in_fluid, FlowCam* in_flowcam)
+void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer)
 {
     phys_world = in_phys_world;
-    fluid = in_fluid;
     flowcam = in_flowcam;
+    visualizer = in_visualizer;
     squish = 1.0f;
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
@@ -33,6 +33,7 @@ void Squid::setup(ofPtr<b2World> in_phys_world, ofxFluid* in_fluid, FlowCam* in_
     has_face = false;
     main_color = ofColor::red;
 }
+
 
 void Squid::setupPhysics()
 {
@@ -172,7 +173,6 @@ void Squid::updateFlow()
     float core_flow_sum = cv::sum(flowcam->flow_high(core_area_rect))[0] / core_area_rect.area() / 255.0;
     local_flow = 0.8 * local_flow + 0.2 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
     core_flow = 0.8 * core_flow + 0.2 * ofMap(core_flow_sum, local_flow_min, local_flow_max, 0, 1);
-//    flowcam->contourfinder.getBalance(<#unsigned int i#>)
 }
 
 void Squid::updateObjectFinder()
@@ -417,7 +417,7 @@ void Squid::moveGoalWithFlow()
 bool Squid::currentGoalIsQuiet()
 {
     float flow_in_goal_section = sections.at<float>(goal_section.y , goal_section.x);
-    return flow_in_goal_section <= 0.2;
+    return flow_in_goal_section <= 0.1;
 }
 
 void Squid::selectFaceGoal()
@@ -516,7 +516,7 @@ void Squid::turnUpright(double delta_t)
 void Squid::squirt()
 {
     ofPoint dir = ofVec2f(0, 1).rotateRad(body->GetAngle());
-    fluid->addTemporalForce(pos_game, dir * scale * 25, main_color, 0.1 * body_radius * scale,  1.0f);
+    visualizer->squidFlee(getPosition(), dir);
 }
 
 void Squid::squishPrep(double delta_t)
@@ -767,6 +767,10 @@ void Squid::drawDebug()
         ofRect(found_face);
     }
 }
+
+ofPoint Squid::getPosition() const { return b2ToOf(body->GetPosition()); };
+float Squid::getBodyAngle() const {return body->GetAngle(); }
+ofPoint Squid::getGoalDirection() const {return ofPoint(goal_direction); }
 
 void Squid::setScale(float in_scale)
 {

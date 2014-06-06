@@ -27,8 +27,12 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     setUseCamera(use_camera);
     setFlowErosionSize(flow_erosion_size);
     // Contourfinder setup
-    contourfinder.setSimplify(true);
-    contourfinder.setMinArea(80);
+    contourfinder_high.setSimplify(true);
+    contourfinder_high.setMinArea(80);
+    contourfinder_high.getTracker().setSmoothingRate(0.2);
+    contourfinder_low.setSimplify(true);
+    contourfinder_low.setMinArea(80);
+    contourfinder_low.getTracker().setSmoothingRate(0.2);
     // OpticalFlow setup
     opticalflow.setPyramidScale(0.5);
     opticalflow.setNumLevels(2);
@@ -41,11 +45,13 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
 
 void FlowCam::update(double delta_t)
 {
+    since_last_capture += delta_t;
     doCapture();
 
     if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) || frame.empty() ) {
         updateFrame();
         updateFlow();
+        since_last_capture = 0;
     }
 }
 
@@ -77,19 +83,51 @@ void FlowCam::updateFlow()
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
     //
     // Compute the low speed mask
-    cv::threshold(magnitude, magnitude, flow_threshold_low, 1, cv::THRESH_TOZERO);
-    flow_low = magnitude > 0;
+    // Shadow these variables:
+    float adj_flow_threshold_low = flow_threshold_low * since_last_capture * 30.0;
+    float adj_flow_threshold_high = flow_threshold_high * since_last_capture * 30.0;
+    flow_low = magnitude > adj_flow_threshold_low & magnitude < adj_flow_threshold_high;
     cv::erode(flow_low, flow_low, open_kernel);
     cv::dilate(flow_low, flow_low, open_kernel);
+    cv::dilate(flow_low, flow_low, open_kernel);
+    cv::erode(flow_low, flow_low, open_kernel);
     //
     // Compute the high speed mask
-    cv::threshold(magnitude, flow_high, flow_threshold_high, 1, cv::THRESH_TOZERO);
-    flow_high = flow_high > 0; // & flow_low_prev > 0;
+    flow_high = magnitude > adj_flow_threshold_high; // & flow_low_prev > 0;
     cv::erode(flow_high, flow_high, open_kernel);
-    //    cv::dilate(flow_high, flow_high, open_kernel_small);
-    flow_behind = flow_high_prev & (255 - flow_high);
+    cv::dilate(flow_high, flow_high, open_kernel);
+    flow_behind = flow_low_prev & (255 - flow_low);
     flow_new = flow_high & ( 255 - flow_high_prev);
-    contourfinder.findContours(flow_high);
+    contourfinder_low.findContours(flow_low);
+    contourfinder_high.findContours(flow_high);
+}
+
+void FlowCam::drawDebug(){
+    ofPushStyle();
+    // Draw the optical flow maps
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
+    ofSetColor(224, 160, 58, 128);
+    ofxCv::drawMat(flow_low, 0, 0, ofGetWidth(), ofGetHeight());
+    ofDisableBlendMode();
+    ofPushMatrix();
+    ofSetLineWidth(4.0);
+    ofSetColor(ofColor::red);
+    ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
+    
+    for (int i = 0; i < contourfinder_high.size(); i ++) {
+        contourfinder_high.getPolyline(i).draw();
+    }
+
+    ofSetColor(ofColor::green);
+    for (int i = 0; i < contourfinder_low.size(); i ++) {
+        cv::Rect r = contourfinder_low.getTracker().getSmoothed(contourfinder_low.getTracker().getLabelFromIndex(i));
+//        contourfinder_low.getPolyline(i).getResampledBySpacing(30).draw();
+        ofRect(toOf(r));
+//        cv::RotatedRect a = contourfinder_low.getMinAreaRect(i);
+    }
+    
+    ofPopMatrix();
+    ofPopStyle();
 }
 
 

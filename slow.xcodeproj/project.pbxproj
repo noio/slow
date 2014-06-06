@@ -34,6 +34,7 @@
 		E2492030193F338300528EA5 /* ofxKeyframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2492018193F338300528EA5 /* ofxKeyframe.cpp */; };
 		E2492031193F338300528EA5 /* ofxPlaylist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E249201A193F338300528EA5 /* ofxPlaylist.cpp */; };
 		E249203B19406E8C00528EA5 /* flowcam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E249203919406E8C00528EA5 /* flowcam.cpp */; };
+		E249203F1941CC8900528EA5 /* motionvisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E249203D1941CC8900528EA5 /* motionvisualizer.cpp */; };
 		E254A37618F583F7007C3AFA /* Delaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A36E18F583F7007C3AFA /* Delaunay.cpp */; };
 		E254A37718F583F7007C3AFA /* ofxDelaunay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E254A37218F583F7007C3AFA /* ofxDelaunay.cpp */; };
 		E25839B5191BBB1A0049E948 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2583953191BBB1A0049E948 /* b2BroadPhase.cpp */; };
@@ -251,6 +252,8 @@
 		E249201C193F338300528EA5 /* ofxPlaylistAEHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPlaylistAEHelper.h; sourceTree = "<group>"; };
 		E249203919406E8C00528EA5 /* flowcam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flowcam.cpp; sourceTree = "<group>"; };
 		E249203A19406E8C00528EA5 /* flowcam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flowcam.h; sourceTree = "<group>"; };
+		E249203D1941CC8900528EA5 /* motionvisualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = motionvisualizer.cpp; sourceTree = "<group>"; };
+		E249203E1941CC8900528EA5 /* motionvisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = motionvisualizer.h; sourceTree = "<group>"; };
 		E254A36018F583F7007C3AFA /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E254A36E18F583F7007C3AFA /* Delaunay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delaunay.cpp; sourceTree = "<group>"; };
 		E254A36F18F583F7007C3AFA /* Delaunay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delaunay.h; sourceTree = "<group>"; };
@@ -1270,6 +1273,8 @@
 			isa = PBXGroup;
 			children = (
 				E258394F191BBB1A0049E948 /* libs */,
+				E249203D1941CC8900528EA5 /* motionvisualizer.cpp */,
+				E249203E1941CC8900528EA5 /* motionvisualizer.h */,
 				E249203A19406E8C00528EA5 /* flowcam.h */,
 				E249203919406E8C00528EA5 /* flowcam.cpp */,
 				E256414318EAC8650030858B /* constants.h */,
@@ -1514,6 +1519,7 @@
 				E2E9315B18F42F7F007BC76B /* ofxUIWidgetWithLabel.cpp in Sources */,
 				E25839DE191BBB1A0049E948 /* b2RevoluteJoint.cpp in Sources */,
 				E25839C3191BBB1A0049E948 /* b2Math.cpp in Sources */,
+				E249203F1941CC8900528EA5 /* motionvisualizer.cpp in Sources */,
 				E2E9314018F42F7F007BC76B /* ofxUIImageToggle.cpp in Sources */,
 				E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */,
 				E2E9314B18F42F7F007BC76B /* ofxUIRectangle.cpp in Sources */,

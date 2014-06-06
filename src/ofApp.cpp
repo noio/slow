@@ -25,13 +25,17 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
+    // Load textures
+    logo_im.loadImage("assets/logo.png");
     // Flow camera
     flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight());
+    // Visualizer
+    visualizer.setup(&flowcam);
     // Set up Box2d
     setupPhysics();
-    squid.setup(phys_world, &fluid, &flowcam);
+    squid.setup(phys_world, &flowcam, &visualizer);
     // Set up fluid
-    fluid.allocate(ofGetWidth(), ofGetHeight(), kFluidScale);
+    fluid.allocate(ofGetWidth(), ofGetHeight(), 1.0);
     fluid.dissipation = 0.99;
     fluid.velocityDissipation = 0.99;
     fluid.setGravity(ofVec2f(0.0, 0.0));
@@ -53,7 +57,7 @@ void ofApp::setupGUI()
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
     gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
-    gui->addIntSlider("FLOW_EROSION_SIZE", 1, 7, 5);
+    gui->addIntSlider("FLOW_EROSION_SIZE", 1, 11, 5);
     gui->addLabelButton("1080x480", false);
     gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
     gui->addSlider("JAGGY_SPACING", 1.0f, 100.0f, &jaggy_spacing);
@@ -110,6 +114,7 @@ void ofApp::update()
     delta_t = ofGetLastFrameTime();
     flowcam.update(delta_t);
     squid.update(delta_t);
+    visualizer.update(delta_t);
     phys_world->Step(1.0f / kFrameRate, 6, 2);
     fluid.update();
 }
@@ -121,39 +126,19 @@ void ofApp::draw()
     ofSetColor(255, 255, 255, 255);
     ofxCv::drawMat(flowcam.frame, 0, 0, ofGetWidth(), ofGetHeight());
 
-    if (draw_debug) {
-        ofPushStyle();
-        // Draw the optical flow maps
-        ofEnableBlendMode(OF_BLENDMODE_ADD);
-        ofSetColor(224, 160, 58, 128);
-        ofxCv::drawMat(flowcam.flow_low, 0, 0, ofGetWidth(), ofGetHeight());
-        ofDisableBlendMode();
-        ofPushMatrix();
-        ofSetLineWidth(4.0);
-        ofSetColor(255, 0, 0);
-        ofScale(ofGetWidth() / (float)flowcam.flow_high.cols, ofGetHeight() / (float)flowcam.flow_high.rows);
-
-        for (int i = 0; i < flowcam.contourfinder.size(); i ++) {
-            flowcam.contourfinder.getPolyline(i).draw();
-        }
-
-        ofPopMatrix();
-        ofPopStyle();
-    }
-
     ofEnableAlphaBlending();
     fluid.draw();
     ofDisableAlphaBlending();
-    drawMotionEffects();
+    visualizer.draw();
     squid.draw(draw_debug);
-    ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
+
+    if (draw_debug) {
+        flowcam.drawDebug();
+        ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
+    }
+    logo_im.draw(0, ofGetHeight() - 64, 300, 64);
 }
 
-void ofApp::drawMotionEffects()
-{
-    // drawJaggies();
-    drawFluid();
-}
 
 void ofApp::drawFluid()
 {
@@ -176,12 +161,12 @@ void ofApp::drawJaggies()
 {
     float flow_scale = ofGetWidth() / (float)flowcam.flow_high.cols;
 
-    for (int ci = 0; ci < flowcam.contourfinder.size(); ci++) {
-        ofPolyline contour = flowcam.contourfinder.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
+    for (int ci = 0; ci < flowcam.contourfinder_high.size(); ci++) {
+        ofPolyline contour = flowcam.contourfinder_high.getPolyline(ci).getResampledBySpacing(jaggy_spacing);
         ofPolyline jaggies_a;
         ofPolyline jaggies_b;
-        int label = flowcam.contourfinder.getTracker().getLabelFromIndex(ci);
-        cv::Point2f center = flowcam.contourfinder.getCenter(ci);
+        int label = flowcam.contourfinder_high.getTracker().getLabelFromIndex(ci);
+        cv::Point2f center = flowcam.contourfinder_high.getCenter(ci);
         ofPoint motion_dir = toOf(flowcam.flow.at<Point2f>(center.y, center.x));
         ofColor contour_color = getPersistentColor(label);
         ofSetLineWidth(2.0f);

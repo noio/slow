@@ -2,7 +2,7 @@
 
 #include "squid.h"
 #include "flowcam.h"
-#include "ParticleSystem.h"
+#include "motionvisualizer.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -29,7 +29,6 @@ public:
     void updateFrame();
     void updateFlow();
     
-    void drawMotionEffects();
     void drawFluid();
     void drawJaggies();
     
@@ -48,7 +47,9 @@ public:
 
     // Components
     FlowCam flowcam;
+    MotionVisualizer visualizer;
     ofxFluid fluid;
+    ofImage logo_im;
     
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;

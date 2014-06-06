@@ -18,12 +18,15 @@ public:
     
     void update(double delta_t);
     
+    void drawDebug();
+    
     void setFlowErosionSize(int in_flow_erosion_size);
     void setUseCamera(bool in_use_camera);
     void setScreenSize(int in_screen_width, int in_screen_height);
     
     ofxCv::FlowFarneback opticalflow;
-    ofxCv::ContourFinder contourfinder;
+    ofxCv::ContourFinder contourfinder_low;
+    ofxCv::ContourFinder contourfinder_high;
 
     cv::Mat frame_full, frame, frame_gray;
     cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev, flow_behind, flow_new;
@@ -42,6 +45,8 @@ private:
     ofVideoPlayer video;
     ofVideoGrabber camera;
     cv::Rect capture_roi;
+    
+    double since_last_capture;
     
     int capture_width, capture_height, screen_width, screen_height;
     

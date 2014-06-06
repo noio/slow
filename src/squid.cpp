@@ -768,9 +768,18 @@ void Squid::drawDebug()
     }
 }
 
-ofPoint Squid::getPosition() const { return b2ToOf(body->GetPosition()); };
-float Squid::getBodyAngle() const {return body->GetAngle(); }
-ofPoint Squid::getGoalDirection() const {return ofPoint(goal_direction); }
+ofPoint Squid::getPosition() const
+{
+    return b2ToOf(body->GetPosition());
+};
+float Squid::getBodyAngle() const
+{
+    return body->GetAngle();
+}
+ofPoint Squid::getGoalDirection() const
+{
+    return ofPoint(goal_direction);
+}
 
 void Squid::setScale(float in_scale)
 {

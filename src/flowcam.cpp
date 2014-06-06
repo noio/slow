@@ -102,7 +102,8 @@ void FlowCam::updateFlow()
     contourfinder_high.findContours(flow_high);
 }
 
-void FlowCam::drawDebug(){
+void FlowCam::drawDebug()
+{
     ofPushStyle();
     // Draw the optical flow maps
     ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -113,19 +114,20 @@ void FlowCam::drawDebug(){
     ofSetLineWidth(4.0);
     ofSetColor(ofColor::red);
     ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
-    
+
     for (int i = 0; i < contourfinder_high.size(); i ++) {
         contourfinder_high.getPolyline(i).draw();
     }
 
     ofSetColor(ofColor::green);
+
     for (int i = 0; i < contourfinder_low.size(); i ++) {
         cv::Rect r = contourfinder_low.getTracker().getSmoothed(contourfinder_low.getTracker().getLabelFromIndex(i));
 //        contourfinder_low.getPolyline(i).getResampledBySpacing(30).draw();
         ofRect(toOf(r));
 //        cv::RotatedRect a = contourfinder_low.getMinAreaRect(i);
     }
-    
+
     ofPopMatrix();
     ofPopStyle();
 }

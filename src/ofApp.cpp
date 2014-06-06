@@ -125,7 +125,6 @@ void ofApp::draw()
 {
     ofSetColor(255, 255, 255, 255);
     ofxCv::drawMat(flowcam.frame, 0, 0, ofGetWidth(), ofGetHeight());
-
     ofEnableAlphaBlending();
     fluid.draw();
     ofDisableAlphaBlending();
@@ -136,6 +135,7 @@ void ofApp::draw()
         flowcam.drawDebug();
         ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
     }
+
     logo_im.draw(0, ofGetHeight() - 64, 300, 64);
 }
 

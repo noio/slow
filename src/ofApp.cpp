@@ -31,9 +31,11 @@ void ofApp::setup()
     flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight());
     // Visualizer
     visualizer.setup(&flowcam);
+    // Highscore table
+    highscores.setup(ofGetWidth() / 6);
     // Set up Box2d
     setupPhysics();
-    squid.setup(phys_world, &flowcam, &visualizer);
+    squid.setup(phys_world, &flowcam, &visualizer, &highscores);
     // Gui Setup
     setupGUI();
     need_setup = false;
@@ -109,6 +111,7 @@ void ofApp::update()
     delta_t = ofGetLastFrameTime();
     flowcam.update(delta_t);
     squid.update(delta_t);
+    highscores.update(delta_t);
     visualizer.update(delta_t);
     phys_world->Step(1.0f / kFrameRate, 6, 2);
 }
@@ -121,6 +124,7 @@ void ofApp::draw()
     ofxCv::drawMat(flowcam.frame, 0, 0, ofGetWidth(), ofGetHeight());
     visualizer.draw();
     squid.draw(draw_debug);
+    highscores.draw();
 
     if (draw_debug) {
         flowcam.drawDebug();

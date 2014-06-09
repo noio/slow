@@ -17,7 +17,7 @@ void MotionVisualizer::update(double delta_t)
     particles.setupForces();
     particles.clean();
 //    updateTrails();
-    updateGlitch();
+//    updateGlitch();
 }
 
 void MotionVisualizer::updateTrails()

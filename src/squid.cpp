@@ -12,11 +12,12 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer)
+void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, HighscoreTable* in_highscores)
 {
     phys_world = in_phys_world;
     flowcam = in_flowcam;
     visualizer = in_visualizer;
+    highscores = in_highscores;
     squish = 1.0f;
     goal = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
     // Setup the physics
@@ -141,6 +142,11 @@ void Squid::update(double delta_t)
     // Display mood
     main_color.setHue(main_color.getHue() + 2);
     main_color.setSaturation(16 + 255 * local_flow);
+    // Update face animation
+    if (has_face){
+        face_time += delta_t;
+        face_anim->update(delta_t);
+    }
 }
 
 void Squid::updateFlow()
@@ -251,12 +257,12 @@ void Squid::updateBehaviorState(double delta_t)
             }
 
             if (time_in_behavior_state > face_pose_time) {
-                grabFace(true);
+                grabFace();
                 switchBehaviorState(PANIC);
                 break;
             }
 
-            grabFace(false);
+            grabFace();
             break;
 
         case GRABBED:
@@ -427,11 +433,15 @@ void Squid::selectFaceGoal()
 
 void Squid::clearFace()
 {
-    has_face = false;
+    if (has_face){
+        highscores->add(face_time, face_anim);
+        has_face = false;
+    }
+    face_time = 0.0;
     face_anim = ofPtr<FrameRecord>(new FrameRecord(face_mask_mat));
 }
 
-void Squid::grabFace(bool do_cut)
+void Squid::grabFace()
 {
     frame_scale = ofGetWidth() / (float)flowcam->frame.cols;
     ofRectangle extract = ofRectangle(found_face);
@@ -593,7 +603,6 @@ void Squid::drawBody()
 
     // Draw face
     if (has_face) {
-        face_anim->update();
         face_anim->draw(body_draw_rect);
     }
 

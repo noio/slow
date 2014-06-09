@@ -7,6 +7,7 @@
 #include "flowcam.h"
 #include "motionvisualizer.h"
 #include "framerecord.h"
+#include "highscoretable.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -41,7 +42,7 @@ public:
 
     
     // METHODS
-    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer);
+    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, HighscoreTable* in_highscores);
     void update(double delta_t);
     void draw(bool draw_debug);
     
@@ -104,7 +105,7 @@ private:
     bool currentGoalIsQuiet();
     
     void clearFace();
-    void grabFace(bool do_cut);
+    void grabFace();
     
     void showCaptureHint();
     
@@ -152,6 +153,7 @@ private:
     ofPtr<FrameRecord> face_anim;
     FlowCam* flowcam;
     MotionVisualizer *visualizer;
+    HighscoreTable* highscores;
     
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;
@@ -161,8 +163,8 @@ private:
     ofPoint pos_game, pos_section;
     
     ofRectangle found_face;
-    int face_anim_current_frame = 0;
     bool has_face = false;
+    double face_time = 0.0;
     int face_detection_count = 0;
     double frame_scale = 1.0;
     

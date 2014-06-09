@@ -18,7 +18,7 @@ public:
     FrameRecord& operator=(const FrameRecord&) = delete; // no assign
     
     void grab(cv::Mat frame, cv::Rect roi);
-    void update();
+    void update(double delta_t);
     void draw(float x, float y, float width, float height);
     void draw(ofRectangle rect);
     

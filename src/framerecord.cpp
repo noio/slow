@@ -22,7 +22,7 @@ void FrameRecord::grab(cv::Mat frame, cv::Rect roi){
     frames.push_back(selection);
 }
 
-void FrameRecord::update(){
+void FrameRecord::update(double delta_t){
     current = (current + 1) % frames.size();
 }
 

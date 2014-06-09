@@ -6,6 +6,7 @@
 #include "utilities.h"
 #include "flowcam.h"
 #include "motionvisualizer.h"
+#include "framerecord.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -148,8 +149,7 @@ private:
     ofxPlaylist playlist;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
-    deque<cv::Mat> face_anim;
-    ofImage face_im;
+    ofPtr<FrameRecord> face_anim;
     FlowCam* flowcam;
     MotionVisualizer *visualizer;
     

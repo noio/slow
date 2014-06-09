@@ -428,8 +428,7 @@ void Squid::selectFaceGoal()
 void Squid::clearFace()
 {
     has_face = false;
-    face_anim.clear();
-    face_anim_current_frame = 0;
+    face_anim = ofPtr<FrameRecord>(new FrameRecord(face_mask_mat));
 }
 
 void Squid::grabFace(bool do_cut)
@@ -439,28 +438,8 @@ void Squid::grabFace(bool do_cut)
     extract.scaleFromCenter(face_grab_padding);
     cv::Rect face_region(extract.x / frame_scale, extract.y / frame_scale, extract.width / frame_scale, extract.height / frame_scale);
     face_region &= cv::Rect(0, 0, flowcam->frame.cols, flowcam->frame.rows);
-    cv::Mat cutout = flowcam->frame(face_region).clone();
-    int padding = cutout.cols / 8;
-    cv::copyMakeBorder(cutout, cutout, padding, padding, padding, padding, cv::BORDER_REPLICATE);
-    cv::resize(cutout, cutout, cv::Size(body_radius * scale * 2, body_radius * scale * 2));
-    cv::Mat mask;
-    cv::Mat bgd, fgd;
-
-    if (do_cut) {
-        cv::grabCut(cutout, mask, cv::Rect(1, 1, cutout.cols - 2, cutout.rows - 2), bgd, fgd, 1, cv::GC_INIT_WITH_RECT);
-        mask = ((mask == cv::GC_FGD) | (mask == cv::GC_PR_FGD)) & face_mask_mat;
-        ofxCv::dilate(mask, 16);
-        ofxCv::erode(mask, 16);
-    } else {
-        mask = face_mask_mat;
-    }
-
-    vector<cv::Mat> channels;
-    cv::split(cutout, channels);
-    channels.push_back(mask);
-    cv::merge(channels, cutout);
-    face_anim.push_back(cutout);
-    face_im.update();
+    
+    face_anim->grab(flowcam->frame, face_region);
     has_face = true;
 }
 
@@ -614,10 +593,8 @@ void Squid::drawBody()
 
     // Draw face
     if (has_face) {
-        toOf(face_anim[face_anim_current_frame], face_im);
-        face_anim_current_frame = (face_anim_current_frame + 1) % face_anim.size();
-        face_im.update();
-        face_im.draw(body_draw_rect);
+        face_anim->update();
+        face_anim->draw(body_draw_rect);
     }
 
     body_draw_rect.scaleFromCenter(1 / squish, 1.0);

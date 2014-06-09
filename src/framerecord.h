@@ -2,14 +2,31 @@
 #ifndef SLOW_FRAMERECORD_H_
 #define SLOW_FRAMERECORD_H_
 
+#include "ofMain.h"
+#include "ofxCv.h"
+
+#include <vector>
 #include <iostream>
+
+using std::vector;
 
 class FrameRecord {
 public:
-    FrameRecord();
+    FrameRecord(cv::Mat mask);
     ~FrameRecord();
     FrameRecord(const FrameRecord&) = delete;            // no copy
     FrameRecord& operator=(const FrameRecord&) = delete; // no assign
+    
+    void grab(cv::Mat frame, cv::Rect roi);
+    void update();
+    void draw(float x, float y, float width, float height);
+    void draw(ofRectangle rect);
+    
+private:
+    unsigned int height, width;
+    cv::Mat mask;
+    unsigned int current;
+    vector<cv::Mat> frames;
     
 };
 

@@ -48,7 +48,6 @@ public:
     // Components
     FlowCam flowcam;
     MotionVisualizer visualizer;
-    ofxFluid fluid;
     ofImage logo_im;
     
     ofPtr<b2World> phys_world;

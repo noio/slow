@@ -34,11 +34,6 @@ void ofApp::setup()
     // Set up Box2d
     setupPhysics();
     squid.setup(phys_world, &flowcam, &visualizer);
-    // Set up fluid
-    fluid.allocate(ofGetWidth(), ofGetHeight(), 1.0);
-    fluid.dissipation = 0.99;
-    fluid.velocityDissipation = 0.99;
-    fluid.setGravity(ofVec2f(0.0, 0.0));
     // Gui Setup
     setupGUI();
     need_setup = false;
@@ -116,7 +111,6 @@ void ofApp::update()
     squid.update(delta_t);
     visualizer.update(delta_t);
     phys_world->Step(1.0f / kFrameRate, 6, 2);
-    fluid.update();
 }
 
 
@@ -125,9 +119,6 @@ void ofApp::draw()
 {
     ofSetColor(255, 255, 255, 255);
     ofxCv::drawMat(flowcam.frame, 0, 0, ofGetWidth(), ofGetHeight());
-    ofEnableAlphaBlending();
-    fluid.draw();
-    ofDisableAlphaBlending();
     visualizer.draw();
     squid.draw(draw_debug);
 
@@ -137,24 +128,6 @@ void ofApp::draw()
     }
 
     logo_im.draw(0, ofGetHeight() - 64, 300, 64);
-}
-
-
-void ofApp::drawFluid()
-{
-    float flow_scale = ofGetWidth() / (float)flowcam.flow_high.cols;
-
-    for (int i = 0; i < flowcam.flow_low.rows; i += 5) {
-        for (int j = 0; j < flowcam.flow_low.cols; j += 5) {
-            if (flowcam.flow_high.at<uchar>(i, j)) {
-                ofPoint p = ofPoint(j, i);
-                ofPoint motion_dir = toOf(flowcam.flow.at<Point2f>(i, j));
-                Point3_<uchar> frame_color = flowcam.frame.at<Point3_<uchar> >(p.y * kFlowSubsample, p.x * kFlowSubsample);
-                ofColor color = ofColor(frame_color.x, frame_color.y, frame_color.z);
-                fluid.addTemporalForce(p * flow_scale, motion_dir * flow_scale, color, fluid_motion_radius, 0.5f, 0.5f );
-            }
-        }
-    }
 }
 
 void ofApp::drawJaggies()
@@ -175,11 +148,6 @@ void ofApp::drawJaggies()
             ofPoint p = contour[ip] * flow_scale;
             // For some reason the line winds such that the normals point inwards.
             ofPoint n = -(contour.getNormalAtIndex(ip));
-
-            // Check if the normal is on the side of the motion
-            if (motion_dir.dot(n) > 0.5) {
-                fluid.addTemporalForce(p, motion_dir * fluid_motion_speed, contour_color, fluid_motion_radius);
-            }
 
             if (ip % 2 == 0) {
                 jaggies_a.addVertex(p + n * jaggy_offset);

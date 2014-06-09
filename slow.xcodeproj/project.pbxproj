@@ -85,6 +85,8 @@
 		E25839E2191BBB1A0049E948 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E25839B3191BBB1A0049E948 /* b2Rope.cpp */; };
 		E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */; };
 		E29D5C3118FD2E0C00890C23 /* squid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C3018FD2E0C00890C23 /* squid.cpp */; };
+		E2C45DBE1945DCA400376929 /* highscoretable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2C45DBC1945DCA400376929 /* highscoretable.cpp */; };
+		E2C45DC11945DE9000376929 /* framerecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2C45DBF1945DE9000376929 /* framerecord.cpp */; };
 		E2DB5C591918E0E000885AC3 /* ofxPathfinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */; };
 		E2E4288F1937338900CF93F7 /* ofxFluid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E427CB1937338700CF93F7 /* ofxFluid.cpp */; };
 		E2E4289C1937338900CF93F7 /* ofxFXObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E428691937338900CF93F7 /* ofxFXObject.cpp */; };
@@ -359,6 +361,10 @@
 		E29D5C2418FBDF5300890C23 /* Particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		E29D5C2F18FD2C9B00890C23 /* squid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squid.h; sourceTree = "<group>"; };
 		E29D5C3018FD2E0C00890C23 /* squid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = squid.cpp; sourceTree = "<group>"; };
+		E2C45DBC1945DCA400376929 /* highscoretable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = highscoretable.cpp; sourceTree = "<group>"; };
+		E2C45DBD1945DCA400376929 /* highscoretable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = highscoretable.h; sourceTree = "<group>"; };
+		E2C45DBF1945DE9000376929 /* framerecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = framerecord.cpp; sourceTree = "<group>"; };
+		E2C45DC01945DE9000376929 /* framerecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = framerecord.h; sourceTree = "<group>"; };
 		E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPathfinder.cpp; sourceTree = "<group>"; };
 		E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPathfinder.h; sourceTree = "<group>"; };
 		E2DB5C5E1919187800885AC3 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
@@ -1273,6 +1279,8 @@
 			isa = PBXGroup;
 			children = (
 				E258394F191BBB1A0049E948 /* libs */,
+				E2C45DBC1945DCA400376929 /* highscoretable.cpp */,
+				E2C45DBD1945DCA400376929 /* highscoretable.h */,
 				E249203D1941CC8900528EA5 /* motionvisualizer.cpp */,
 				E249203E1941CC8900528EA5 /* motionvisualizer.h */,
 				E249203A19406E8C00528EA5 /* flowcam.h */,
@@ -1281,6 +1289,8 @@
 				E2DB5C5E1919187800885AC3 /* utilities.h */,
 				E29D5C2F18FD2C9B00890C23 /* squid.h */,
 				E29D5C3018FD2E0C00890C23 /* squid.cpp */,
+				E2C45DBF1945DE9000376929 /* framerecord.cpp */,
+				E2C45DC01945DE9000376929 /* framerecord.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */,
@@ -1418,6 +1428,7 @@
 				E2492026193F338300528EA5 /* ofxEasingCirc.cpp in Sources */,
 				E25839C5191BBB1A0049E948 /* b2StackAllocator.cpp in Sources */,
 				E25839C6191BBB1A0049E948 /* b2Timer.cpp in Sources */,
+				E2C45DBE1945DCA400376929 /* highscoretable.cpp in Sources */,
 				E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */,
 				E25839BD191BBB1A0049E948 /* b2ChainShape.cpp in Sources */,
 				E25839C9191BBB1A0049E948 /* b2Fixture.cpp in Sources */,
@@ -1435,6 +1446,7 @@
 				E2E9313F18F42F7F007BC76B /* ofxUIImageSlider.cpp in Sources */,
 				E2E4288F1937338900CF93F7 /* ofxFluid.cpp in Sources */,
 				E25839B8191BBB1A0049E948 /* b2CollidePolygon.cpp in Sources */,
+				E2C45DC11945DE9000376929 /* framerecord.cpp in Sources */,
 				EBCDE831EFAE08274E799C97 /* Calibration.cpp in Sources */,
 				E25839BB191BBB1A0049E948 /* b2DynamicTree.cpp in Sources */,
 				E25839CC191BBB1A0049E948 /* b2WorldCallbacks.cpp in Sources */,

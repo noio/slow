@@ -34,6 +34,11 @@ public:
     enum BehaviorState { IDLE, PANIC, FACE, GRABBED };
     enum MotionState { STILL, PREP, PUSH, GLIDE, LOCK };
     
+    Squid(){};
+    Squid(const Squid&) = delete;            // no copy
+    Squid& operator=(const Squid&) = delete; // no assign
+
+    
     // METHODS
     void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer);
     void update(double delta_t);

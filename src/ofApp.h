@@ -3,6 +3,7 @@
 #include "squid.h"
 #include "flowcam.h"
 #include "motionvisualizer.h"
+#include "highscoretable.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -46,13 +47,12 @@ public:
     void guiEvent(ofxUIEventArgs& e);
 
     // Components
-    FlowCam flowcam;
-    MotionVisualizer visualizer;
     ofImage logo_im;
-    
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
-    
+    FlowCam flowcam;
+    MotionVisualizer visualizer;
+    HighscoreTable highscores;
     Squid squid;
     
     ofPtr<ofxUIScrollableCanvas> gui;

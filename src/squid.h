@@ -126,13 +126,13 @@ private:
     // PRIVATE MEMBERS
 
     float scale = 1.0f;
-    int num_tentacles = 7;
-    int num_segments = 7;
+    int num_tentacles = 5;
+    int num_segments = 1;
     ofPoint tentacle_attach_scale = ofPoint(0.80, 0.2);
     ofPoint tentacle_attach_offset = ofPoint(0.0, 0.175);
     float segment_join_length = 0.9;
     float segment_length = 20.0;
-    float segment_width = 6.0;
+    float segment_width = 12.0;
     float tentacle_density = 0.01f;
     double tentacle_damping = 3.0f;
     
@@ -145,7 +145,8 @@ private:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_front_im, body_back_im, body_accent_im, tentacle_front_im, tentacle_back_im, hint_im, face_mask_im;
+    ofImage body_base_back_im, body_base_front_im, body_bubble_im, tentacle_im;
+    ofImage hint_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
     ofxPlaylist playlist;
     cv::Mat face_mask_mat;

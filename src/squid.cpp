@@ -101,12 +101,11 @@ void Squid::setupPhysics()
 void Squid::setupTextures()
 {
     // Load textures
-    body_back_im.loadImage("assets/body_back.png");
-    body_front_im.loadImage("assets/body_front.png");
-    body_accent_im.loadImage("assets/body_accent.png");
+    body_base_back_im.loadImage("assets/body_base_back.png");
+    body_base_front_im.loadImage("assets/body_base_front.png");
+    body_bubble_im.loadImage("assets/body_bubble.png");
     hint_im.loadImage("assets/hint.png");
-    tentacle_back_im.loadImage("assets/tentacle_back.png");
-    tentacle_front_im.loadImage("assets/tentacle_front.png");
+    tentacle_im.loadImage("assets/tentacle.png");
     face_mask_im.loadImage("assets/face_mask.png");
     face_mask_mat = toCv(face_mask_im);
     cv::cvtColor(face_mask_mat, face_mask_mat, CV_RGB2GRAY);
@@ -596,9 +595,13 @@ void Squid::drawBody()
     ofPushMatrix();
     ofTranslate(pos_game);
     ofRotate(body->GetAngle() * RAD_TO_DEG);
-    //    ofRectangle body_draw_rect(-body_radius_s / squish, -body_radius_s, body_radius_s * 2 / squish, body_radius_s * 2 * squish);
+    
     ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
-    body_back_im.draw(body_draw_rect);
+    ofRectangle body_draw_rect_squished(body_draw_rect);
+    body_draw_rect_squished.scaleFromCenter(1 / squish, 1.0);
+    body_draw_rect_squished.height *= squish;
+    
+    body_base_back_im.draw(body_draw_rect);
     ofSetColor(255, 255, 255, 255);
 
     // Draw face
@@ -606,11 +609,8 @@ void Squid::drawBody()
         face_anim->draw(body_draw_rect);
     }
 
-    body_draw_rect.scaleFromCenter(1 / squish, 1.0);
-    body_draw_rect.height *= squish;
-    body_front_im.draw(body_draw_rect);
-    ofSetColor(main_color);
-    body_accent_im.draw(body_draw_rect);
+    body_base_front_im.draw(body_draw_rect);
+    body_bubble_im.draw(body_draw_rect_squished);
     ofPopMatrix();
 }
 
@@ -638,22 +638,13 @@ void Squid::drawTentacles()
                 p.curveTo(b2ToOf(tentacle->GetWorldPoint(ofToB2(ofPoint(segment_length, 0)))));
             }
 
-            for (int layer = 0; layer < 2; layer ++) {
-                ofPushMatrix();
-                ofTranslate(b2ToOf(tentacle->GetPosition()));
-                ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
-                int alpha = j / (float)num_segments * 255;
+            ofPushMatrix();
+            ofTranslate(b2ToOf(tentacle->GetPosition()));
+            ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
 
-                if (layer == 0) {
-                    ofSetColor(255, 255, 255, alpha);
-                    tentacle_back_im.draw(tentacle_draw_rect);
-                } else if (layer == 1) {
-                    ofSetColor(main_color, alpha);
-                    tentacle_front_im.draw(tentacle_draw_rect);
-                }
+            tentacle_im.draw(tentacle_draw_rect);
 
-                ofPopMatrix();
-            }
+            ofPopMatrix();
         }
 
         ofSetColor(ofColor::white);

@@ -666,7 +666,9 @@ void Squid::drawTentacles()
         ofTranslate(b2ToOf(tentacle->GetPosition()));
         ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
         tentacle_im.draw(tentacle_draw_rect);
-        ofTranslate(-0.1 * ofVec2f(tentacle_draw_rect.width,tentacle_draw_rect.height).rotateRad(-tentacle->GetAngle()));
+        ofPoint shine_offset = 0.15 * ofVec2f(tentacle_draw_rect.width,tentacle_draw_rect.height) * ofVec2f(-1,1).rotateRad(-tentacle->GetAngle());
+//        shine_offset.rotateRad(-tentacle->GetAngle());
+        ofTranslate(shine_offset);
         tentacle_shine_im.draw(tentacle_draw_rect);
         ofPopMatrix();
     }

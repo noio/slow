@@ -34,7 +34,7 @@ public:
     const cv::Size kSectionsSize = cv::Size(8, 4);
     
     enum BehaviorState { IDLE, PANIC, FACE, GRABBED };
-    enum MotionState { STILL, PREP, PUSH, GLIDE, LOCK };
+    enum MotionState { STILL, PREP1, PREP2, PUSH, GLIDE, LOCK };
     
     Squid(){};
     Squid(const Squid&) = delete;            // no copy
@@ -56,9 +56,11 @@ public:
     
     double push_force = 40.0;
     double panic_force_multiplier = 2.0;
-    double tentacle_prep_force = 400.0f;
+    double tentacle_prep_force = 100.0f;
+    double tentacle_push_force = 60.0f;
 
-    double motion_time_prep = 0.15;
+    double motion_time_prep1 = 0.15;
+    double motion_time_prep2 = 0.1;
     double motion_time_push = 0.3;
     double idle_move_cooldown = 10.0;
     double face_pose_time = 5.0;
@@ -83,6 +85,11 @@ public:
     double face_search_window = 0.2;
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
     double face_size_max = 0.05; // This is relative to the full frame, not the face search window
+    
+    ofColor idle_color = ofColor::fromHex(0x53A8BF);
+    ofColor face_color = ofColor::fromHex(0xDAEBEF);
+    ofColor panic_color = ofColor::fromHex(0xE5411A);
+    ofColor grab_color = ofColor::fromHex(0x76CC32);
 
 
 private:
@@ -117,6 +124,7 @@ private:
     void squishPush(double delta_t);
     void squirt();
     void tentaclePrep();
+    void tentaclePush();
     void tentacleGlide();
     
     void drawBody();
@@ -126,14 +134,12 @@ private:
     // PRIVATE MEMBERS
 
     float scale = 1.0f;
-    int num_tentacles = 5;
-    int num_segments = 1;
-    ofPoint tentacle_attach_scale = ofPoint(0.80, 0.2);
-    ofPoint tentacle_attach_offset = ofPoint(0.0, 0.175);
-    float segment_join_length = 0.9;
-    float segment_length = 20.0;
-    float segment_width = 12.0;
-    float tentacle_density = 0.01f;
+    vector<ofPoint> tentacle_attach;
+    vector<ofPoint> tentacle_out_direction;
+    float segment_join_length = 0.95;
+    float segment_length = 48.0;
+    float segment_width = 27.0;
+    float tentacle_density = 0.1f;
     double tentacle_damping = 3.0f;
     
     double body_radius = 40;
@@ -145,7 +151,7 @@ private:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_base_back_im, body_base_front_im, body_bubble_im, tentacle_im;
+    ofImage body_base_back_im, body_base_front_im, body_bubble_im, tentacle_im, markings_bubble_im, tentacle_shine_im;
     ofImage hint_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
     ofxPlaylist playlist;

@@ -16,16 +16,13 @@ void MotionVisualizer::update(double delta_t)
     particles.update();
     particles.setupForces();
     particles.clean();
-//    updateTrails();
+    
+    updateTrails();
 //    updateGlitch();
 }
 
 void MotionVisualizer::updateTrails()
 {
-    if (ofRandomuf() < 0.1) {
-        trails.erase(trails.begin());
-    }
-
     float scale_flow_to_frame = ofGetWidth() / (float)flowcam->flow_high.cols;
     const vector<unsigned int>& current = flowcam->contourfinder_low.getTracker().getCurrentLabels();
 
@@ -73,28 +70,38 @@ void MotionVisualizer::updateGlitch()
 
 void MotionVisualizer::draw()
 {
-    ofEnableAlphaBlending();
-    ofSetCircleResolution(6);
-    ofSetLineWidth(2.0f);
-    ofNoFill();
-
-    for (int i = 0; i < particles.size(); i ++) {
-        Particle& p = particles[i];
-        ofSetColor(0, 220, 220, 80);
-        ofCircle(p.x, p.y, 10);
-    }
-
-    for (map<unsigned int, ofPolyline>::const_iterator it = trails.begin(); it != trails.end(); ++it) {
-        ofPolyline p = it->second;
-//        p.setColor(ofColor::white);
-//        p.setFilled(true);
-//        p.setStrokeWidth(2.0f);
-        p.draw();
-        cout << p.size() << endl;
-    }
+    particles.draw();
 }
 
-void MotionVisualizer::squidFlee(ofPoint pos, ofPoint dir)
+void MotionVisualizer::trail(ofPoint pos, ofPoint dir, float radius)
 {
-//    fluid->addTemporalForce(pos, dir * scale * 25, main_color, 0.1 * body_radius * scale,  1.0f);
+    float angle = atan2(dir.y, dir.x);
+    ofPoint spread = dir;
+    spread = spread.rotate(0, 0, 90.0);
+    pos = (pos + spread * 0.5 * ofRandom(-radius, radius)) + (radius * dir);
+    ofPoint vel = dir * 50 + spread * ofRandom(-30, 30);
+    Particle p(pos.x, pos.y, angle);
+    p.xv = vel.x;
+    p.yv = vel.y;
+    p.shape = SHAPE_RECT;
+    p.life = ofRandom(3.0);
+    p.size = radius / 10 * ofRandom(1.0, 3.0);
+    p.color = ofColor::fromHsb(ofRandom(256.0), 0.0, 255);
+    particles.add(p);
+}
+
+void MotionVisualizer::sparkle(ofPoint pos, float radius){
+    for (int i = 0; i < 40; i ++){
+        Particle p(pos.x, pos.y);
+        p.a = ofRandom(TWO_PI);
+        ofPoint vel = ofPoint(cos(p.a), sin(p.a)) * radius * ofRandom(5,10);
+        p.xv = vel.x;
+        p.yv = vel.y;
+        p.life = ofRandom(4,8);
+        p.damping = 0.9;
+        p.size = radius / 10;
+        p.shape = SHAPE_RECT;
+        p.color = ofColor::fromHex(0xE224B6);
+        particles.add(p);
+    }
 }

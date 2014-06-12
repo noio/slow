@@ -254,11 +254,7 @@ void ParticleSystem::clean()
 void ParticleSystem::draw()
 {
     int n = particles.size();
-    glBegin(GL_POINTS);
-
     for(int i = 0; i < n; i++) {
         particles[i].draw();
     }
-
-    glEnd();
 }

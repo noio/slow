@@ -9,17 +9,6 @@
     <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>FACE_SEARCH_WINDOW</Name>
-    <Value>0.628906250</Value>
-</Widget>
-<Widget>
-    <Kind>6</Kind>
-    <Name>FACE_SIZE</Name>
-    <HighValue>0.601875007</HighValue>
-    <LowValue>0.130564108</LowValue>
-</Widget>
-<Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
     <HighValue>1.359375000</HighValue>
@@ -33,25 +22,21 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SQUID_SCALE</Name>
-    <Value>1.945312500</Value>
+    <Value>1.033854127</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>JAGGY_SPACING</Name>
-    <Value>14.406250954</Value>
+    <Name>FACE_SEARCH_WINDOW</Name>
+    <Value>0.628906250</Value>
+</Widget>
+<Widget>
+    <Kind>6</Kind>
+    <Name>FACE_SIZE</Name>
+    <HighValue>0.622291625</HighValue>
+    <LowValue>0.106770828</LowValue>
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>JAGGY_OFFSET</Name>
-    <Value>17.247394562</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>FLUID_MOTION_SPEED</Name>
-    <Value>2.020833254</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>FLUID_MOTION_RADIUS</Name>
-    <Value>2.218750000</Value>
+    <Name>ZOOM</Name>
+    <Value>1.000000000</Value>
 </Widget>

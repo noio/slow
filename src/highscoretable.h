@@ -3,7 +3,7 @@
 #define SLOW_HIGHSCORE_TABLE_H_
 
 #include "framerecord.h"
-
+#include "motionvisualizer.h"
 #include "ofMain.h"
 
 #include <iostream>
@@ -15,7 +15,9 @@ using std::vector;
 
 typedef struct Highscore {
     double time;
+    unsigned int serial;
     ofPtr<FrameRecord> recording;
+    bool operator == (const Highscore &i) const {return serial == i.serial;}
 }
 Highscore;
 
@@ -29,14 +31,19 @@ public:
     HighscoreTable(const HighscoreTable&) = delete;            // no copy
     HighscoreTable& operator=(const HighscoreTable&) = delete; // no assign
 
-    void setup(float w);
+    void setup(float w, MotionVisualizer* visualizer);
     void update(double delta_t);
     void draw();
     
     void add(double time, ofPtr<FrameRecord> recording);
+    
+    int max_scores = 3;
 private:
-    float width;
+    MotionVisualizer* visualizer;
+    ofTrueTypeFont squada;
+    float width, row_height;
     vector<Highscore> scores;
+    unsigned int serial = 0;
     
 };
 

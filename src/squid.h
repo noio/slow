@@ -51,13 +51,14 @@ public:
     float getBodyAngle() const;
     ofPoint getGoalDirection() const;
     void setScale(float in_scale);
+    std::string getState();
 
     // PUBLIC SETTINGS
     
-    double push_force = 40.0;
-    double panic_force_multiplier = 2.0;
-    double tentacle_prep_force = 100.0f;
-    double tentacle_push_force = 60.0f;
+    double push_force = 60.0;
+    double panic_force_multiplier = 3.0;
+    double tentacle_prep_force = 200.0f;
+    double tentacle_push_force = 100.0f;
 
     double motion_time_prep1 = 0.15;
     double motion_time_prep2 = 0.1;
@@ -67,7 +68,7 @@ public:
     double grab_time = 4.0;
     
     double min_velocity = 150;
-    float max_goal_distance_close = 60;
+    float max_goal_distance_close = 40;
     float max_goal_distance_far = 200;
     double max_face_distance = 10;
     float goal_bottom_margin = 2.0; // relative to body_radius
@@ -76,8 +77,8 @@ public:
     
     float face_grab_padding = 2.0;
     
-    float local_area_radius = 200;
-    float core_area_radius = 80;
+    float local_area_radius = 100;
+    float core_area_radius = 40;
     
     float local_flow_min = 0.01f;
     float local_flow_max = 0.02f;
@@ -90,6 +91,7 @@ public:
     ofColor face_color = ofColor::fromHex(0xDAEBEF);
     ofColor panic_color = ofColor::fromHex(0xE5411A);
     ofColor grab_color = ofColor::fromHex(0x76CC32);
+    ofColor body_color = ofColor(137,202,217);
 
 
 private:
@@ -110,6 +112,8 @@ private:
     void moveGoalWithFlow();
     void selectFaceGoal();
     bool currentGoalIsQuiet();
+    void setGoal(ofPoint in_goal);
+    void setGoal(float x, float y);
     
     void clearFace();
     void grabFace();
@@ -136,9 +140,10 @@ private:
     float scale = 1.0f;
     vector<ofPoint> tentacle_attach;
     vector<ofPoint> tentacle_out_direction;
+    int num_segments = 2;
     float segment_join_length = 0.95;
-    float segment_length = 48.0;
-    float segment_width = 27.0;
+    float segment_length = 32.0;
+    float segment_width = 20.0;
     float tentacle_density = 0.1f;
     double tentacle_damping = 3.0f;
     
@@ -173,7 +178,7 @@ private:
     bool has_face = false;
     double face_time = 0.0;
     int face_detection_count = 0;
-    double frame_scale = 1.0;
+    double scale_frame_to_game = 1.0;
     
     cv::Mat sections;
     ofPoint goal;

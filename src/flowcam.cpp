@@ -3,7 +3,7 @@
 
 using namespace ofxCv;
 
-void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height)
+void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom)
 {
     // Initialize the camera first, before we do other stuff that depends on having a frame
     // Use an external camera if one is connected
@@ -25,6 +25,7 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     capture_height = in_capture_height;
     setScreenSize(in_screen_width, in_screen_height);
     setUseCamera(use_camera);
+    setZoom(zoom);
     setFlowErosionSize(flow_erosion_size);
     // Contourfinder setup
     contourfinder_high.setSimplify(true);
@@ -40,6 +41,11 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     opticalflow.setNumIterations(3);
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
+    //
+    reset();
+}
+
+void FlowCam::reset(){
     opticalflow.resetFlow();
 }
 
@@ -133,6 +139,29 @@ void FlowCam::drawDebug()
 }
 
 
+
+
+void FlowCam::setUseCamera(bool in_use_camera)
+{
+    if (use_camera == in_use_camera) return;
+    use_camera = in_use_camera;
+    computeRoi();
+}
+
+void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
+{
+    if (screen_width == in_screen_width && screen_height == in_screen_height) return;
+    screen_width = in_screen_width;
+    screen_height = in_screen_height;
+    computeRoi();
+}
+
+void FlowCam::setZoom(float in_zoom){
+    if (zoom == in_zoom) return;
+    zoom = in_zoom;
+    computeRoi();
+}
+
 void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
 {
     flow_erosion_size = in_flow_erosion_size;
@@ -141,18 +170,6 @@ void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
                                             cv::Point(flow_erosion_size, flow_erosion_size));
 }
 
-void FlowCam::setUseCamera(bool in_use_camera)
-{
-    use_camera = in_use_camera;
-    computeRoi();
-}
-
-void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
-{
-    screen_width = in_screen_width;
-    screen_height = in_screen_height;
-    computeRoi();
-}
 
 ////////// PRIVATE METHODS //////////
 
@@ -174,5 +191,8 @@ void FlowCam::computeRoi()
     float ratio = (float)screen_width / screen_height;
     int w = std::min(frame_full.cols, static_cast<int>(round(frame_full.rows * ratio)));
     int h = std::min(frame_full.rows, static_cast<int>(round(frame_full.cols / ratio)));
+    w /= zoom;
+    h /= zoom;
     capture_roi = cv::Rect((frame_full.cols - w) / 2, (frame_full.rows - h) / 2, w, h);
+    reset();
 }

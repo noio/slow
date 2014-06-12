@@ -25,14 +25,15 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
+    ofSetLogLevel(OF_LOG_VERBOSE);
     // Load textures
     logo_im.loadImage("assets/logo.png");
     // Flow camera
-    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight());
+    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0);
     // Visualizer
     visualizer.setup(&flowcam);
     // Highscore table
-    highscores.setup(ofGetWidth() / 6);
+    highscores.setup(ofGetWidth() / 10, &visualizer);
     // Set up Box2d
     setupPhysics();
     squid.setup(phys_world, &flowcam, &visualizer, &highscores);
@@ -51,16 +52,15 @@ void ofApp::setupGUI()
     gui->addLabelButton("RESET", false);
     gui->addToggle("DEBUG", &draw_debug);
     gui->addToggle("CAMERA", false);
-    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
-    gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
     gui->addIntSlider("FLOW_EROSION_SIZE", 1, 11, 5);
-    gui->addLabelButton("1080x480", false);
     gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
-    gui->addSlider("JAGGY_SPACING", 1.0f, 100.0f, &jaggy_spacing);
-    gui->addSlider("JAGGY_OFFSET", 0.5f, 30.0f, &jaggy_offset);
-    gui->addSlider("FLUID_MOTION_SPEED", 1.0f, 50.0f, &fluid_motion_speed);
-    gui->addSlider("FLUID_MOTION_RADIUS", 1.0f, 10.0f, &fluid_motion_radius);
+    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
+    gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
+    gui->addLabelButton("1080x480", false);
+    gui->addLabelButton("780x270", false);
+    gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
+
     // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     // Position the GUI
@@ -130,8 +130,6 @@ void ofApp::draw()
         flowcam.drawDebug();
         ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
     }
-
-    logo_im.draw(0, ofGetHeight() - 64, 300, 64);
 }
 
 void ofApp::drawJaggies()
@@ -281,9 +279,18 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "SQUID_SCALE") {
         squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
     }
+    
+    if (name == "ZOOM") {
+        flowcam.setZoom(((ofxUISlider*) e.widget)->getScaledValue());
+    }
 
     if (name == "1080x480") {
         ofSetWindowShape(1080, 480);
         need_setup = true;
     }
+    if (name == "780x270") {
+        ofSetWindowShape(780, 270);
+        need_setup = true;
+    }
+
 }

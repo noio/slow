@@ -15,7 +15,8 @@ public:
     void setup(FlowCam* in_flowcam);
     void update(double delta_t);
     void draw();
-    void squidFlee(ofPoint pos, ofPoint dir);
+    void trail(ofPoint pos, ofPoint dir, float radius);
+    void sparkle(ofPoint pos, float radius);
 
 private:
     void updateTrails();
@@ -24,9 +25,6 @@ private:
     
     ParticleSystem particles;
     FlowCam* flowcam;
-    map<unsigned int, ofPolyline> trails;
-    map<unsigned int, ofPoint> freezes;
-    
 
 };
 

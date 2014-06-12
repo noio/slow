@@ -14,7 +14,7 @@ public:
     FlowCam(const FlowCam&) = delete;            // no copy
     FlowCam& operator=(const FlowCam&) = delete; // no assign
     
-    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height);
+    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom);
     
     void update(double delta_t);
     
@@ -23,6 +23,7 @@ public:
     void setFlowErosionSize(int in_flow_erosion_size);
     void setUseCamera(bool in_use_camera);
     void setScreenSize(int in_screen_width, int in_screen_height);
+    void setZoom(float in_zoom);
     
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder_low;
@@ -40,6 +41,7 @@ private:
     void updateFlow();
     void doCapture();
     void computeRoi();
+    void reset();
     
     cv::Mat open_kernel;
     ofVideoPlayer video;
@@ -49,6 +51,7 @@ private:
     double since_last_capture;
     
     int capture_width, capture_height, screen_width, screen_height;
+    float zoom = 1.0;
     
     bool use_camera = true;
     int flow_erosion_size = 5;

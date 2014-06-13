@@ -61,54 +61,6 @@ void FlowCam::update(double delta_t)
         since_last_capture = 0;
     }
 }
-
-
-void FlowCam::updateFrame()
-{
-    cv::flip(frame_full(capture_roi), frame, 1);
-    cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-    cv::pyrDown(frame_gray, frame_gray);
-    cv::pyrDown(frame_gray, frame_gray);
-}
-
-void FlowCam::updateFlow()
-{
-    opticalflow.calcOpticalFlow(frame_gray);
-    flow = opticalflow.getFlow();
-    std::swap(flow_low_prev, flow_low); // TODO: Remove this whole flow_low_prev thing?
-    std::swap(flow_high_prev, flow_high);
-
-    // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
-    if (flow.cols == 1) {
-        flow_low_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
-        flow_high_prev = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_8U);
-        flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
-    }
-
-    std::vector<cv::Mat> xy(2);
-    cv::split(flow, xy);
-    cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
-    //
-    // Compute the low speed mask
-    // Shadow these variables:
-    float adj_flow_threshold_low = flow_threshold_low * since_last_capture * 30.0;
-    float adj_flow_threshold_high = flow_threshold_high * since_last_capture * 30.0;
-    flow_low = magnitude > adj_flow_threshold_low & magnitude < adj_flow_threshold_high;
-    cv::erode(flow_low, flow_low, open_kernel);
-    cv::dilate(flow_low, flow_low, open_kernel);
-    cv::dilate(flow_low, flow_low, open_kernel);
-    cv::erode(flow_low, flow_low, open_kernel);
-    //
-    // Compute the high speed mask
-    flow_high = magnitude > adj_flow_threshold_high; // & flow_low_prev > 0;
-    cv::erode(flow_high, flow_high, open_kernel);
-    cv::dilate(flow_high, flow_high, open_kernel);
-    flow_behind = flow_low_prev & (255 - flow_low);
-    flow_new = flow_high & ( 255 - flow_high_prev);
-    contourfinder_low.findContours(flow_low);
-    contourfinder_high.findContours(flow_high);
-}
-
 void FlowCam::drawDebug()
 {
     ofPushStyle();
@@ -138,9 +90,6 @@ void FlowCam::drawDebug()
     ofPopMatrix();
     ofPopStyle();
 }
-
-
-
 
 void FlowCam::setUseCamera(bool in_use_camera)
 {
@@ -176,6 +125,29 @@ void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
 }
 
 
+void FlowCam::loadLUT(string path){
+	LUTloaded=false;
+	
+	ofFile file(path);
+	string line;
+	for(int i = 0; i < 5; i++) {
+		getline(file, line);
+		ofLog() << "Skipped line: " << line;
+	}
+	for(int z=0; z<32; z++){
+		for(int y=0; y<32; y++){
+			for(int x=0; x<32; x++){
+				ofVec3f cur;
+				file >> cur.x >> cur.y >> cur.z;
+				lut[x][y][z] = cur;
+			}
+		}
+	}
+	
+	LUTloaded = true;
+}
+
+
 ////////// PRIVATE METHODS //////////
 
 void FlowCam::doCapture()
@@ -190,6 +162,63 @@ void FlowCam::doCapture()
     }
 }
 
+
+void FlowCam::updateFrame()
+{
+    cv::flip(frame_full(capture_roi), frame, 1);
+    cv::resize(frame, frame_screen, cv::Size(screen_width, screen_height), 0, 0, cv::INTER_NEAREST);
+    toOf(frame_screen, frame_screen_im);
+    cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
+    cv::pyrDown(frame_gray, frame_gray);
+    cv::pyrDown(frame_gray, frame_gray);
+    frame_screen_im.update();
+}
+
+void FlowCam::updateFlow()
+{
+    opticalflow.calcOpticalFlow(frame_gray);
+    flow = opticalflow.getFlow();
+    std::swap(flow_low_prev, flow_low); // TODO: Remove this whole flow_low_prev thing?
+    std::swap(flow_high_prev, flow_high);
+    
+    // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
+    if (flow.cols == 1) {
+        flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
+        flow_low_prev = cv::Mat::zeros(flow.rows, flow.cols, CV_8U);
+        flow_high_prev = cv::Mat::zeros(flow.rows, flow.cols, CV_8U);
+        flow_hist = cv::Mat::zeros(flow.rows, flow.cols, CV_32FC1);
+    }
+    
+    std::vector<cv::Mat> xy(2);
+    cv::split(flow, xy);
+    cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
+    //
+    // Compute the low speed mask
+    // Shadow these variables:
+    float adj_flow_threshold_low = flow_threshold_low * since_last_capture * 30.0;
+    float adj_flow_threshold_high = flow_threshold_high * since_last_capture * 30.0;
+    flow_low = magnitude > adj_flow_threshold_low; // & magnitude < adj_flow_threshold_high;
+    cv::dilate(flow_low, flow_low, open_kernel);
+    cv::erode(flow_low, flow_low, open_kernel);
+    cv::erode(flow_low, flow_low, open_kernel);
+    
+    //
+    // Compute the high speed mask
+    flow_high = magnitude > adj_flow_threshold_high; // & flow_low_prev > 0;
+    cv::erode(flow_high, flow_high, open_kernel);
+    cv::dilate(flow_high, flow_high, open_kernel);
+    flow_behind = flow_low_prev & (255 - flow_low);
+    flow_new = flow_high & ( 255 - flow_high_prev);
+    // Update history image
+    cv::add(flow_hist, flow_behind, flow_hist, cv::noArray(), CV_32F);
+    flow_hist *= 0.9;
+    // Contourfinders
+    contourfinder_low.findContours(flow_low);
+    contourfinder_high.findContours(flow_high);
+}
+
+
+
 void FlowCam::computeRoi()
 {
     doCapture(); // Get a single frame so we have the cam resolution
@@ -200,4 +229,37 @@ void FlowCam::computeRoi()
     h /= zoom;
     capture_roi = cv::Rect((frame_full.cols - w) / 2, (frame_full.rows - h) / 2, w, h);
     reset();
+}
+
+
+void FlowCam::applyLUT(){
+	if (LUTloaded) {
+		
+		for(int y = 0; y < frame_screen_im.getHeight(); y++){
+			for(int x = 0; x < frame_screen_im.getWidth(); x++){
+				
+                ofColor color = frame_screen_im.getColor(x,y);
+				
+				int lutPos [3];
+				for (int m=0; m<3; m++) {
+					lutPos[m] = color[m] / 8;
+					if (lutPos[m]==31) {
+						lutPos[m]=30;
+					}
+				}
+				
+				ofVec3f start = lut[lutPos[0]][lutPos[1]][lutPos[2]];
+				ofVec3f end = lut[lutPos[0]+1][lutPos[1]+1][lutPos[2]+1];
+				
+				for (int k=0; k<3; k++) {
+					float amount = (color[k] % 8) / 8.0f;
+					color[k]= (start[k] + amount * (end[k] - start[k])) * 255;
+				}
+				
+				frame_screen_im.setColor(x, y, color);
+				
+			}
+		}
+        frame_screen_im.update();
+	}
 }

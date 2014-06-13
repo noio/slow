@@ -26,15 +26,7 @@ public:
     
     void setupPhysics();
     void setupGUI();
-
-    void updateFrame();
-    void updateFlow();
-    
-    void drawFluid();
-    void drawJaggies();
-    
-    ofColor getPersistentColor(int i);
-
+        
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );

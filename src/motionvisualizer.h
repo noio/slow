@@ -22,6 +22,7 @@ typedef struct Trailshape {
 typedef struct Trailtail {
     unsigned int length;
     ofPolyline tail;
+    ofPoint direction;
 } Trailtail;
 
 ofPolyline lineFacingNormal(const ofPolyline& input, const ofPoint& normal, float max_angle);
@@ -34,7 +35,9 @@ public:
     void trail(ofPoint pos, ofPoint dir, float radius);
     void sparkle(ofPoint pos, float radius);
     
-    double max_trail_life = 3.0;
+    double max_trail_life = 1.6;
+    double trail_fade_in = 0.5;
+    int trail_max_alpha = 255;
 
 private:
     void updateTrails(double delta_t);

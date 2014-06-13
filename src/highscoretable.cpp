@@ -15,12 +15,14 @@ void HighscoreTable::add(double time, ofPtr<FrameRecord> recording)
     scores.push_back(h);
     sort(scores.begin(), scores.end(), compareScore);
     vector<Highscore>::iterator it = std::find(scores.begin(), scores.end(), h);
-    int pos = std::distance(scores.begin(),it);
+    int pos = std::distance(scores.begin(), it);
     ofLogVerbose("HighscoreTable") << "new score at pos: " << pos << endl;
-    if (pos < max_scores){
-        visualizer->sparkle(ofPoint(width / 2, (pos + 0.5) * row_height), width/2);
+
+    if (pos < max_scores) {
+        visualizer->sparkle(ofPoint(width / 2, (pos + 0.5) * row_height), width / 2);
     }
-    if (scores.size() > max_scores){
+
+    if (scores.size() > max_scores) {
         scores.resize(max_scores);
     }
 }

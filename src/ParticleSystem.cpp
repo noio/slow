@@ -254,6 +254,7 @@ void ParticleSystem::clean()
 void ParticleSystem::draw()
 {
     int n = particles.size();
+
     for(int i = 0; i < n; i++) {
         particles[i].draw();
     }

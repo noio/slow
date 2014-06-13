@@ -45,7 +45,8 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     reset();
 }
 
-void FlowCam::reset(){
+void FlowCam::reset()
+{
     opticalflow.resetFlow();
 }
 
@@ -144,6 +145,7 @@ void FlowCam::drawDebug()
 void FlowCam::setUseCamera(bool in_use_camera)
 {
     if (use_camera == in_use_camera) return;
+
     use_camera = in_use_camera;
     computeRoi();
 }
@@ -151,13 +153,16 @@ void FlowCam::setUseCamera(bool in_use_camera)
 void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
 {
     if (screen_width == in_screen_width && screen_height == in_screen_height) return;
+
     screen_width = in_screen_width;
     screen_height = in_screen_height;
     computeRoi();
 }
 
-void FlowCam::setZoom(float in_zoom){
+void FlowCam::setZoom(float in_zoom)
+{
     if (zoom == in_zoom) return;
+
     zoom = in_zoom;
     computeRoi();
 }

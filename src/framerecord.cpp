@@ -1,11 +1,12 @@
 
 #include "framerecord.h"
 
-FrameRecord::FrameRecord(){
+FrameRecord::FrameRecord()
+{
     current = 0;
     width = 100;
     height = 100;
-    mask = cv::Mat(height,width,CV_8UC1,cv::Scalar(255));
+    mask = cv::Mat(height, width, CV_8UC1, cv::Scalar(255));
 }
 
 FrameRecord::FrameRecord(cv::Mat in_mask)
@@ -34,18 +35,18 @@ void FrameRecord::grab(cv::Mat frame, cv::Rect roi, float pad)
 
 void FrameRecord::update(double delta_t)
 {
-    if (frames.size()){
+    if (frames.size()) {
         current = (current + 1) % frames.size();
     }
 }
 
 void FrameRecord::draw(float x, float y, float width, float height)
 {
-    if (frames.size()){
+    if (frames.size()) {
         ofImage to_draw;
         ofxCv::toOf(frames[current], to_draw);
         to_draw.update();
-        to_draw.draw(x, y, width, height);        
+        to_draw.draw(x, y, width, height);
     }
 }
 

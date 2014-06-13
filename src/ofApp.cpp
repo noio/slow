@@ -60,7 +60,6 @@ void ofApp::setupGUI()
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("780x270", false);
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
-
     // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     // Position the GUI
@@ -279,7 +278,7 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "SQUID_SCALE") {
         squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
     }
-    
+
     if (name == "ZOOM") {
         flowcam.setZoom(((ofxUISlider*) e.widget)->getScaledValue());
     }
@@ -288,9 +287,9 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
         ofSetWindowShape(1080, 480);
         need_setup = true;
     }
+
     if (name == "780x270") {
         ofSetWindowShape(780, 270);
         need_setup = true;
     }
-
 }

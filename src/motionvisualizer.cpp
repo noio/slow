@@ -3,11 +3,27 @@
 
 using namespace ofxCv;
 
+ofPolyline lineFacingNormal(const ofPolyline& input, const ofPoint& normal, float max_angle)
+{
+    ofPolyline output;
+    float similarity = cos(max_angle);
+
+    for (int ip = 0; ip < input.size(); ip++) {
+        if (input.getNormalAtIndex(ip).dot(normal) > similarity) {
+            output.addVertex(input[ip]);
+        }
+    }
+
+    return output;
+}
+
 void MotionVisualizer::setup(FlowCam* in_flowcam)
 {
     flowcam = in_flowcam;
     particles.setup(ofGetWidth(), ofGetHeight(), 4, 2048);
     particles.setTimeStep(1 / kFrameRate);
+    trailhistory.clear();
+    trailshapes.clear();
 }
 
 void MotionVisualizer::update(double delta_t)
@@ -16,61 +32,92 @@ void MotionVisualizer::update(double delta_t)
     particles.update();
     particles.setupForces();
     particles.clean();
-    
-    updateTrails();
+    updateTrails(delta_t);
 //    updateGlitch();
 }
 
-void MotionVisualizer::updateTrails()
+void MotionVisualizer::updateTrails(double delta_t)
 {
-    float scale_flow_to_frame = ofGetWidth() / (float)flowcam->flow_high.cols;
-    const vector<unsigned int>& current = flowcam->contourfinder_low.getTracker().getCurrentLabels();
+    float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
 
-    for (vector<unsigned int>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        unsigned int label = *it;
-        ofPolyline& found = trails[label];
-        const cv::Rect& bb = flowcam->contourfinder_low.getTracker().getSmoothed(label);
-        ofPoint p(bb.x + bb.width / 2, bb.y + bb.height / 2);
-        found.lineTo(p * scale_flow_to_frame);
-        cout << p << endl;
+    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
+        unsigned int label = flowcam->contourfinder_low.getLabel(ic);
+        ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic);
+
+        // If this is the first contour on this trail we need to estimate the
+        // "backside" using the flow.
+        if (trailhistory.find(label) == trailhistory.end()) {
+            cv::Vec2f center = flowcam->contourfinder_low.getCenter(ic);
+            ofPoint flow_dir = toOf(flowcam->flow.at<cv::Vec2f>(center[1], center[0])).normalized();
+            const ofPolyline& backside = lineFacingNormal(contour, flow_dir, PI / 4);
+
+            if (backside.size()) {
+                Trailtail tail = {0, backside.getResampledByCount(10)};
+                trailhistory[label] = tail;
+            }
+        } else {
+            Trailtail& prev = trailhistory.at(label);
+            ofPoint flow_dir = (contour.getCentroid2D() - prev.tail.getCentroid2D()).normalized();
+            const ofPolyline& backside = lineFacingNormal(contour, flow_dir, PI / 4).getResampledByCount(10);
+            ofLogVerbose("MotionVisualizer") << "add to existing trail" << backside.size();
+
+            for (int step = 0; step < backside.size() - 1 && step < prev.tail.size() - 1; step++) {
+                ofPath trail;
+                const double progress = step / 10.0;
+                const double progress_n = (step + 1) / 10.0;
+                ofLogVerbose("MotionVisualizer") << backside.size();
+                trail.moveTo(prev.tail[step] * scale_flow_to_game);
+                trail.lineTo(backside[step] * scale_flow_to_game);
+                trail.lineTo(backside[step + 1] * scale_flow_to_game);
+                trail.lineTo(prev.tail[step + 1] * scale_flow_to_game);
+                trail.close();
+                trail.setFilled(true);
+                trail.setFillColor(ofColor::fromHsb(240 - prev.length - step * 4, 255, 255));
+                const Trailshape shape = {0.0, trail};
+                trailshapes.push_back(shape);
+            }
+
+            prev.tail = backside;
+            prev.length ++;
+        }
+    }
+
+    for (int is = 0; is < trailshapes.size(); is ++) {
+        trailshapes[is].t += delta_t;
+    }
+
+    while (trailshapes.size() && trailshapes[0].t > max_trail_life) {
+        trailshapes.pop_front();
+    }
+
+    const vector<unsigned int>& dead_labels = flowcam->contourfinder_low.getTracker().getDeadLabels();
+
+    for (int i = 0; i < dead_labels.size(); i++) {
+        trailhistory.erase(dead_labels[i]);
     }
 }
-
-void MotionVisualizer::updateGlitch()
-{
-    float scale_flow_to_frame = (float)flowcam->frame.cols / (float)flowcam->flow_high.cols;
-
-    for (int ci = 0; ci < flowcam->contourfinder_high.size(); ci++) {
-        // Check distance from last freeze-frame
-        unsigned int label = flowcam->contourfinder_high.getTracker().getLabelFromIndex(ci);
-        ofPoint& found = freezes[label];
-        cv::Rect bounds = flowcam->contourfinder_high.getBoundingRect(ci);
-        ofPoint center = ofPoint(bounds.x + bounds.width / 2, bounds.y + bounds.width / 2);
-
-        if (found.distance(center) > 50) {
-            ofPolyline contour = flowcam->contourfinder_high.getPolyline(ci).getResampledBySpacing(20);
-
-            for (int pi = 0; pi < contour.size(); pi++) {
-                ofPoint p = contour[pi];
-                ofPoint n = contour.getNormalAtIndex(pi) * 20;
-                particles.add(Particle(p.x * scale_flow_to_frame, p.y * scale_flow_to_frame, 0.0, n.x, n.y));
-            }
-        }
-    };
-
-//    const vector<unsigned int>& current = flowcam->contourfinder_high.getTracker().getCurrentLabels();
-//    for (vector<unsigned int>::const_iterator it = current.begin(); it != current.end(); ++it){
-//        unsigned int label = *it;
-//        ofPoint& lastpos = freezes[label];
-//        flowcam->contourfinder_high.s
-//    }
-}
-
 
 
 void MotionVisualizer::draw()
 {
     particles.draw();
+    ofPushMatrix();
+//    float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
+//    ofScale(scale_flow_to_game, scale_flow_to_game);
+//    for (map<unsigned int, ofPolyline>::iterator it = trailhistory.begin(); it != trailhistory.end(); ++it){
+//        it->second.draw();
+//    }
+    ofNoFill();
+
+    for (int is = 0; is < trailshapes.size(); is ++) {
+        Trailshape& shape = trailshapes[is];
+        ofSetColor(shape.shape.getFillColor(), 255 * (1 - (shape.t / max_trail_life)));
+        shape.shape.setUseShapeColor(false);
+        shape.shape.setFilled(false);
+        shape.shape.getOutline()[0].draw();
+    }
+
+    ofPopMatrix();
 }
 
 void MotionVisualizer::trail(ofPoint pos, ofPoint dir, float radius)
@@ -90,14 +137,15 @@ void MotionVisualizer::trail(ofPoint pos, ofPoint dir, float radius)
     particles.add(p);
 }
 
-void MotionVisualizer::sparkle(ofPoint pos, float radius){
-    for (int i = 0; i < 40; i ++){
+void MotionVisualizer::sparkle(ofPoint pos, float radius)
+{
+    for (int i = 0; i < 40; i ++) {
         Particle p(pos.x, pos.y);
         p.a = ofRandom(TWO_PI);
-        ofPoint vel = ofPoint(cos(p.a), sin(p.a)) * radius * ofRandom(5,10);
+        ofPoint vel = ofPoint(cos(p.a), sin(p.a)) * radius * ofRandom(5, 10);
         p.xv = vel.x;
         p.yv = vel.y;
-        p.life = ofRandom(4,8);
+        p.life = ofRandom(4, 8);
         p.damping = 0.9;
         p.size = radius / 10;
         p.shape = SHAPE_RECT;

@@ -45,7 +45,6 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     objectfinder.setFindBiggestObject(true);
     objectfinder.getTracker().setSmoothingRate(0.2);
     has_face = false;
-    main_color = ofColor(247, 0, 207);
 }
 
 
@@ -371,24 +370,24 @@ void Squid::switchBehaviorState(BehaviorState next)
 
     switch (next) {
         case IDLE:
-            main_color = idle_color;
+            main_color = kIdleColor;
             break;
 
         case PANIC:
-            main_color = panic_color;
+            main_color = kPanicColor;
             switchMotionState(STILL);
             selectQuietGoal();
             break;
 
         case FACE:
-            main_color = face_color;
+            main_color = kFaceColor;
             switchMotionState(LOCK);
             showCaptureHint();
             clearFace();
             break;
 
         case GRABBED:
-            main_color = grab_color;
+            main_color = kGrabColor;
             switchMotionState(LOCK);
             setGoal(pos_game);
             break;
@@ -680,34 +679,16 @@ void Squid::drawBody()
 
     body_base_front_im.draw(body_draw_rect);
     body_bubble_im.draw(body_draw_rect_squished);
-    ofSetColor(main_color);
+    ofSetColor(markings_color);
     markings_bubble_im.draw(body_draw_rect_squished);
     ofPopMatrix();
 }
 
 void Squid::drawTentacles()
 {
-    ofEnableAlphaBlending();
-    // Draw Tentacles
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
-
-    for (int i = 0; i < tentacles.size(); i ++) {
-        ofPolyline p;
-        b2Body* tentacle = tentacles[i];
-        ofPushMatrix();
-        ofTranslate(b2ToOf(tentacle->GetPosition()));
-        ofRotate(tentacle->GetAngle() * RAD_TO_DEG);
-//        tentacle_im.draw(tentacle_draw_rect);
-        ofPoint shine_offset = 0.14 * ofVec2f(tentacle_draw_rect.width, tentacle_draw_rect.height) * ofVec2f(-1, 1).rotateRad(-tentacle->GetAngle());
-//        shine_offset.rotateRad(-tentacle->GetAngle());
-        ofTranslate(shine_offset);
-//        tentacle_shine_im.draw(tentacle_draw_rect);
-        ofPopMatrix();
-    }
-
     float w = 0.5 * segment_width / kPhysicsScale;
     float l = 0.5 * segment_length / kPhysicsScale;
-
     // Alternate method: splines
     for (int i = 0; i < tentacle_attach.size(); i ++) {
         b2Body* seg1 = tentacles[i * num_segments];
@@ -724,10 +705,9 @@ void Squid::drawTentacles()
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(0, -w))));
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(-l, 0.6 * -w))));
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(-l, 0.6 * w))));
-//        p.close();
         p.setColor(body_color);
         p.draw();
-        ofSetColor(ofColor::white);
+        ofSetColor(outline_color);
         ofSetLineWidth(2.0 * scale);
         p.getOutline()[0].draw();
     }

@@ -88,11 +88,13 @@ public:
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
     double face_size_max = 0.05; // This is relative to the full frame, not the face search window
     
-    ofColor idle_color = ofColor::fromHex(0x53A8BF);
-    ofColor face_color = ofColor::fromHex(0xDAEBEF);
-    ofColor panic_color = ofColor::fromHex(0xE5411A);
-    ofColor grab_color = ofColor::fromHex(0x76CC32);
-    ofColor body_color = ofColor(137,202,217);
+    const ofColor kIdleColor = ofColor::fromHex(0x53A8BF);
+    const ofColor kFaceColor = ofColor::fromHex(0xDAEBEF);
+    const ofColor kPanicColor = ofColor::fromHex(0xE5411A);
+    const ofColor kGrabColor = ofColor::fromHex(0x76CC32);
+
+    const ofColor kBodyColor = ofColor(137,202,217);
+    const ofColor kOutlineColor = ofColor(255,255,255);
 
 
 private:
@@ -196,8 +198,7 @@ private:
     float hint_alpha = 0.0f;
     float hint_progress = 0.0f;
     
-    ofColor main_color;
-    
+    ofColor body_color = kBodyColor, outline_color = kOutlineColor, markings_color = kIdleColor;
     
     // Helpers
     ofPoint goal_direction;

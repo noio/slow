@@ -35,17 +35,21 @@ public:
     void trail(ofPoint pos, ofPoint dir, float radius);
     void sparkle(ofPoint pos, float radius);
     
-    double max_trail_life = 1.6;
-    double trail_fade_in = 0.5;
-    int trail_max_alpha = 255;
-
 private:
-    void updateTrails(double delta_t);
-    void updateGlitch();
-    void glitchRegion(cv::Rect region);
+    void updateBackTrails(double delta_t);
+    void updateFullTrails(double delta_t);
+    void updateTrailTexture(double delta_t);
+    
+    void drawTrailTexture();
+    void drawTrailShapes();
     
     ParticleSystem particles;
     FlowCam* flowcam;
+    
+    double t;
+    vector<float> trail_alpha_timeline;
+    double trail_alpha_resolution = 0.1;
+    double trail_alpha_life;
     
     map<unsigned int, Trailtail> trailhistory;
     deque<Trailshape> trailshapes;

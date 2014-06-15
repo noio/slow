@@ -91,6 +91,10 @@ void FlowCam::drawDebug()
     ofPopStyle();
 }
 
+cv::Size FlowCam::getFlowSize() const{
+    return cv::Size(flow_width, flow_height);
+}
+
 void FlowCam::setUseCamera(bool in_use_camera)
 {
     if (use_camera == in_use_camera) return;
@@ -169,8 +173,10 @@ void FlowCam::updateFrame()
     cv::resize(frame, frame_screen, cv::Size(screen_width, screen_height), 0, 0, cv::INTER_NEAREST);
     toOf(frame_screen, frame_screen_im);
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-    cv::pyrDown(frame_gray, frame_gray);
-    cv::pyrDown(frame_gray, frame_gray);
+    for (int i = 0; i < pyrdown_steps; i++){
+        cv::pyrDown(frame_gray, frame_gray);
+    }
+    assert(frame_gray.cols == flow_width && frame_gray.rows == flow_height);
     frame_screen_im.update();
 }
 
@@ -228,6 +234,8 @@ void FlowCam::computeRoi()
     w /= zoom;
     h /= zoom;
     capture_roi = cv::Rect((frame_full.cols - w) / 2, (frame_full.rows - h) / 2, w, h);
+    flow_width = ceil(w / pow(2.0, pyrdown_steps));
+    flow_height = ceil(h / pow(2.0, pyrdown_steps));
     reset();
 }
 

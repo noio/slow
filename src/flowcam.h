@@ -22,11 +22,13 @@ public:
     
     void loadLUT(string path);
     
+    cv::Size getFlowSize() const;
+    
     void setFlowErosionSize(int in_flow_erosion_size);
     void setUseCamera(bool in_use_camera);
     void setScreenSize(int in_screen_width, int in_screen_height);
     void setZoom(float in_zoom);
-    
+
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder_low;
     ofxCv::ContourFinder contourfinder_high;
@@ -39,6 +41,7 @@ public:
 
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
+    const int pyrdown_steps = 2;
 
     
 private:
@@ -56,7 +59,7 @@ private:
     
     double since_last_capture;
     
-    int capture_width, capture_height, screen_width, screen_height;
+    int capture_width, capture_height, screen_width, screen_height, flow_width, flow_height;
     float zoom = 1.0;
     
     bool LUTloaded = false;

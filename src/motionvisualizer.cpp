@@ -24,16 +24,18 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     particles.setTimeStep(1 / kFrameRate);
     trailhistory.clear();
     trailshapes.clear();
+    trail_overlay = cv::Mat(flowcam->getFlowSize(), CV_8UC3);
+    ofImage trail_texture_im;
+    trail_texture_im.loadImage("assets/trail_texture.png");
+    trail_texture = toCv(trail_texture_im).clone();
 }
 
 void MotionVisualizer::update(double delta_t)
 {
-//    particles.add(Particle(ofGetWidth() / 2 + ofRandomf(), ofGetHeight() / 2 + ofRandomf()));
     particles.update();
     particles.setupForces();
     particles.clean();
     updateTrails(delta_t);
-//    updateGlitch();
 }
 
 void MotionVisualizer::updateTrails(double delta_t)
@@ -97,15 +99,29 @@ void MotionVisualizer::updateTrails(double delta_t)
     for (int i = 0; i < dead_labels.size(); i++) {
         trailhistory.erase(dead_labels[i]);
     }
+    
+    
+    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++){
+        const cv::Rect bbox = flowcam->contourfinder_low.getBoundingRect(ic);
+        // Using overlays
+//        trail_overlay -= 1;
+        const cv::Rect bbox_tex(0, 0, bbox.width, bbox.height);
+        cv::Mat section = trail_overlay(bbox);
+        cv::Mat mask_section = flowcam->flow_low(bbox);
+        cv::Mat tex_section = trail_texture(bbox_tex);
+        tex_section.copyTo(section, mask_section);
+    }
+    trail_overlay -= cv::Scalar(3,1,2);
+//    ofxCv::blur(trail_overlay,3);
 }
-
+;
 
 void MotionVisualizer::draw()
 {
-    ofSetColor(255, 255, 255, 255);
+    ofSetColor(200, 255, 200, 255);
     flowcam->frame_screen_im.draw(0, 0, ofGetWidth(), ofGetHeight());
     // Color multiply
-    ofSetColor(255,255,255,128);
+    ofSetColor(255,255,255,255);
     vector<cv::Mat> channels;
 //    channels.push_back(flowcam->flow_hist);
 //    channels.push_back(flowcam->flow_hist);
@@ -113,16 +129,11 @@ void MotionVisualizer::draw()
 //    cv::Mat colormap;
 //    cv::merge(channels, colormap);
 //    blur(colormap, colormap, 20);
-    ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
-//    ofxCv::drawMat(flowcam->flow_hist, 0, 0, ofGetWidth(), ofGetHeight());
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
+    ofxCv::drawMat(trail_overlay, 0, 0, ofGetWidth(), ofGetHeight());
     ofDisableBlendMode();
-    particles.draw();
+
     ofPushMatrix();
-//    float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
-//    ofScale(scale_flow_to_game, scale_flow_to_game);
-//    for (map<unsigned int, ofPolyline>::iterator it = trailhistory.begin(); it != trailhistory.end(); ++it){
-//        it->second.draw();
-//    }
     ofNoFill();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
 
@@ -135,10 +146,11 @@ void MotionVisualizer::draw()
         ofSetColor(shape.shape.getFillColor(), alpha);
         shape.shape.setUseShapeColor(false);
         shape.shape.setFilled(true);
-        shape.shape.draw();
+//        shape.shape.draw();
     }
     ofDisableBlendMode();
     ofPopMatrix();
+//    particles.draw();
 }
 
 void MotionVisualizer::trail(ofPoint pos, ofPoint dir, float radius)

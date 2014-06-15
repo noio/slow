@@ -49,6 +49,8 @@ private:
     
     map<unsigned int, Trailtail> trailhistory;
     deque<Trailshape> trailshapes;
+    cv::Mat trail_overlay;
+    cv::Mat trail_texture;
 
 };
 

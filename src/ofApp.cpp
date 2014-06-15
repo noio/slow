@@ -119,7 +119,7 @@ void ofApp::update()
 void ofApp::draw()
 {
     visualizer.draw();
-    squid.draw(draw_debug);
+//    squid.draw(draw_debug);
     highscores.draw();
 
     if (draw_debug) {

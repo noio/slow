@@ -6,16 +6,30 @@
 #include "ofMain.h"
 #include "ofxPlaylist.h"
 #include <iostream>
+#include <vector>
 
 class Instructions {
 public:
+    Instructions(){};
+    Instructions(const Instructions&) = delete;            // no copy
+    Instructions& operator=(const Instructions&) = delete; // no assign
+
     void setup(Squid* squid);
     void update(double delta_t);
     void draw();
     
+    void play();
+    
+    
 private:
+    Squid* squid;
+    
     ofxPlaylist playlist;
-    ofImage instructions_1_im, instructions_2_im, instructions_3_im;
+    vector<ofImage> instructions_ims;
+    vector<float> instructions_alpha;
+
+    float draw_height;
+    ofPoint draw_pos;
     
 };
 

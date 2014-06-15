@@ -36,7 +36,10 @@ void ofApp::setup()
     highscores.setup(ofGetWidth() / 10, &visualizer);
     // Set up Box2d
     setupPhysics();
+    // Squid setup
     squid.setup(phys_world, &flowcam, &visualizer, &highscores);
+    // Instructions
+    instructions.setup(&squid);
     // Gui Setup
     setupGUI();
     need_setup = false;
@@ -112,6 +115,7 @@ void ofApp::update()
     squid.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);
+    instructions.update(delta_t);
     phys_world->Step(delta_t, 6, 2);
 }
 
@@ -120,8 +124,10 @@ void ofApp::update()
 void ofApp::draw()
 {
     visualizer.draw();
-    squid.draw(draw_debug);
     highscores.draw();
+    instructions.draw();
+    squid.draw(draw_debug);
+
 
     if (draw_debug) {
         flowcam.drawDebug();
@@ -145,6 +151,10 @@ void ofApp::keyPressed(int key)
 
         case 'd':
             draw_debug = !draw_debug;
+            break;
+            
+        case 'h':
+            instructions.play();
             break;
 
         case ' ':
@@ -204,6 +214,7 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     int kind = e.widget->getKind();
 
     if (name == "RESET") {
+        gui->saveSettings("settings.xml");
         need_setup = true;
     }
 

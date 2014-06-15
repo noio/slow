@@ -1,9 +1,10 @@
 #pragma once
 
-#include "squid.h"
 #include "flowcam.h"
 #include "motionvisualizer.h"
+#include "squid.h"
 #include "highscoretable.h"
+#include "instructions.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -44,8 +45,9 @@ public:
     b2Body* world_bounds = NULL;
     FlowCam flowcam;
     MotionVisualizer visualizer;
-    HighscoreTable highscores;
     Squid squid;
+    HighscoreTable highscores;
+    Instructions instructions;
     
     ofPtr<ofxUIScrollableCanvas> gui;
     

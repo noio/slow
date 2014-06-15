@@ -33,7 +33,7 @@ public:
     // CONST
     const cv::Size kSectionsSize = cv::Size(8, 4);
     
-    enum BehaviorState { IDLE, PANIC, FACE, GRABBED };
+    enum BehaviorState { IDLE, PANIC, FACE, GRABBED, STATIONARY };
     enum MotionState { STILL, PREP1, PREP2, PUSH, GLIDE, LOCK };
     
     Squid(){};
@@ -45,6 +45,9 @@ public:
     void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, HighscoreTable* in_highscores);
     void update(double delta_t);
     void draw(bool draw_debug);
+    
+    void stayForInstructions(ofPoint target, double duration);
+    void wearInstructionColors(double duration);
     
     // GETTERS & SETTERS
     ofPoint getPosition() const;
@@ -67,10 +70,10 @@ public:
     double idle_move_cooldown = 10.0;
     double face_pose_time = 5.0;
     double grab_time = 4.0;
+    double instruction_time = 5.0;
     
     double min_velocity = 150;
-    float max_goal_distance_close = 40;
-    float max_goal_distance_far = 200;
+    float max_goal_distance = 30;
     double max_face_distance = 10;
     float goal_bottom_margin = 2.0; // relative to body_radius
     
@@ -95,7 +98,8 @@ public:
 
     const ofColor kBodyColor = ofColor(137,202,217);
     const ofColor kOutlineColor = ofColor(255,255,255);
-
+    const ofColor kInstructionsBodyColor = ofColor(0,0,0);
+    const ofColor kInstructionsOutlineColor =ofColor(255,255,0);
 
 private:
     void setupPhysics();
@@ -159,7 +163,7 @@ private:
     b2Body* body = NULL;
     vector <b2Body *> tentacles;
     vector <b2RevoluteJoint *> tentacle_joints;
-    ofImage body_base_back_im, body_base_front_im, body_bubble_im, tentacle_im, markings_bubble_im, tentacle_shine_im;
+    ofImage body_base_back_im, body_base_front_im, body_base_front_outline_im, body_bubble_im, body_bubble_outline_im, markings_bubble_im;
     ofImage hint_im, face_mask_im;
     ofxCv::ObjectFinder objectfinder;
     ofxPlaylist playlist;
@@ -198,7 +202,12 @@ private:
     float hint_alpha = 0.0f;
     float hint_progress = 0.0f;
     
-    ofColor body_color = kBodyColor, outline_color = kOutlineColor, markings_color = kIdleColor;
+    ofColor body_color = kBodyColor,
+            outline_color = kOutlineColor,
+            markings_color = kIdleColor,
+            tentacle_color = kBodyColor,
+            tentacle_outline_color = kOutlineColor;
+    float instruction_color_amount = 0.0;
     
     // Helpers
     ofPoint goal_direction;

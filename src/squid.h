@@ -55,10 +55,11 @@ public:
 
     // PUBLIC SETTINGS
     
-    double push_force = 60.0;
+    double push_force = 40.0;
     double panic_force_multiplier = 3.0;
-    double tentacle_prep_force = 200.0f;
-    double tentacle_push_force = 100.0f;
+    double tentacle_prep_force = 160.0f;
+    double tentacle_push_force = 80.0f;
+    double turn_torque = 60.0;
 
     double motion_time_prep1 = 0.15;
     double motion_time_prep2 = 0.1;

@@ -32,9 +32,9 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     vector<ofPoint> alphas;
     alphas.push_back(ofPoint(0.0, 16));
     alphas.push_back(ofPoint(0.48, 16));
-    alphas.push_back(ofPoint(0.5, 128));
-    alphas.push_back(ofPoint(0.52, 16));
-    alphas.push_back(ofPoint(3.0, 0.0));
+    alphas.push_back(ofPoint(0.5, 64));
+    alphas.push_back(ofPoint(0.52, 4));
+    alphas.push_back(ofPoint(2.0, 0.0));
     double t = 0;
     trail_alpha_timeline.clear();
     while (alphas.size() > 1){
@@ -55,86 +55,42 @@ void MotionVisualizer::update(double delta_t)
     particles.update();
     particles.setupForces();
     particles.clean();
-//    updateBackTrails(delta_t);
     updateFullTrails(delta_t);
 //    updateTrailTexture(delta_t);
 }
 
-void MotionVisualizer::updateBackTrails(double delta_t)
-{
-    float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
-
-    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
-        unsigned int label = flowcam->contourfinder_low.getLabel(ic);
-        const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledByCount(50);
-        cv::Vec2f center = flowcam->contourfinder_low.getCenter(ic);
-        ofPoint flow_dir = -toOf(flowcam->flow.at<cv::Vec2f>(center[1], center[0])).normalized();
-
-        // If this is the first contour on this trail we need to estimate the
-        // "backside" using the flow.
-        if (trailhistory.find(label) == trailhistory.end()) {
-            const ofPolyline& backside = lineFacingNormal(contour, flow_dir, PI / 4).getResampledByCount(12);
-            if (backside.size() > 1) {
-                Trailtail tail = {0, backside, flow_dir};
-                trailhistory[label] = tail;
-                assert(tail.tail.size() > 1);
-            }
-        } else {
-            Trailtail& prev = trailhistory.at(label);
-            // Average the flow dir with the previous one to get a more stable result.
-            flow_dir = (flow_dir + prev.direction) / 2;
-            const ofPolyline& backside = lineFacingNormal(contour, flow_dir, PI / 4).getResampledByCount(12);
-            if (backside.size() > 1){
-                
-                for (int step = 0; step < backside.size() - 1; step++) {
-                    ofPath trail;
-                    trail.lineTo(backside[step] * scale_flow_to_game);
-                    trail.lineTo(backside[step + 1] * scale_flow_to_game);
-                    if (prev.tail.size() > step + 1){
-                        trail.lineTo(prev.tail[step + 1] * scale_flow_to_game);
-                    }
-                    assert(prev.tail.size() > step);
-                    trail.lineTo(prev.tail[step] * scale_flow_to_game);
-                    trail.close();
-                    trail.setFilled(true);
-                    trail.setFillColor(ofColor::fromHsb(240 - prev.length - step * 4, 255, 255));
-                    const Trailshape shape = {0.0, trail};
-                    trailshapes.push_back(shape);
-                }
-                
-                prev.tail = backside;
-                prev.length ++;
-            }
-        }
-    }
-
-    for (int is = 0; is < trailshapes.size(); is ++) {
-        trailshapes[is].t += delta_t;
-    }
-
-    while (trailshapes.size() && trailshapes[0].t > trail_alpha_life) {
-        trailshapes.pop_front();
-    }
-    
-    
-    
-    
-
-//    ofxCv::blur(trail_overlay,3);
-}
 
 void MotionVisualizer::updateFullTrails(double delta_t){
     float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
     for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
-        const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledBySpacing(ofGetHeight() * 0.05);
+        const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledBySpacing(ofGetHeight() * 0.01);
+        ofRectangle bbox = toOf(flowcam->contourfinder_low.getBoundingRect(ic));
+        float inv_size = 1 / MIN(bbox.width, bbox.height) * scale_flow_to_game;
+        ofVec2f center = toOf(flowcam->contourfinder_low.getCenter(ic));
+        ofVec2f flow_dir = toOf(flowcam->flow.at<cv::Vec2f>(center.y, center.x));
+        float magnitude = flow_dir.length();
+        flow_dir.normalize();
+        center *= scale_flow_to_game;
+        const ofVec2f v = flow_dir.rotateRad(HALF_PI);
+        
         ofPath path;
         for (int iv = 0; iv < contour.size(); iv ++){
             path.lineTo(contour[iv] * scale_flow_to_game);
-            path.setColor(ofColor::fromHex(0x302CFF));
         }
         path.close();
         path.setFilled(true);
-        Trailshape shape = {0.0, path};
+        ofMesh mesh = path.getTessellation();
+        for (int im = 0; im < mesh.getNumVertices(); im ++){
+//            float d = ((mesh.getVertex(im) - center) * inv_size).dot(v);
+            float d = ((mesh.getVertex(im) - center) * inv_size).y;
+            float hue = ofWrap(d * 16 + t, 0, 255);
+            float saturation = 255;// * ofMap(magnitude, flowcam->flow_threshold_high, flowcam->flow_threshold_low, 0, 1);
+            float brightness = 255;
+            ofFloatColor color = ofColor::fromHsb(hue, saturation, brightness);
+            mesh.addColor(color);
+        }
+        
+        Trailshape shape = {0.0, mesh};
         trailshapes.push_back(shape);
     }
     
@@ -163,12 +119,12 @@ void MotionVisualizer::updateTrailTexture(double delta_t){
 
 void MotionVisualizer::draw()
 {
-    ofSetColor(200, 255, 200, 255);
+    ofSetColor(200, 200, 200, 255);
     flowcam->frame_screen_im.draw(0, 0, ofGetWidth(), ofGetHeight());
 
 //    drawTrailTexture();
     drawTrailShapes();
-//    particles.draw();
+    particles.draw();
 }
 
 void MotionVisualizer::drawTrailTexture(){
@@ -197,9 +153,12 @@ void MotionVisualizer::drawTrailShapes(){
         const int right = n + 1;
         const double amt = n - left;
         const int alpha = ofLerp(trail_alpha_timeline[left], trail_alpha_timeline[right], amt);
-        ofSetColor(shape.shape.getFillColor(), alpha);
-        shape.shape.setUseShapeColor(false);
-        shape.shape.setFilled(true);
+        for (int im = 0; im < shape.shape.getNumVertices(); im ++){
+            shape.shape.setColor(im, ofFloatColor(shape.shape.getColor(im), alpha/255.0));
+        }
+        ofSetColor(ofColor::white, alpha);
+//        shape.shape.setUseShapeColor(false);
+//        shape.shape.setFilled(true);
         shape.shape.draw();
     }
     ofDisableBlendMode();

@@ -552,9 +552,9 @@ void Squid::turnToAngle(float target_angle, double delta_t)
     }
 
     if (goal_angle_relative > 0.2) {
-        body->ApplyTorque(100.0 * multiplier * body->GetMass(), true);
+        body->ApplyTorque(turn_torque * multiplier * body->GetMass(), true);
     } else if (goal_angle_relative < -0.2) {
-        body->ApplyTorque(-100.0 * multiplier * body->GetMass(), true);
+        body->ApplyTorque(-turn_torque * multiplier * body->GetMass(), true);
     }
 }
 

@@ -16,7 +16,7 @@ using std::deque;
 
 typedef struct Trailshape {
     double t;
-    ofPath shape;
+    ofMesh shape;
 } Trailshape;
 
 typedef struct Trailtail {
@@ -36,7 +36,6 @@ public:
     void sparkle(ofPoint pos, float radius);
     
 private:
-    void updateBackTrails(double delta_t);
     void updateFullTrails(double delta_t);
     void updateTrailTexture(double delta_t);
     

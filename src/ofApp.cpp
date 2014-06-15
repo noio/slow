@@ -111,7 +111,7 @@ void ofApp::update()
     squid.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);
-    phys_world->Step(1.0f / kFrameRate, 6, 2);
+    phys_world->Step(delta_t, 6, 2);
 }
 
 
@@ -119,7 +119,7 @@ void ofApp::update()
 void ofApp::draw()
 {
     visualizer.draw();
-//    squid.draw(draw_debug);
+    squid.draw(draw_debug);
     highscores.draw();
 
     if (draw_debug) {

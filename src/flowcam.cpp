@@ -3,7 +3,7 @@
 
 using namespace ofxCv;
 
-void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom)
+void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom, string load_movie)
 {
     // Initialize the camera first, before we do other stuff that depends on having a frame
     // Use an external camera if one is connected
@@ -17,7 +17,7 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     }
 
     camera.initGrabber(in_capture_width, in_capture_height);
-    video.loadMovie("videos/damrak/damrak_3.mov");
+    video.loadMovie(load_movie);
     video.setVolume(0);
     video.play();
     // Initialize member variables
@@ -91,7 +91,8 @@ void FlowCam::drawDebug()
     ofPopStyle();
 }
 
-cv::Size FlowCam::getFlowSize() const{
+cv::Size FlowCam::getFlowSize() const
+{
     return cv::Size(flow_width, flow_height);
 }
 
@@ -129,26 +130,28 @@ void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
 }
 
 
-void FlowCam::loadLUT(string path){
-	LUTloaded=false;
-	
-	ofFile file(path);
-	string line;
-	for(int i = 0; i < 5; i++) {
-		getline(file, line);
-		ofLog() << "Skipped line: " << line;
-	}
-	for(int z=0; z<32; z++){
-		for(int y=0; y<32; y++){
-			for(int x=0; x<32; x++){
-				ofVec3f cur;
-				file >> cur.x >> cur.y >> cur.z;
-				lut[x][y][z] = cur;
-			}
-		}
-	}
-	
-	LUTloaded = true;
+void FlowCam::loadLUT(string path)
+{
+    LUTloaded = false;
+    ofFile file(path);
+    string line;
+
+    for(int i = 0; i < 5; i++) {
+        getline(file, line);
+        ofLog() << "Skipped line: " << line;
+    }
+
+    for(int z = 0; z < 32; z++) {
+        for(int y = 0; y < 32; y++) {
+            for(int x = 0; x < 32; x++) {
+                ofVec3f cur;
+                file >> cur.x >> cur.y >> cur.z;
+                lut[x][y][z] = cur;
+            }
+        }
+    }
+
+    LUTloaded = true;
 }
 
 
@@ -173,9 +176,11 @@ void FlowCam::updateFrame()
     cv::resize(frame, frame_screen, cv::Size(screen_width, screen_height), 0, 0, cv::INTER_NEAREST);
     toOf(frame_screen, frame_screen_im);
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-    for (int i = 0; i < pyrdown_steps; i++){
+
+    for (int i = 0; i < pyrdown_steps; i++) {
         cv::pyrDown(frame_gray, frame_gray);
     }
+
     assert(frame_gray.cols == flow_width && frame_gray.rows == flow_height);
     frame_screen_im.update();
 }
@@ -186,7 +191,7 @@ void FlowCam::updateFlow()
     flow = opticalflow.getFlow();
     std::swap(flow_low_prev, flow_low); // TODO: Remove this whole flow_low_prev thing?
     std::swap(flow_high_prev, flow_high);
-    
+
     // ofxCV wrapper returns a 1x1 flow image after the first optical flow computation.
     if (flow.cols == 1) {
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
@@ -194,7 +199,7 @@ void FlowCam::updateFlow()
         flow_high_prev = cv::Mat::zeros(flow.rows, flow.cols, CV_8U);
         flow_hist = cv::Mat::zeros(flow.rows, flow.cols, CV_32FC1);
     }
-    
+
     std::vector<cv::Mat> xy(2);
     cv::split(flow, xy);
     cv::cartToPolar(xy[0], xy[1], magnitude, angle, true);
@@ -207,7 +212,6 @@ void FlowCam::updateFlow()
     cv::dilate(flow_low, flow_low, open_kernel);
     cv::erode(flow_low, flow_low, open_kernel);
     cv::erode(flow_low, flow_low, open_kernel);
-    
     //
     // Compute the high speed mask
     flow_high = magnitude > adj_flow_threshold_high; // & flow_low_prev > 0;
@@ -240,34 +244,34 @@ void FlowCam::computeRoi()
 }
 
 
-void FlowCam::applyLUT(){
-	if (LUTloaded) {
-		
-		for(int y = 0; y < frame_screen_im.getHeight(); y++){
-			for(int x = 0; x < frame_screen_im.getWidth(); x++){
-				
-                ofColor color = frame_screen_im.getColor(x,y);
-				
-				int lutPos [3];
-				for (int m=0; m<3; m++) {
-					lutPos[m] = color[m] / 8;
-					if (lutPos[m]==31) {
-						lutPos[m]=30;
-					}
-				}
-				
-				ofVec3f start = lut[lutPos[0]][lutPos[1]][lutPos[2]];
-				ofVec3f end = lut[lutPos[0]+1][lutPos[1]+1][lutPos[2]+1];
-				
-				for (int k=0; k<3; k++) {
-					float amount = (color[k] % 8) / 8.0f;
-					color[k]= (start[k] + amount * (end[k] - start[k])) * 255;
-				}
-				
-				frame_screen_im.setColor(x, y, color);
-				
-			}
-		}
+void FlowCam::applyLUT()
+{
+    if (LUTloaded) {
+        for(int y = 0; y < frame_screen_im.getHeight(); y++) {
+            for(int x = 0; x < frame_screen_im.getWidth(); x++) {
+                ofColor color = frame_screen_im.getColor(x, y);
+                int lutPos [3];
+
+                for (int m = 0; m < 3; m++) {
+                    lutPos[m] = color[m] / 8;
+
+                    if (lutPos[m] == 31) {
+                        lutPos[m] = 30;
+                    }
+                }
+
+                ofVec3f start = lut[lutPos[0]][lutPos[1]][lutPos[2]];
+                ofVec3f end = lut[lutPos[0] + 1][lutPos[1] + 1][lutPos[2] + 1];
+
+                for (int k = 0; k < 3; k++) {
+                    float amount = (color[k] % 8) / 8.0f;
+                    color[k] = (start[k] + amount * (end[k] - start[k])) * 255;
+                }
+
+                frame_screen_im.setColor(x, y, color);
+            }
+        }
+
         frame_screen_im.update();
-	}
+    }
 }

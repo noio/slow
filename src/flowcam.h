@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+using std::string;
 
 class FlowCam {
 public:
@@ -14,7 +15,7 @@ public:
     FlowCam(const FlowCam&) = delete;            // no copy
     FlowCam& operator=(const FlowCam&) = delete; // no assign
     
-    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom);
+    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom, string load_movie);
     
     void update(double delta_t);
     

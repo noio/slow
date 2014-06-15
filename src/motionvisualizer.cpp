@@ -37,15 +37,18 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     alphas.push_back(ofPoint(2.0, 0.0));
     double t = 0;
     trail_alpha_timeline.clear();
-    while (alphas.size() > 1){
+
+    while (alphas.size() > 1) {
         double amt = ofMap(t, alphas[0].x, alphas[1].x, 0, 1);
         trail_alpha_timeline.push_back( ofLerp(alphas[0].y, alphas[1].y, amt) );
         t += trail_alpha_resolution;
         cout << t;
-        if (t >= alphas[1].x){
+
+        if (t >= alphas[1].x) {
             alphas.erase(alphas.begin());
         }
     }
+
     trail_alpha_life = alphas[0].x;
 }
 
@@ -60,8 +63,10 @@ void MotionVisualizer::update(double delta_t)
 }
 
 
-void MotionVisualizer::updateFullTrails(double delta_t){
+void MotionVisualizer::updateFullTrails(double delta_t)
+{
     float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
+
     for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
         const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledBySpacing(ofGetHeight() * 0.01);
         ofRectangle bbox = toOf(flowcam->contourfinder_low.getBoundingRect(ic));
@@ -72,39 +77,42 @@ void MotionVisualizer::updateFullTrails(double delta_t){
         flow_dir.normalize();
         center *= scale_flow_to_game;
         const ofVec2f v = flow_dir.rotateRad(HALF_PI);
-        
         ofPath path;
-        for (int iv = 0; iv < contour.size(); iv ++){
+
+        for (int iv = 0; iv < contour.size(); iv ++) {
             path.lineTo(contour[iv] * scale_flow_to_game);
         }
+
         path.close();
         path.setFilled(true);
         ofMesh mesh = path.getTessellation();
-        for (int im = 0; im < mesh.getNumVertices(); im ++){
+
+        for (int im = 0; im < mesh.getNumVertices(); im ++) {
 //            float d = ((mesh.getVertex(im) - center) * inv_size).dot(v);
             float d = ((mesh.getVertex(im) - center) * inv_size).y;
-            float hue = ofWrap(d * 16 + t, 0, 255);
+            float hue = ofWrap(d * 16 + 200, 0, 255);
             float saturation = 255;// * ofMap(magnitude, flowcam->flow_threshold_high, flowcam->flow_threshold_low, 0, 1);
             float brightness = 255;
             ofFloatColor color = ofColor::fromHsb(hue, saturation, brightness);
             mesh.addColor(color);
         }
-        
+
         Trailshape shape = {0.0, mesh};
         trailshapes.push_back(shape);
     }
-    
+
     for (int is = 0; is < trailshapes.size(); is ++) {
         trailshapes[is].t += delta_t;
     }
-    
+
     while (trailshapes.size() && trailshapes[0].t > trail_alpha_life) {
         trailshapes.pop_front();
     }
 }
 
-void MotionVisualizer::updateTrailTexture(double delta_t){
-    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++){
+void MotionVisualizer::updateTrailTexture(double delta_t)
+{
+    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
         const cv::Rect bbox = flowcam->contourfinder_low.getBoundingRect(ic);
         // Using overlays
         //        trail_overlay -= 1;
@@ -114,22 +122,23 @@ void MotionVisualizer::updateTrailTexture(double delta_t){
         cv::Mat tex_section = trail_texture(bbox_tex);
         tex_section.copyTo(section, mask_section);
     }
-    trail_overlay -= cv::Scalar(3,1,2);
+
+    trail_overlay -= cv::Scalar(3, 1, 2);
 }
 
 void MotionVisualizer::draw()
 {
     ofSetColor(200, 200, 200, 255);
     flowcam->frame_screen_im.draw(0, 0, ofGetWidth(), ofGetHeight());
-
 //    drawTrailTexture();
     drawTrailShapes();
     particles.draw();
 }
 
-void MotionVisualizer::drawTrailTexture(){
+void MotionVisualizer::drawTrailTexture()
+{
     // Color multiply
-    ofSetColor(255,255,255,255);
+    ofSetColor(255, 255, 255, 255);
     vector<cv::Mat> channels;
     //    channels.push_back(flowcam->flow_hist);
     //    channels.push_back(flowcam->flow_hist);
@@ -142,10 +151,11 @@ void MotionVisualizer::drawTrailTexture(){
     ofDisableBlendMode();
 }
 
-void MotionVisualizer::drawTrailShapes(){
+void MotionVisualizer::drawTrailShapes()
+{
     ofPushMatrix();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
-    
+
     for (int is = 0; is < trailshapes.size(); is ++) {
         Trailshape& shape = trailshapes[is];
         const double n = shape.t / trail_alpha_resolution;
@@ -153,14 +163,17 @@ void MotionVisualizer::drawTrailShapes(){
         const int right = n + 1;
         const double amt = n - left;
         const int alpha = ofLerp(trail_alpha_timeline[left], trail_alpha_timeline[right], amt);
-        for (int im = 0; im < shape.shape.getNumVertices(); im ++){
-            shape.shape.setColor(im, ofFloatColor(shape.shape.getColor(im), alpha/255.0));
+
+        for (int im = 0; im < shape.shape.getNumVertices(); im ++) {
+            shape.shape.setColor(im, ofFloatColor(shape.shape.getColor(im), alpha / 255.0));
         }
+
         ofSetColor(ofColor::white, alpha);
 //        shape.shape.setUseShapeColor(false);
 //        shape.shape.setFilled(true);
         shape.shape.draw();
     }
+
     ofDisableBlendMode();
     ofPopMatrix();
 }

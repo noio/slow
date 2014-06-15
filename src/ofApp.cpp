@@ -29,7 +29,7 @@ void ofApp::setup()
     // Load textures
     logo_im.loadImage("assets/logo.png");
     // Flow camera
-    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0);
+    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0, "videos/damrak/damrak_2.mov");
     // Visualizer
     visualizer.setup(&flowcam);
     // Highscore table
@@ -58,7 +58,7 @@ void ofApp::setupGUI()
     gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
     gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addLabelButton("1080x480", false);
-    gui->addLabelButton("780x270", false);
+    gui->addLabelButton("768x288", false);
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
@@ -106,6 +106,7 @@ void ofApp::update()
     if (need_setup) {
         setup();
     }
+
     delta_t = ofGetLastFrameTime();
     flowcam.update(delta_t);
     squid.update(delta_t);
@@ -241,8 +242,8 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
         need_setup = true;
     }
 
-    if (name == "780x270") {
-        ofSetWindowShape(780, 270);
+    if (name == "768x288") {
+        ofSetWindowShape(768, 288);
         need_setup = true;
     }
 }

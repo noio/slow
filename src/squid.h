@@ -11,7 +11,6 @@
 
 #include "ofMain.h"
 #include "ofxCv.h"
-#include "ofxPathfinder.h"
 #include "ofxFluid.h"
 #include "ofxPlaylist.h"
 

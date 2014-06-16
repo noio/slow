@@ -88,7 +88,6 @@
 		E29D5C3118FD2E0C00890C23 /* squid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C3018FD2E0C00890C23 /* squid.cpp */; };
 		E2C45DBE1945DCA400376929 /* highscoretable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2C45DBC1945DCA400376929 /* highscoretable.cpp */; };
 		E2C45DC11945DE9000376929 /* framerecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2C45DBF1945DE9000376929 /* framerecord.cpp */; };
-		E2DB5C591918E0E000885AC3 /* ofxPathfinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */; };
 		E2E4288F1937338900CF93F7 /* ofxFluid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E427CB1937338700CF93F7 /* ofxFluid.cpp */; };
 		E2E4289C1937338900CF93F7 /* ofxFXObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E428691937338900CF93F7 /* ofxFXObject.cpp */; };
 		E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E930A018F42F7F007BC76B /* ofxUI2DGraph.cpp */; };
@@ -368,8 +367,6 @@
 		E2C45DBD1945DCA400376929 /* highscoretable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = highscoretable.h; sourceTree = "<group>"; };
 		E2C45DBF1945DE9000376929 /* framerecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = framerecord.cpp; sourceTree = "<group>"; };
 		E2C45DC01945DE9000376929 /* framerecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = framerecord.h; sourceTree = "<group>"; };
-		E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPathfinder.cpp; sourceTree = "<group>"; };
-		E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPathfinder.h; sourceTree = "<group>"; };
 		E2DB5C5E1919187800885AC3 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		E2E427BA1937338700CF93F7 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E2E427C81937338700CF93F7 /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ofxaddons_thumbnail.png; sourceTree = "<group>"; };
@@ -663,7 +660,6 @@
 				E2491FCC193F338300528EA5 /* ofxPlaylist */,
 				E2E427B91937338700CF93F7 /* ofxFluid */,
 				E2E427CD1937338700CF93F7 /* ofxFX */,
-				E2DB5C421918E0E000885AC3 /* ofxPathfinder */,
 				E254A35F18F583F7007C3AFA /* ofxDelaunay */,
 				E2E9319118F43158007BC76B /* ofxXmlSettings */,
 				E2E92EDA18F42F7C007BC76B /* ofxUI */,
@@ -976,24 +972,6 @@
 				E25839B4191BBB1A0049E948 /* b2Rope.h */,
 			);
 			path = Rope;
-			sourceTree = "<group>";
-		};
-		E2DB5C421918E0E000885AC3 /* ofxPathfinder */ = {
-			isa = PBXGroup;
-			children = (
-				E2DB5C541918E0E000885AC3 /* src */,
-			);
-			name = ofxPathfinder;
-			path = ../../../addons/ofxPathfinder;
-			sourceTree = "<group>";
-		};
-		E2DB5C541918E0E000885AC3 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				E2DB5C551918E0E000885AC3 /* ofxPathfinder.cpp */,
-				E2DB5C561918E0E000885AC3 /* ofxPathfinder.h */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 		E2E427B91937338700CF93F7 /* ofxFluid */ = {
@@ -1486,7 +1464,6 @@
 				E25839C7191BBB1A0049E948 /* b2Body.cpp in Sources */,
 				E2E9315818F42F7F007BC76B /* ofxUIValuePlotter.cpp in Sources */,
 				E25839E1191BBB1A0049E948 /* b2WheelJoint.cpp in Sources */,
-				E2DB5C591918E0E000885AC3 /* ofxPathfinder.cpp in Sources */,
 				E25839DF191BBB1A0049E948 /* b2RopeJoint.cpp in Sources */,
 				E2E9314818F42F7F007BC76B /* ofxUINumberDialer.cpp in Sources */,
 				C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */,

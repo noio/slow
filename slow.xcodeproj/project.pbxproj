@@ -19,6 +19,7 @@
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
 		E244DE8B194E19DD0099BE28 /* instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E244DE89194E19DD0099BE28 /* instructions.cpp */; };
+		E245AEFB194F3F3600B41F9B /* objectfinderthreaded.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */; };
 		E2492023193F338300528EA5 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2491FFC193F338300528EA5 /* ofxEasing.cpp */; };
 		E2492024193F338300528EA5 /* ofxEasingBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2491FFE193F338300528EA5 /* ofxEasingBack.cpp */; };
 		E2492025193F338300528EA5 /* ofxEasingBounce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2492000193F338300528EA5 /* ofxEasingBounce.cpp */; };
@@ -220,6 +221,8 @@
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
 		E244DE89194E19DD0099BE28 /* instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instructions.cpp; sourceTree = "<group>"; };
 		E244DE8A194E19DD0099BE28 /* instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instructions.h; sourceTree = "<group>"; };
+		E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectfinderthreaded.cpp; sourceTree = "<group>"; };
+		E245AEFA194F3F3600B41F9B /* objectfinderthreaded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectfinderthreaded.h; sourceTree = "<group>"; };
 		E2491FFB193F338300528EA5 /* easing_terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = easing_terms_of_use.html; sourceTree = "<group>"; };
 		E2491FFC193F338300528EA5 /* ofxEasing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxEasing.cpp; sourceTree = "<group>"; };
 		E2491FFD193F338300528EA5 /* ofxEasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxEasing.h; sourceTree = "<group>"; };
@@ -1262,6 +1265,8 @@
 				E258394F191BBB1A0049E948 /* libs */,
 				E2C45DBC1945DCA400376929 /* highscoretable.cpp */,
 				E2C45DBD1945DCA400376929 /* highscoretable.h */,
+				E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */,
+				E245AEFA194F3F3600B41F9B /* objectfinderthreaded.h */,
 				E244DE89194E19DD0099BE28 /* instructions.cpp */,
 				E244DE8A194E19DD0099BE28 /* instructions.h */,
 				E249203D1941CC8900528EA5 /* motionvisualizer.cpp */,
@@ -1442,6 +1447,7 @@
 				E2E9313818F42F7F007BC76B /* ofxUIDropDownList.cpp in Sources */,
 				E25839CB191BBB1A0049E948 /* b2World.cpp in Sources */,
 				E25839D8191BBB1A0049E948 /* b2GearJoint.cpp in Sources */,
+				E245AEFB194F3F3600B41F9B /* objectfinderthreaded.cpp in Sources */,
 				6AABAB39E82AF5CFEA23A205 /* ContourFinder.cpp in Sources */,
 				E2492029193F338300528EA5 /* ofxEasingExpo.cpp in Sources */,
 				E2E9315018F42F7F007BC76B /* ofxUISpacer.cpp in Sources */,

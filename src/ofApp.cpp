@@ -128,7 +128,6 @@ void ofApp::draw()
     instructions.draw();
     squid.draw(draw_debug);
 
-
     if (draw_debug) {
         flowcam.drawDebug();
         ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
@@ -152,7 +151,7 @@ void ofApp::keyPressed(int key)
         case 'd':
             draw_debug = !draw_debug;
             break;
-            
+
         case 'h':
             instructions.play();
             break;
@@ -184,6 +183,7 @@ void ofApp::mouseDragged(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
+    squid.stayAtPoint(ofPoint(x, y), 10);
 }
 
 //--------------------------------------------------------------

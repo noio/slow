@@ -26,31 +26,33 @@ void Instructions::update(double delta_t)
 
 void Instructions::draw()
 {
-
-    for (int i = 0; i < instructions_ims.size(); i++){
-        if (instructions_alpha[i] > 0.1){
+    for (int i = 0; i < instructions_ims.size(); i++) {
+        if (instructions_alpha[i] > 0.1) {
             ofEnableAlphaBlending();
             ofSetColor(255, 255, 255, 255);
             instructions_ims[i].draw(draw_pos, ofGetWidth(), draw_height);
-            ofSetColor(255,200,255, 255 * (1.0 - instructions_alpha[i]));
+            ofSetColor(255, 200, 255, 255 * (1.0 - instructions_alpha[i]));
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             ofDisableAlphaBlending();
         }
     }
 }
 
-void Instructions::play(){
+void Instructions::play()
+{
     ofLogVerbose("Instructions") << "starting script";
-    squid->stayForInstructions(ofPoint(ofGetWidth() * 0.81, ofGetHeight() * 0.40), 15 + 4);
-    squid->wearInstructionColors(5);
+    squid->stayAtPoint(ofPoint(ofGetWidth() * 0.81, ofGetHeight() * 0.40), 15 + 4);
+    squid->wearInstructionColors(20.2);
+
     // First three screens contain instructions, show slowly
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++) {
         playlist.addToKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 1.0));
-        playlist.addKeyFrame(Action::pause(4800.0f));
+        playlist.addKeyFrame(Action::pause(14800.0f));
         playlist.addKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 0.0));
     }
+
     // Rest is countdown
-    for (int i = 3; i < instructions_ims.size(); i ++){
+    for (int i = 3; i < instructions_ims.size(); i ++) {
         playlist.addToKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 1.0));
         playlist.addKeyFrame(Action::pause(800.0f));
         playlist.addKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 0.0));

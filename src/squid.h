@@ -8,6 +8,7 @@
 #include "motionvisualizer.h"
 #include "framerecord.h"
 #include "highscoretable.h"
+#include "objectfinderthreaded.h"
 
 #include "ofMain.h"
 #include "ofxCv.h"
@@ -45,7 +46,7 @@ public:
     void update(double delta_t);
     void draw(bool draw_debug);
     
-    void stayForInstructions(ofPoint target, double duration);
+    void stayAtPoint(const ofPoint& target, double duration);
     void wearInstructionColors(double duration);
     
     // GETTERS & SETTERS
@@ -69,7 +70,7 @@ public:
     double idle_move_cooldown = 10.0;
     double face_pose_time = 5.0;
     double grab_time = 4.0;
-    double instruction_time = 5.0;
+    double stationary_time = 5.0;
     
     double min_velocity = 150;
     float max_goal_distance = 30;
@@ -105,7 +106,7 @@ private:
     void setupTextures();
     
     void updateFlow();
-    void updateObjectFinder();
+    void updateFinder();
     void updateBehaviorState(double delta_t);
     void updateMotionState(double delta_t);
     
@@ -118,7 +119,7 @@ private:
     void moveGoalWithFlow();
     void selectFaceGoal();
     bool currentGoalIsQuiet();
-    void setGoal(ofPoint in_goal);
+    void setGoal(const ofPoint& in_goal);
     void setGoal(float x, float y);
     
     void clearFace();
@@ -164,7 +165,8 @@ private:
     vector <b2RevoluteJoint *> tentacle_joints;
     ofImage body_base_back_im, body_base_front_im, body_base_front_outline_im, body_bubble_im, body_bubble_outline_im, markings_bubble_im;
     ofImage hint_im, face_mask_im;
-    ofxCv::ObjectFinder objectfinder;
+
+    ObjectFinderThreaded objectfinder_t;
     ofxPlaylist playlist;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
@@ -184,6 +186,8 @@ private:
     bool has_face = false;
     double face_time = 0.0;
     int face_detection_count = 0;
+    bool waiting_for_face_results = false;
+    bool search_for_face = false;
     double scale_frame_to_game = 1.0;
     
     cv::Mat sections;

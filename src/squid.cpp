@@ -33,17 +33,11 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     tentacle_out_direction.push_back(ofPoint(1, 0));
     tentacle_attach.push_back(ofPoint(0.50, 0.95));
     tentacle_out_direction.push_back(ofPoint(0, 0));
+    //
+    objectfinder_t.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     // Setup the physics
     setupPhysics();
     setupTextures();
-    // Set up face detection
-    objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
-    //    objectfinder.setup("haarcascades/haarcascade_profileface.xml");
-    objectfinder.setRescale(1.0); // Don't rescale internally because we'll feed it a small frame
-    objectfinder.setMinNeighbors(2);
-    objectfinder.setMultiScaleFactor(1.3);
-    objectfinder.setFindBiggestObject(true);
-    objectfinder.getTracker().setSmoothingRate(0.2);
     has_face = false;
 }
 
@@ -150,7 +144,7 @@ void Squid::update(double delta_t)
     goal_angle = atan2(goal_direction.y, goal_direction.x);
     // Update data
     updateFlow();
-//    updateObjectFinder();
+    updateFinder();
     playlist.update();
     // Define some shorthands
     going_slow = b2ToOf(body->GetLinearVelocity()).length() < (min_velocity * scale);
@@ -168,13 +162,15 @@ void Squid::update(double delta_t)
     }
 }
 
-void Squid::stayForInstructions(ofPoint target, double duration){
-    instruction_time = duration;
+void Squid::stayAtPoint(const ofPoint& target, double duration)
+{
+    stationary_time = duration;
     setGoal(target);
     switchBehaviorState(STATIONARY);
 }
 
-void Squid::wearInstructionColors(double duration){
+void Squid::wearInstructionColors(double duration)
+{
     playlist.addKeyFrame(Action::tween(200.0f, &instruction_color_amount, 1.0));
     playlist.addKeyFrame(Action::pause((float)(1000.0f * duration) - 400.0f));
     playlist.addKeyFrame(Action::tween(200.0f, &instruction_color_amount, 0.0));
@@ -212,38 +208,47 @@ void Squid::updateFlow()
     core_flow = 0.8 * core_flow + 0.2 * ofMap(core_flow_sum, local_flow_min, local_flow_max, 0, 1);
 }
 
-void Squid::updateObjectFinder()
+void Squid::updateFinder()
 {
-    // Only compute a width because the face search window is square.
-    int frame_width = flowcam->frame.cols;
-    int frame_height = flowcam->frame.rows;
-    scale_frame_to_game = (double)ofGetWidth() / (double)frame_width;
-    int face_search_width = MIN(frame_width, frame_height) * face_search_window;
-    face_roi = cv::Rect(MAX(0, MIN(frame_width - face_search_width, (pos_game.x / scale_frame_to_game - face_search_width / 2))),
-                        MAX(0, MIN(frame_height - face_search_width, (pos_game.y / scale_frame_to_game - face_search_width / 2))),
-                        face_search_width, face_search_width);
-    // Face size is relative to frame, not face search window, so rescale and cap at 1.0
-    objectfinder.setMinSizeScale(MIN(1.0, face_size_min / face_search_window));
-    objectfinder.setMaxSizeScale(MIN(1.0, face_size_max / face_search_window));
-    // The call below uses 2 arguments including a switch "preprocess" that
-    // was added to ObjectFinder::update to disable the resize and BGR2GRAY calls.
-    cv::Mat frame = flowcam->frame(face_roi);
-    objectfinder.update(frame, true);
+    if (waiting_for_face_results) {
+        int num_found;
+        ofRectangle first_face;
 
-    if (objectfinder.size() > 0) {
-        face_detection_count ++;
+        if (objectfinder_t.getResults(num_found, first_face)) {
+            waiting_for_face_results = false;
+            ofLogVerbose("Squid") << "got results: " << num_found << " faces";
+            if (num_found > 0) {
+                face_detection_count ++;
 
-        if (face_detection_count > face_detection_threshold) {
-            int label = objectfinder.getLabel(0);
-            found_face = toOf(objectfinder.getTracker().getSmoothed(label));
-            found_face.scale(scale_frame_to_game);
-            found_face.x = (found_face.x + face_roi.x) * scale_frame_to_game;
-            found_face.y = (found_face.y + face_roi.y) * scale_frame_to_game;
-            sees_face = true;
+                if (face_detection_count > face_detection_threshold) {
+                    found_face = first_face;
+                    found_face.scale(scale_frame_to_game);
+                    found_face.x = (found_face.x + face_roi.x) * scale_frame_to_game;
+                    found_face.y = (found_face.y + face_roi.y) * scale_frame_to_game;
+                    sees_face = true;
+                }
+            } else {
+                face_detection_count = 0;
+                sees_face = false;
+            }
         }
-    } else {
-        face_detection_count = 0;
-        sees_face = false;
+    }
+
+    if (search_for_face && !waiting_for_face_results) {
+        // Only compute a width because the face search window is square.
+        int frame_width = flowcam->frame.cols;
+        int frame_height = flowcam->frame.rows;
+        scale_frame_to_game = (double)ofGetWidth() / (double)flowcam->frame.cols;
+        int face_search_width = MIN(frame_width, frame_height) * face_search_window;
+        face_roi = cv::Rect(MAX(0, MIN(frame_width - face_search_width, (pos_game.x / scale_frame_to_game - face_search_width / 2))),
+                            MAX(0, MIN(frame_height - face_search_width, (pos_game.y / scale_frame_to_game - face_search_width / 2))),
+                            face_search_width, face_search_width);
+        // Face size is relative to frame, not face search window, so rescale and cap at 1.0
+        float min_size_scale = MIN(1.0, face_size_min / face_search_window);
+        float max_size_scale = MIN(1.0, face_size_max / face_search_window);
+        bool was_free = objectfinder_t.startDetection(flowcam->frame, face_roi, min_size_scale, max_size_scale);
+        waiting_for_face_results = true;
+        ofLogVerbose("Squid") << "searching: " << search_for_face;
     }
 }
 
@@ -290,6 +295,7 @@ void Squid::updateBehaviorState(double delta_t)
 
             if (time_in_behavior_state > face_pose_time) {
                 grabFace();
+                search_for_face = false;
                 switchBehaviorState(PANIC);
                 break;
             }
@@ -299,6 +305,7 @@ void Squid::updateBehaviorState(double delta_t)
 
         case GRABBED:
             if (time_in_behavior_state > grab_time) {
+                search_for_face = false;
                 switchBehaviorState(PANIC);
                 break;
             }
@@ -310,13 +317,14 @@ void Squid::updateBehaviorState(double delta_t)
 
             moveGoalWithFlow();
             break;
-            
+
         case STATIONARY:
-            if (time_in_behavior_state > instruction_time){
+            if (time_in_behavior_state > stationary_time) {
                 setGoal(ofGetWidth() / 2, ofGetHeight() / 2);
                 switchBehaviorState(IDLE);
                 break;
             }
+
             break;
     }
 }
@@ -401,6 +409,7 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case FACE:
             markings_color = kFaceColor;
+            search_for_face = true;
             switchMotionState(LOCK);
             showCaptureHint();
             clearFace();
@@ -408,10 +417,11 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case GRABBED:
             markings_color = kGrabColor;
+            search_for_face = true;
             switchMotionState(LOCK);
             setGoal(pos_game);
             break;
-            
+
         case STATIONARY:
             switchMotionState(STILL);
             markings_color = kInstructionsBodyColor;
@@ -514,7 +524,7 @@ void Squid::setGoal(float x, float y)
     goal = ofPoint(ofClamp(x, 0, ofGetWidth() - 1), ofClamp(y, 0, ofGetHeight() - 1));
 }
 
-void Squid::setGoal(ofPoint in_goal)
+void Squid::setGoal(const ofPoint& in_goal)
 {
     setGoal(in_goal.x, in_goal.y);
 }
@@ -707,6 +717,7 @@ void Squid::drawBody()
     if (has_face) {
         face_anim->draw(body_draw_rect_squished);
     }
+
     ofSetColor(body_color);
     body_base_front_im.draw(body_draw_rect);
     body_bubble_im.draw(body_draw_rect_squished);
@@ -723,6 +734,7 @@ void Squid::drawTentacles()
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
     float w = 0.5 * scale * segment_width / kPhysicsScale;
     float l = 0.5 * scale * segment_length / kPhysicsScale;
+
     // Alternate method: splines
     for (int i = 0; i < tentacle_attach.size(); i ++) {
         b2Body* seg1 = tentacles[i * num_segments];
@@ -756,7 +768,7 @@ void Squid::drawDebug()
     // Draw the grids
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofSetColor(255, 0, 255, 128);
-    drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight(), GL_NEAREST);
+    drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight());
     ofDisableBlendMode();
     ofSetColor(0, 255, 0, 255);
     // Draw the local area
@@ -789,7 +801,7 @@ void Squid::drawDebug()
     ofRect(face_roi_rect.getPosition(), face_size_max * ofGetHeight(), face_size_max * ofGetHeight());
 
     // Draw detected faces
-    if(objectfinder.size()) {
+    if(sees_face) {
         ofPushStyle();
         ofSetLineWidth(2.0);
         ofSetColor(ofColor::blue);
@@ -832,7 +844,7 @@ std::string Squid::getState()
         case GRABBED:
             state += "GRABBED";
             break;
-            
+
         case STATIONARY:
             state += "STATIONARY";
             break;

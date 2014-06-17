@@ -34,7 +34,7 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     tentacle_attach.push_back(ofPoint(0.50, 0.95));
     tentacle_out_direction.push_back(ofPoint(0, 0));
     //
-    objectfinder_t.setup("haarcascades/haarcascade_frontalface_alt2.xml");
+    objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
     // Setup the physics
     setupPhysics();
     setupTextures();
@@ -214,7 +214,7 @@ void Squid::updateFinder()
         int num_found;
         ofRectangle first_face;
 
-        if (objectfinder_t.getResults(num_found, first_face)) {
+        if (objectfinder.getResults(num_found, first_face)) {
             waiting_for_face_results = false;
             ofLogVerbose("Squid") << "got results: " << num_found << " faces";
             if (num_found > 0) {
@@ -246,7 +246,7 @@ void Squid::updateFinder()
         // Face size is relative to frame, not face search window, so rescale and cap at 1.0
         float min_size_scale = MIN(1.0, face_size_min / face_search_window);
         float max_size_scale = MIN(1.0, face_size_max / face_search_window);
-        bool was_free = objectfinder_t.startDetection(flowcam->frame, face_roi, min_size_scale, max_size_scale);
+        bool was_free = objectfinder.startDetection(flowcam->frame, face_roi, min_size_scale, max_size_scale);
         waiting_for_face_results = true;
         ofLogVerbose("Squid") << "searching: " << search_for_face;
     }
@@ -521,7 +521,8 @@ void Squid::selectFaceGoal()
 
 void Squid::setGoal(float x, float y)
 {
-    goal = ofPoint(ofClamp(x, 0, ofGetWidth() - 1), ofClamp(y, 0, ofGetHeight() - 1));
+    float g = goal_padding * scale * body_radius;
+    goal = ofPoint(ofClamp(x, g, ofGetWidth() - g), ofClamp(y, g, ofGetHeight() - g));
 }
 
 void Squid::setGoal(const ofPoint& in_goal)

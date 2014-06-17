@@ -35,11 +35,12 @@ public:
     void trail(ofPoint pos, ofPoint dir, float radius);
     void sparkle(ofPoint pos, float radius);
     
+    int trail_hue = 200;
+    int trail_hue_range = 64;
+    
 private:
     void updateFullTrails(double delta_t);
-    void updateTrailTexture(double delta_t);
     
-    void drawTrailTexture();
     void drawTrailShapes();
     
     ParticleSystem particles;

@@ -1,12 +1,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>CAMERA</Name>
-    <Value>1</Value>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>ZOOM</Name>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
@@ -36,7 +41,12 @@
     <LowValue>0.106770828</LowValue>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>ZOOM</Name>
-    <Value>1.000000000</Value>
+    <Kind>42</Kind>
+    <Name>HUE</Name>
+    <Value>200</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>HUE_RANGE</Name>
+    <Value>69</Value>
 </Widget>

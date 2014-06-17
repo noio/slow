@@ -75,7 +75,7 @@ public:
     double min_velocity = 150;
     float max_goal_distance = 30;
     double max_face_distance = 10;
-    float goal_bottom_margin = 2.0; // relative to body_radius
+    float goal_padding = 1.0; // relative to body_radius * scale
     
     int face_detection_threshold = 3;
     
@@ -166,7 +166,7 @@ private:
     ofImage body_base_back_im, body_base_front_im, body_base_front_outline_im, body_bubble_im, body_bubble_outline_im, markings_bubble_im;
     ofImage hint_im, face_mask_im;
 
-    ObjectFinderThreaded objectfinder_t;
+    ObjectFinderThreaded objectfinder;
     ofxPlaylist playlist;
     cv::Mat face_mask_mat;
     cv::Rect face_roi;

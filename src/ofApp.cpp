@@ -49,20 +49,30 @@ void ofApp::setupGUI()
 {
     // Set up control panel
     gui->removeWidgets();
-    gui->setTheme(OFX_UI_THEME_HACKER);
+    gui->setTheme(OFX_UI_THEME_MINBLACK);
     gui->setScrollAreaHeight(ofGetHeight());
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
     gui->addLabelButton("RESET", false);
+    // ----------
+    gui->addLabel("SCREEN & CAMERA");
     gui->addToggle("DEBUG", &draw_debug);
     gui->addToggle("CAMERA", false);
-    gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
-    gui->addIntSlider("FLOW_EROSION_SIZE", 1, 11, 5);
-    gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
-    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
-    gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
+    // ----------
+    gui->addLabel("OPTICAL FLOW");
+    gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
+    gui->addIntSlider("FLOW_EROSION_SIZE", 1, 11, 5);
+    // ----------
+    gui->addLabel("SQUISHY");
+    gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
+    gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
+    gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
+    // ----------
+    gui->addLabel("VISUALIZER");
+    gui->addIntSlider("HUE", 0, 255, &visualizer.trail_hue);
+    gui->addIntSlider("HUE_RANGE", 0, 255, &visualizer.trail_hue_range);
     // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     // Position the GUI

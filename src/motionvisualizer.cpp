@@ -59,7 +59,6 @@ void MotionVisualizer::update(double delta_t)
     particles.setupForces();
     particles.clean();
     updateFullTrails(delta_t);
-//    updateTrailTexture(delta_t);
 }
 
 
@@ -70,7 +69,7 @@ void MotionVisualizer::updateFullTrails(double delta_t)
     for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
         const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledBySpacing(ofGetHeight() * 0.01);
         ofRectangle bbox = toOf(flowcam->contourfinder_low.getBoundingRect(ic));
-        float inv_size = 1 / MIN(bbox.width, bbox.height) * scale_flow_to_game;
+        float inv_size = 1 / (MIN(bbox.width, bbox.height) * scale_flow_to_game);
         ofVec2f center = toOf(flowcam->contourfinder_low.getCenter(ic));
         ofVec2f flow_dir = toOf(flowcam->flow.at<cv::Vec2f>(center.y, center.x));
         float magnitude = flow_dir.length();
@@ -88,9 +87,8 @@ void MotionVisualizer::updateFullTrails(double delta_t)
         ofMesh mesh = path.getTessellation();
 
         for (int im = 0; im < mesh.getNumVertices(); im ++) {
-//            float d = ((mesh.getVertex(im) - center) * inv_size).dot(v);
             float d = ((mesh.getVertex(im) - center) * inv_size).y;
-            float hue = ofWrap(d * 16 + 200, 0, 255);
+            float hue = ofWrap(d * trail_hue_range + trail_hue, 0, 255);
             float saturation = 255;// * ofMap(magnitude, flowcam->flow_threshold_high, flowcam->flow_threshold_low, 0, 1);
             float brightness = 255;
             ofFloatColor color = ofColor::fromHsb(hue, saturation, brightness);
@@ -110,46 +108,15 @@ void MotionVisualizer::updateFullTrails(double delta_t)
     }
 }
 
-void MotionVisualizer::updateTrailTexture(double delta_t)
-{
-    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
-        const cv::Rect bbox = flowcam->contourfinder_low.getBoundingRect(ic);
-        // Using overlays
-        //        trail_overlay -= 1;
-        const cv::Rect bbox_tex(0, 0, bbox.width, bbox.height);
-        cv::Mat section = trail_overlay(bbox);
-        cv::Mat mask_section = flowcam->flow_low(bbox);
-        cv::Mat tex_section = trail_texture(bbox_tex);
-        tex_section.copyTo(section, mask_section);
-    }
-
-    trail_overlay -= cv::Scalar(3, 1, 2);
-}
 
 void MotionVisualizer::draw()
 {
     ofSetColor(200, 200, 200, 255);
     flowcam->frame_screen_im.draw(0, 0, ofGetWidth(), ofGetHeight());
-//    drawTrailTexture();
     drawTrailShapes();
     particles.draw();
 }
 
-void MotionVisualizer::drawTrailTexture()
-{
-    // Color multiply
-    ofSetColor(255, 255, 255, 255);
-    vector<cv::Mat> channels;
-    //    channels.push_back(flowcam->flow_hist);
-    //    channels.push_back(flowcam->flow_hist);
-    //    channels.push_back(cv::Mat(flowcam->flow_low.rows, flowcam->flow_low.cols, CV_8UC1, cv::Scalar(255)));
-    //    cv::Mat colormap;
-    //    cv::merge(channels, colormap);
-    //    blur(colormap, colormap, 20);
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
-    ofxCv::drawMat(trail_overlay, 0, 0, ofGetWidth(), ofGetHeight());
-    ofDisableBlendMode();
-}
 
 void MotionVisualizer::drawTrailShapes()
 {

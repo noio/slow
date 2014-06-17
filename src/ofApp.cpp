@@ -20,7 +20,7 @@ ofApp::ofApp()
 void ofApp::setup()
 {
     // Generic openframeworks setup
-    ofSetFrameRate(40);
+    ofSetFrameRate(kFrameRate);
     ofSetBackgroundAuto(false);
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);

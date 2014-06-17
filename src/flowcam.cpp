@@ -55,6 +55,7 @@ void FlowCam::update(double delta_t)
     if (camera.isFrameNew() || frame.empty() ) {
         updateFrame();
         updateFlow();
+        ofLogNotice("FlowCam") << since_last_capture << "s capture";
         since_last_capture = 0;
     }
 }

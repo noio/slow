@@ -3361,7 +3361,7 @@
 	"ofMesh.h"
 	"ofNode.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofconstants.h
+1403032822 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofconstants.h
 	<stdint.h>
 	<TargetConditionals.h>
 	<windows.h>
@@ -5974,11 +5974,11 @@
 	<string>
 	<iostream>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\flowcam.cpp
+1403032191 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\flowcam.cpp
 	"flowcam.h"
 	"utilities.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\flowcam.h
+1403030826 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\flowcam.h
 	"ofMain.h"
 	"ofxCv.h"
 	<iostream>
@@ -5989,7 +5989,7 @@
 	"constants.h"
 	"Box2D/Box2D.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\constants.h
+1403031910 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\constants.h
 	<cmath>
 
 1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\box2d.h
@@ -6157,16 +6157,16 @@
 1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.cpp
 	"framerecord.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.h
+1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.h
 	"ofMain.h"
 	"ofxCv.h"
 	<vector>
 	<iostream>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.cpp
+1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.cpp
 	"highscoretable.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.h
+1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.h
 	"framerecord.h"
 	"motionvisualizer.h"
 	"ofMain.h"
@@ -6174,7 +6174,7 @@
 	<vector>
 	<algorithm>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.h
+1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.h
 	"ParticleSystem.h"
 	"flowcam.h"
 	"ofxCv.h"
@@ -6190,7 +6190,7 @@
 1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particle.h
 	"ofGraphics.h"
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.cpp
+1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.cpp
 	"instructions.h"
 
 1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.h
@@ -6200,7 +6200,7 @@
 	<iostream>
 	<vector>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
+1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
 	"utilities.h"
 	"flowcam.h"
 	"motionvisualizer.h"
@@ -6563,7 +6563,7 @@
 	"ofApp.h"
 	"constants.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
+1403030826 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
 	"flowcam.h"
 	"motionvisualizer.h"
 	"squid.h"
@@ -6575,15 +6575,16 @@
 	"ofxFluid.h"
 	"ofxDelaunay.h"
 	"Box2D/Box2D.h"
+	<vector>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
+1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
 	"motionvisualizer.h"
 	"constants.h"
 
 1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.cpp
 	"objectfinderthreaded.h"
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
+1403031958 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
 	"ofApp.h"
 	"constants.h"
 	"utilities.h"
@@ -6592,9 +6593,11 @@
 1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.cpp
 	"ParticleSystem.h"
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
+1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
 	"squid.h"
 	"constants.h"
 	"ofxCv.h"
 	<algorithm>
+
+1396347904 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\icon.rc
 

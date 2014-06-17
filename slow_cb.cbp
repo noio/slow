@@ -50,6 +50,7 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
+					<Add option="-O3" />
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
@@ -58,6 +59,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-O3" />
 			<Add option="-Wno-multichar" />
 			<Add directory="../../../libs/glu/include" />
 			<Add directory="../../../libs/freetype/include" />

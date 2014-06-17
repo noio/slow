@@ -13,6 +13,10 @@
 #include "ofxDelaunay.h"
 #include "Box2D/Box2D.h"
 
+#include <vector>
+
+using std::vector;
+using std::string;
 
 class ofApp : public ofBaseApp
 {

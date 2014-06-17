@@ -25,11 +25,11 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
-    ofSetLogLevel(OF_LOG_VERBOSE);
+    ofSetLogLevel(OF_LOG_NOTICE);
     // Load textures
     logo_im.loadImage("assets/logo.png");
     // Flow camera
-    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0, "videos/damrak/damrak_2.mov");
+    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0);
     // Visualizer
     visualizer.setup(&flowcam);
     // Highscore table
@@ -56,10 +56,9 @@ void ofApp::setupGUI()
     // ----------
     gui->addLabel("SCREEN & CAMERA");
     gui->addToggle("DEBUG", &draw_debug);
-    gui->addToggle("CAMERA", false);
+    gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
-    gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     // ----------
     gui->addLabel("OPTICAL FLOW");
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
@@ -226,10 +225,6 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "RESET") {
         gui->saveSettings("settings.xml");
         need_setup = true;
-    }
-
-    if (name == "CAMERA") {
-        flowcam.setUseCamera( ((ofxUIToggle*) e.widget)->getValue() );
     }
 
     if (name == "FACE_SEARCH_WINDOW") {

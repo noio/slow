@@ -3,7 +3,7 @@
 
 using namespace ofxCv;
 
-void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom, string load_movie)
+void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom)
 {
     // Initialize the camera first, before we do other stuff that depends on having a frame
     // Use an external camera if one is connected
@@ -17,14 +17,11 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
     }
 
     camera.initGrabber(in_capture_width, in_capture_height);
-    video.loadMovie(load_movie);
-    video.setVolume(0);
-    video.play();
+    ofLogNotice("FlowCam") << "Camera set to " << camera.getWidth() << "x" << camera.getHeight();
     // Initialize member variables
     capture_width = in_capture_width;
     capture_height = in_capture_height;
     setScreenSize(in_screen_width, in_screen_height);
-    setUseCamera(use_camera);
     setZoom(zoom);
     setFlowErosionSize(flow_erosion_size);
     // Contourfinder setup
@@ -55,7 +52,7 @@ void FlowCam::update(double delta_t)
     since_last_capture += delta_t;
     doCapture();
 
-    if ((use_camera && camera.isFrameNew()) || (!use_camera && video.isFrameNew()) || frame.empty() ) {
+    if (camera.isFrameNew() || frame.empty() ) {
         updateFrame();
         updateFlow();
         since_last_capture = 0;
@@ -94,14 +91,6 @@ void FlowCam::drawDebug()
 cv::Size FlowCam::getFlowSize() const
 {
     return cv::Size(flow_width, flow_height);
-}
-
-void FlowCam::setUseCamera(bool in_use_camera)
-{
-    if (use_camera == in_use_camera) return;
-
-    use_camera = in_use_camera;
-    computeRoi();
 }
 
 void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
@@ -159,14 +148,8 @@ void FlowCam::loadLUT(string path)
 
 void FlowCam::doCapture()
 {
-    if (use_camera) {
-        camera.update();
-        frame_full = toCv(camera);
-    } else {
-        video.update();
-        frame_full = toCv(video.getPixelsRef());
-        cv::resize(frame_full, frame_full, cv::Size(capture_width, capture_height));
-    }
+    camera.update();
+    frame_full = toCv(camera);
 }
 
 

@@ -15,7 +15,7 @@ public:
     FlowCam(const FlowCam&) = delete;            // no copy
     FlowCam& operator=(const FlowCam&) = delete; // no assign
     
-    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom, string load_movie);
+    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom);
     
     void update(double delta_t);
     
@@ -26,7 +26,6 @@ public:
     cv::Size getFlowSize() const;
     
     void setFlowErosionSize(int in_flow_erosion_size);
-    void setUseCamera(bool in_use_camera);
     void setScreenSize(int in_screen_width, int in_screen_height);
     void setZoom(float in_zoom);
 
@@ -54,7 +53,6 @@ private:
     void reset();
     
     cv::Mat open_kernel;
-    ofVideoPlayer video;
     ofVideoGrabber camera;
     cv::Rect capture_roi;
     
@@ -66,7 +64,6 @@ private:
     bool LUTloaded = false;
 	ofVec3f lut[32][32][32];
     
-    bool use_camera = true;
     int flow_erosion_size = 5;
 };
 

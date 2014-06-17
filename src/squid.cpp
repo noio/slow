@@ -140,7 +140,6 @@ void Squid::setupTextures()
  */
 void Squid::update(double delta_t)
 {
-    time_since_active += delta_t;
     // Some position and direction helpers
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
@@ -295,7 +294,7 @@ void Squid::updateBehaviorState(double delta_t)
                 break;
             }
             
-            if (time_since_active > inactivity_time_until_bored){
+            if (ofGetElapsedTimef() - time_last_active > inactivity_time_until_bored){
                 switchBehaviorState(BORED);
                 break;
             }
@@ -444,13 +443,14 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case PANIC:
             switchColors(kPanicColors, 0.2);
-            time_since_active = 0;
+            time_last_active = ofGetElapsedTimef();
             switchMotionState(STILL);
             selectQuietGoal();
             break;
 
         case FACE:
             search_for_face = true;
+            time_last_face = ofGetElapsedTimef();
             switchMotionState(LOCK);
             showCaptureHint();
             clearFace();
@@ -467,7 +467,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
             
         case BORED:
-            time_since_active = 0;
+            time_last_active = ofGetElapsedTimef();
             clearFace();
             break;
     }

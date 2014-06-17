@@ -20,6 +20,8 @@ public:
     
     void play();
     
+    float instruction_cooldown = 30;
+    
     
 private:
     Squid* squid;
@@ -30,6 +32,8 @@ private:
 
     float draw_height;
     ofPoint draw_pos;
+    
+    float time_last_instructions = 0.0;
     
 };
 

@@ -72,6 +72,7 @@ public:
     ofPoint getGoalDirection() const;
     double getLastActivity() const;
     void setScale(float in_scale);
+    float getTimeLastFace() const {return time_last_face;};
     std::string getState();
 
     // PUBLIC SETTINGS
@@ -200,7 +201,8 @@ private:
     MotionState motion_state = STILL;
     double time_in_motion_state = 0.0;
     double time_in_behavior_state = 0.0;
-    double time_since_active = 0.0;
+    float time_last_active = 0.0;
+    float time_last_face = 0.0;
     
     ofPoint pos_game, pos_section;
     

@@ -22,6 +22,11 @@ void Instructions::setup(Squid* in_squid)
 void Instructions::update(double delta_t)
 {
     playlist.update();
+    float cur = ofGetElapsedTimef();
+    if ((cur - squid->getTimeLastFace() > instruction_cooldown) &&
+        (cur - time_last_instructions > instruction_cooldown)){
+        play();
+    }
 }
 
 void Instructions::draw()
@@ -41,6 +46,7 @@ void Instructions::draw()
 void Instructions::play()
 {
     ofLogVerbose("Instructions") << "starting script";
+    time_last_instructions = ofGetElapsedTimef();
     squid->stayAtPoint(ofPoint(ofGetWidth() * 0.81, ofGetHeight() * 0.40), 15 + 4);
     ofColor yellow(255,255,0, 255);
     ofColor black(0,0,0,255);

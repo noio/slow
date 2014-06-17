@@ -23,6 +23,9 @@ public:
     void draw(float x, float y, float width, float height);
     void draw(ofRectangle rect);
     
+    int getWidth() const {return width;};
+    int getHeight() const {return height;};
+    
 private:
     unsigned int height, width;
     cv::Mat mask;

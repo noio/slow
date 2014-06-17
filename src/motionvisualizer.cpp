@@ -167,12 +167,12 @@ void MotionVisualizer::sparkle(ofPoint pos, float radius)
     for (int i = 0; i < 40; i ++) {
         Particle p(pos.x, pos.y);
         p.a = ofRandom(TWO_PI);
-        ofPoint vel = ofPoint(cos(p.a), sin(p.a)) * radius * ofRandom(5, 10);
+        ofPoint vel = ofPoint(cos(p.a), sin(p.a)) * radius * ofRandom(2, 6);
         p.xv = vel.x;
         p.yv = vel.y;
         p.life = ofRandom(4, 8);
-        p.damping = 0.9;
-        p.size = radius / 10;
+        p.damping = 0.95;
+        p.size = radius / 2;
         p.shape = SHAPE_RECT;
         p.color = ofColor::fromHex(0xE224B6);
         particles.add(p);

@@ -37,7 +37,7 @@ public:
     
     void add(double time, ofPtr<FrameRecord> recording);
     
-    int max_scores = 3;
+    int max_scores = 4;
 private:
     MotionVisualizer* visualizer;
     ofTrueTypeFont squada;

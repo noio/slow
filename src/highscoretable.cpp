@@ -4,9 +4,9 @@
 void HighscoreTable::setup(float w, MotionVisualizer* in_visualizer)
 {
     width = w;
-    row_height = w;
+    row_height = w * 0.8;
     visualizer = in_visualizer;
-    squada.loadFont("assets/squadaone.ttf", 20);
+    squada.loadFont("assets/squadaone.ttf", row_height / 3);
 }
 
 void HighscoreTable::add(double time, ofPtr<FrameRecord> recording)
@@ -39,10 +39,13 @@ void HighscoreTable::draw()
     for (int i = 0; i < scores.size(); i ++) {
         ofEnableAlphaBlending();
         ofSetColor(ofColor::white);
-        scores[i].recording->draw(0, i * row_height, width, row_height);
+        
+        scores[i].recording->draw(0, i * row_height, width, width);
+        
         string scoretxt = ofToString(round(scores[i].time) * 10, 0);
         ofRectangle bounds = squada.getStringBoundingBox(scoretxt, 0, 0);
-        squada.drawString(scoretxt, (width - bounds.width) / 2, i * row_height + (row_height - bounds.height / 2));
+        
+        squada.drawString(scoretxt, width, (i * row_height) + 0.5 * (bounds.height + row_height));
 //        ofDrawBitmapStringHighlight(ofToString(scores[i].time, 0) + " seconds", ofPoint(10, i * width + 10));
     }
 }

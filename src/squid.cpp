@@ -35,6 +35,8 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     tentacle_out_direction.push_back(ofPoint(0, 0));
     //
     objectfinder.setup("haarcascades/haarcascade_frontalface_alt2.xml");
+    //
+    score_font.loadFont("assets/squadaone.ttf", 24 * scale);
     // Setup the physics
     setupPhysics();
     setupTextures();
@@ -134,6 +136,7 @@ void Squid::setupTextures()
  */
 void Squid::update(double delta_t)
 {
+    time_since_active += delta_t;
     // Some position and direction helpers
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
@@ -169,11 +172,26 @@ void Squid::stayAtPoint(const ofPoint& target, double duration)
     switchBehaviorState(STATIONARY);
 }
 
-void Squid::wearInstructionColors(double duration)
-{
-    playlist.addKeyFrame(Action::tween(200.0f, &instruction_color_amount, 1.0));
-    playlist.addKeyFrame(Action::pause((float)(1000.0f * duration) - 400.0f));
-    playlist.addKeyFrame(Action::tween(200.0f, &instruction_color_amount, 0.0));
+void Squid::switchColors(const SquidColorPreset& switch_to, float duration){
+    colors_prev = colors_cur;
+    colors_cur = switch_to;
+    color_prev_amount = 1.0;
+    playlist.addKeyFrame(Action::tween(duration * 1000.0f, &color_prev_amount, 0.0));
+}
+
+void Squid::switchColorsTemp(const SquidColorPreset& switch_to, float duration, float period){
+    colors_prev = switch_to;
+    color_prev_amount = 0.0;
+    playlist.addKeyFrame(Action::tween(duration * 1000.0f, &color_prev_amount, 1.0f));
+    playlist.addKeyFrame(Action::pause(period * 1000.0f));
+    playlist.addKeyFrame(Action::tween(duration * 1000.0f, &color_prev_amount, 0.0f));
+}
+
+void Squid::switchColorsTemp(ofColor body_fill, ofColor body_outline,
+                             ofColor tentacle_fill, ofColor tentacle_outline,
+                             ofColor markings, float duration, float period){
+    SquidColorPreset p = {body_fill, body_outline, tentacle_fill, tentacle_outline, markings};
+    switchColorsTemp(p, duration, period);
 }
 
 void Squid::updateFlow()
@@ -269,6 +287,11 @@ void Squid::updateBehaviorState(double delta_t)
                 switchBehaviorState(PANIC);
                 break;
             }
+            
+            if (time_since_active > inactivity_time_until_bored){
+                switchBehaviorState(BORED);
+                break;
+            }
 
             if (time_in_behavior_state > idle_move_cooldown) {
                 selectQuietGoalAdjacent();
@@ -325,6 +348,17 @@ void Squid::updateBehaviorState(double delta_t)
                 break;
             }
 
+            break;
+        
+        case BORED:
+            // TODO: swim circles?
+            if (on_goal) {
+                selectQuietGoalAdjacent();
+            }
+            if (time_in_behavior_state > bored_time){
+                switchBehaviorState(IDLE);
+                break;
+            }
             break;
     }
 }
@@ -398,17 +432,15 @@ void Squid::switchBehaviorState(BehaviorState next)
 
     switch (next) {
         case IDLE:
-            markings_color = kIdleColor;
             break;
 
         case PANIC:
-            markings_color = kPanicColor;
+            time_since_active = 0;
             switchMotionState(STILL);
             selectQuietGoal();
             break;
 
         case FACE:
-            markings_color = kFaceColor;
             search_for_face = true;
             switchMotionState(LOCK);
             showCaptureHint();
@@ -416,7 +448,6 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case GRABBED:
-            markings_color = kGrabColor;
             search_for_face = true;
             switchMotionState(LOCK);
             setGoal(pos_game);
@@ -424,7 +455,11 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case STATIONARY:
             switchMotionState(STILL);
-            markings_color = kInstructionsBodyColor;
+            break;
+            
+        case BORED:
+            time_since_active = 0;
+            clearFace();
             break;
     }
 
@@ -640,7 +675,6 @@ void Squid::tentaclePush()
     for (int i = 0; i < tentacle_attach.size(); i++) {
         b2Body* tentacle = tentacles[i * num_segments];
         float current = tentacle_joints[i]->GetJointAngle();
-//            tentacle->ApplyTorque(-current *tentacle_push_force*tentacle->GetMass(), true);
         b2Vec2 inward = - body->GetWorldVector(ofToB2(tentacle_out_direction[i / 2]));
         inward.Normalize();
         tentacle->ApplyForceToCenter(tentacle->GetMass() * tentacle_push_force * inward, true);
@@ -668,10 +702,10 @@ void Squid::tentacleGlide()
 
 void Squid::draw(bool draw_debug)
 {
-    body_color = ofColor(kBodyColor).lerp(kInstructionsOutlineColor, instruction_color_amount);
-    outline_color = ofColor(kOutlineColor).lerp(kInstructionsBodyColor, instruction_color_amount);
-    tentacle_color = ofColor(kBodyColor).lerp(kInstructionsBodyColor, instruction_color_amount);
-    tentacle_outline_color = ofColor(kOutlineColor).lerp(kInstructionsOutlineColor, instruction_color_amount);
+    if (has_face){
+        drawScore();
+    }
+    tweenColors();
     drawTentacles();
     drawBody();
 
@@ -697,6 +731,37 @@ void Squid::draw(bool draw_debug)
     }
 }
 
+void Squid::tweenColors(){
+    if (color_prev_amount > 0){
+        colors_tweened.body = ofColor(colors_cur.body).lerp(colors_prev.body, color_prev_amount);
+        colors_tweened.body_outline = ofColor(colors_cur.body_outline).lerp(colors_prev.body_outline, color_prev_amount);
+        colors_tweened.tentacles = ofColor(colors_cur.tentacles).lerp(colors_prev.tentacles, color_prev_amount);
+        colors_tweened.tentacles_outline = ofColor(colors_cur.tentacles_outline).lerp(colors_prev.tentacles_outline, color_prev_amount);
+        colors_tweened.markings = ofColor(colors_cur.markings).lerp(colors_prev.markings, color_prev_amount);
+    } else {
+        colors_tweened.body = colors_cur.body;
+        colors_tweened.body_outline = colors_cur.body_outline;
+        colors_tweened.tentacles = colors_cur.tentacles;
+        colors_tweened.tentacles_outline = colors_cur.tentacles_outline;
+        colors_tweened.markings = colors_cur.markings;
+    }
+}
+
+void Squid::drawScore(){
+    string scoretxt = ofToString(round(face_time * 10), 0);
+    ofRectangle bounds = score_font.getStringBoundingBox(scoretxt, 0, 0);
+    const float angle = -35 * DEG_TO_RAD;
+    const float ri = body_radius * scale * 1.5;
+    const ofPoint score_txt_offset = ofPoint(cos(angle) *ri, sin(angle) * ri);
+    const ofPoint score_txt_pos = pos_game + score_txt_offset;
+    ofNoFill();
+    ofSetColor(255, 255, 255, 255);
+    ofSetLineWidth(4.0 * scale);
+    ofLine(pos_game, score_txt_pos);
+    score_font.drawString(scoretxt, score_txt_pos.x, score_txt_pos.y - bounds.height * 0.4);
+    ofDisableBlendMode();
+}
+
 void Squid::drawBody()
 {
     // Draw body
@@ -710,7 +775,7 @@ void Squid::drawBody()
     ofRectangle body_draw_rect_squished(body_draw_rect);
     body_draw_rect_squished.height *= squish;
     body_draw_rect_squished.y += body_draw_rect_squished.height * (1 - squish);
-    ofSetColor(body_color);
+    ofSetColor(colors_tweened.body);
     body_base_back_im.draw(body_draw_rect);
     ofSetColor(255, 255, 255, 255);
 
@@ -719,13 +784,13 @@ void Squid::drawBody()
         face_anim->draw(body_draw_rect_squished);
     }
 
-    ofSetColor(body_color);
+    ofSetColor(colors_tweened.body);
     body_base_front_im.draw(body_draw_rect);
     body_bubble_im.draw(body_draw_rect_squished);
-    ofSetColor(outline_color);
+    ofSetColor(colors_tweened.body_outline);
     body_base_front_outline_im.draw(body_draw_rect);
     body_bubble_outline_im.draw(body_draw_rect_squished);
-    ofSetColor(markings_color);
+    ofSetColor(colors_tweened.markings);
     markings_bubble_im.draw(body_draw_rect_squished);
     ofPopMatrix();
 }
@@ -752,9 +817,9 @@ void Squid::drawTentacles()
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(0, -w))));
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(-l, 0.6 * -w))));
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(-l, 0.6 * w))));
-        p.setColor(tentacle_color);
+        p.setColor(colors_tweened.tentacles);
         p.draw();
-        ofSetColor(tentacle_outline_color);
+        p.setColor(colors_tweened.tentacles_outline);
         ofSetLineWidth(2.0 * scale);
         p.getOutline()[0].draw();
     }
@@ -848,6 +913,10 @@ std::string Squid::getState()
 
         case STATIONARY:
             state += "STATIONARY";
+            break;
+            
+        case BORED:
+            state += "BORED";
             break;
     }
 

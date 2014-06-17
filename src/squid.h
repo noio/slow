@@ -22,10 +22,20 @@
 using std::vector;
 using std::deque;
 
+typedef struct SquidColorPreset {
+    ofColor body;
+    ofColor body_outline;
+    ofColor tentacles;
+    ofColor tentacles_outline;
+    ofColor markings;
+} SquidColorPreset;
+
 ////////// CONSTANTS //////////
 
+const SquidColorPreset defaultColors = {ofColor::blue, ofColor::white, ofColor::blue, ofColor::white, ofColor::blue};
 
 ////////// CLASS DEF //////////
+
 
 class Squid
 {
@@ -33,7 +43,7 @@ public:
     // CONST
     const cv::Size kSectionsSize = cv::Size(8, 4);
     
-    enum BehaviorState { IDLE, PANIC, FACE, GRABBED, STATIONARY };
+    enum BehaviorState { IDLE, PANIC, FACE, GRABBED, STATIONARY, BORED };
     enum MotionState { STILL, PREP1, PREP2, PUSH, GLIDE, LOCK };
     
     Squid(){};
@@ -47,12 +57,16 @@ public:
     void draw(bool draw_debug);
     
     void stayAtPoint(const ofPoint& target, double duration);
-    void wearInstructionColors(double duration);
+    void switchColors(const SquidColorPreset& switch_to, float duration);
+    void switchColorsTemp(const SquidColorPreset& switch_to, float duration, float period);
+    void switchColorsTemp(ofColor body_fill, ofColor body_outline, ofColor tentacle_fill, ofColor tentacle_outline, ofColor markings, float duration, float period);
+
     
     // GETTERS & SETTERS
     ofPoint getPosition() const;
     float getBodyAngle() const;
     ofPoint getGoalDirection() const;
+    double getLastActivity() const;
     void setScale(float in_scale);
     std::string getState();
 
@@ -71,6 +85,8 @@ public:
     double face_pose_time = 5.0;
     double grab_time = 4.0;
     double stationary_time = 5.0;
+    double inactivity_time_until_bored = 120.0;
+    double bored_time = 6.0; // Time spent in BORED state
     
     double min_velocity = 150;
     float max_goal_distance = 30;
@@ -98,8 +114,6 @@ public:
 
     const ofColor kBodyColor = ofColor(137,202,217);
     const ofColor kOutlineColor = ofColor(255,255,255);
-    const ofColor kInstructionsBodyColor = ofColor(0,0,0);
-    const ofColor kInstructionsOutlineColor =ofColor(255,255,0);
 
 private:
     void setupPhysics();
@@ -138,6 +152,8 @@ private:
     void tentaclePush();
     void tentacleGlide();
     
+    void tweenColors();
+    void drawScore();
     void drawBody();
     void drawTentacles();
     void drawDebug();
@@ -165,6 +181,7 @@ private:
     vector <b2RevoluteJoint *> tentacle_joints;
     ofImage body_base_back_im, body_base_front_im, body_base_front_outline_im, body_bubble_im, body_bubble_outline_im, markings_bubble_im;
     ofImage hint_im, face_mask_im;
+    ofTrueTypeFont score_font;
 
     ObjectFinderThreaded objectfinder;
     ofxPlaylist playlist;
@@ -179,6 +196,7 @@ private:
     MotionState motion_state = STILL;
     double time_in_motion_state = 0.0;
     double time_in_behavior_state = 0.0;
+    double time_since_active = 0.0;
     
     ofPoint pos_game, pos_section;
     
@@ -205,12 +223,11 @@ private:
     float hint_alpha = 0.0f;
     float hint_progress = 0.0f;
     
-    ofColor body_color = kBodyColor,
-            outline_color = kOutlineColor,
-            markings_color = kIdleColor,
-            tentacle_color = kBodyColor,
-            tentacle_outline_color = kOutlineColor;
-    float instruction_color_amount = 0.0;
+    SquidColorPreset colors_cur;
+    SquidColorPreset colors_prev;
+    SquidColorPreset colors_tweened;
+
+    float color_prev_amount = 0.0;
     
     // Helpers
     ofPoint goal_direction;

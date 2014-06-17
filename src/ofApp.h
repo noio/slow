@@ -61,9 +61,6 @@ public:
     
     // Settings
     bool draw_debug = false;
-        
-    float jaggy_spacing = 20.0f;
-    float jaggy_offset = 10.0f;
-    float fluid_motion_speed = 5.0f;
-    float fluid_motion_radius = 10.0f;
+    int capture_width = 1920;
+    int capture_height = 1080;
 };

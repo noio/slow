@@ -150,8 +150,10 @@ void Squid::update(double delta_t)
     goal_direction = to_goal.normalized();
     goal_angle = atan2(goal_direction.y, goal_direction.x);
     // Update data
-    updateFlow();
-    updateFinder();
+    if (flowcam->hasData()){
+        updateFlow();
+        updateFinder();
+    }
     playlist.update();
     // Define some shorthands
     going_slow = b2ToOf(body->GetLinearVelocity()).length() < (min_velocity * scale);

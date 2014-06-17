@@ -27,7 +27,9 @@ public:
     
     void setFlowErosionSize(int in_flow_erosion_size);
     void setScreenSize(int in_screen_width, int in_screen_height);
+    void setCaptureSize(int in_capture_width, int in_capture_height);
     void setZoom(float in_zoom);
+    bool hasData(){return has_data;};
 
     ofxCv::FlowFarneback opticalflow;
     ofxCv::ContourFinder contourfinder_low;
@@ -41,13 +43,12 @@ public:
 
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
-    const int pyrdown_steps = 3;
+    const int pyrdown_steps = 2;
 
     
 private:
     void updateFrame();
     void updateFlow();
-    void doCapture();
     void computeRoi();
     void applyLUT();
     void reset();
@@ -60,6 +61,7 @@ private:
     
     int capture_width, capture_height, screen_width, screen_height, flow_width, flow_height;
     float zoom = 1.0;
+    bool has_data = false;
     
     bool LUTloaded = false;
 	ofVec3f lut[32][32][32];

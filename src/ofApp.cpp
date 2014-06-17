@@ -29,7 +29,7 @@ void ofApp::setup()
     // Load textures
     logo_im.loadImage("assets/logo.png");
     // Flow camera
-    flowcam.setup(kCaptureWidth, kCaptureHeight, ofGetWidth(), ofGetHeight(), 1.0);
+    flowcam.setup(capture_width, capture_height, ofGetWidth(), ofGetHeight(), 1.0);
     // Visualizer
     visualizer.setup(&flowcam);
     // Highscore table
@@ -59,6 +59,10 @@ void ofApp::setupGUI()
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
+    vector<string> capture_resolutions;
+    capture_resolutions.push_back("1080p");
+    capture_resolutions.push_back("720p");
+	gui->addRadio("CAPTURE RES", capture_resolutions, OFX_UI_ORIENTATION_HORIZONTAL);
     // ----------
     gui->addLabel("OPTICAL FLOW");
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
@@ -225,6 +229,13 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "RESET") {
         gui->saveSettings("settings.xml");
         need_setup = true;
+    }
+    
+    if (name == "1080p"){
+        flowcam.setCaptureSize(1920, 1080);
+    }
+    if (name == "720p"){
+        flowcam.setCaptureSize(1280, 720);
     }
 
     if (name == "FACE_SEARCH_WINDOW") {

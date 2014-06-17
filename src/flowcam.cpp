@@ -11,16 +11,8 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
         camera.setDeviceID(1);
     }
 
-    // Camera and video grabber
-    if (camera.isInitialized()) {
-        camera.close();
-    }
-
-    camera.initGrabber(in_capture_width, in_capture_height);
-    ofLogNotice("FlowCam") << "Camera set to " << camera.getWidth() << "x" << camera.getHeight();
     // Initialize member variables
-    capture_width = in_capture_width;
-    capture_height = in_capture_height;
+    setCaptureSize(in_capture_width, in_capture_height);
     setScreenSize(in_screen_width, in_screen_height);
     setZoom(zoom);
     setFlowErosionSize(flow_erosion_size);
@@ -45,17 +37,21 @@ void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_w
 void FlowCam::reset()
 {
     opticalflow.resetFlow();
+    has_data = false;
 }
 
 void FlowCam::update(double delta_t)
 {
     since_last_capture += delta_t;
-    doCapture();
 
-    if (camera.isFrameNew() || frame.empty() ) {
+    camera.update();
+
+    if (camera.isFrameNew()) {
+        frame_full = toCv(camera);
         updateFrame();
         updateFlow();
-        ofLogNotice("FlowCam") << since_last_capture << "s capture";
+        has_data = true;
+        ofLogNotice("FlowCam") << round(1/since_last_capture) << " captures/s";
         since_last_capture = 0;
     }
 }
@@ -111,6 +107,19 @@ void FlowCam::setZoom(float in_zoom)
     computeRoi();
 }
 
+void FlowCam::setCaptureSize(int in_capture_width, int in_capture_height){
+    if (capture_width == in_capture_width && capture_height == in_capture_height) return;
+    capture_width = in_capture_width;
+    capture_height = in_capture_height;
+    // Camera and video grabber
+    if (camera.isInitialized()) {
+        camera.close();
+    }
+    camera.initGrabber(in_capture_width, in_capture_height);
+    ofLogNotice("FlowCam") << "Camera set to " << camera.getWidth() << "x" << camera.getHeight();
+    computeRoi();
+}
+
 void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
 {
     flow_erosion_size = in_flow_erosion_size;
@@ -147,11 +156,6 @@ void FlowCam::loadLUT(string path)
 
 ////////// PRIVATE METHODS //////////
 
-void FlowCam::doCapture()
-{
-    camera.update();
-    frame_full = toCv(camera);
-}
 
 
 void FlowCam::updateFrame()
@@ -215,13 +219,12 @@ void FlowCam::updateFlow()
 
 void FlowCam::computeRoi()
 {
-    doCapture(); // Get a single frame so we have the cam resolution
     float ratio = (float)screen_width / screen_height;
-    int w = std::min(frame_full.cols, static_cast<int>(round(frame_full.rows * ratio)));
-    int h = std::min(frame_full.rows, static_cast<int>(round(frame_full.cols / ratio)));
+    int w = std::min(capture_width, static_cast<int>(round(capture_height * ratio)));
+    int h = std::min(capture_height, static_cast<int>(round(capture_width / ratio)));
     w /= zoom;
     h /= zoom;
-    capture_roi = cv::Rect((frame_full.cols - w) / 2, (frame_full.rows - h) / 2, w, h);
+    capture_roi = cv::Rect((capture_width - w) / 2, (capture_height - h) / 2, w, h);
     flow_width = ceil(w / pow(2.0, pyrdown_steps));
     flow_height = ceil(h / pow(2.0, pyrdown_steps));
     reset();

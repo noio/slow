@@ -32,7 +32,11 @@ typedef struct SquidColorPreset {
 
 ////////// CONSTANTS //////////
 
-const SquidColorPreset defaultColors = {ofColor::blue, ofColor::white, ofColor::blue, ofColor::white, ofColor::blue};
+const ofColor kSquidPink = ofColor::fromHex(0xCF44D3);
+const ofColor kSquidOutlineWhite = ofColor::fromHex(0xFFFFFF);
+const ofColor kSquidDefaultColor = ofColor::fromHex(0x4A86FF);
+const SquidColorPreset kDefaultColors = {kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor};
+const SquidColorPreset kPanicColors = {kSquidPink, kSquidOutlineWhite, kSquidPink, kSquidOutlineWhite, kSquidPink};
 
 ////////// CLASS DEF //////////
 
@@ -59,7 +63,7 @@ public:
     void stayAtPoint(const ofPoint& target, double duration);
     void switchColors(const SquidColorPreset& switch_to, float duration);
     void switchColorsTemp(const SquidColorPreset& switch_to, float duration, float period);
-    void switchColorsTemp(ofColor body_fill, ofColor body_outline, ofColor tentacle_fill, ofColor tentacle_outline, ofColor markings, float duration, float period);
+    void switchColorsTemp(const ofColor& body_fill, const ofColor& body_outline, const ofColor& tentacle_fill, const ofColor& tentacle_outline, const ofColor& markings, float duration, float period);
 
     
     // GETTERS & SETTERS

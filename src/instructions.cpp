@@ -42,8 +42,9 @@ void Instructions::play()
 {
     ofLogVerbose("Instructions") << "starting script";
     squid->stayAtPoint(ofPoint(ofGetWidth() * 0.81, ofGetHeight() * 0.40), 15 + 4);
-    ofColor yellow = ofColor::yellow;
-    squid->switchColorsTemp(yellow, ofColor::black, ofColor::black, yellow, ofColor::black, 0.2f, 5.0f);
+    ofColor yellow(255,255,0, 255);
+    ofColor black(0,0,0,255);
+    squid->switchColorsTemp(yellow, black, black, yellow, black, 0.2f, 5.0f);
 
     // First three screens contain instructions, show slowly
     for (int i = 0; i < 3; i++) {

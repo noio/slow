@@ -19,6 +19,10 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     visualizer = in_visualizer;
     highscores = in_highscores;
     squish = 1.0f;
+    colors_prev = kPanicColors;
+    colors_cur = kPanicColors;
+    color_prev_amount = 0.0;
+    playlist.clear();
     setGoal(ofGetWidth() / 2, ofGetHeight() / 2);
     // Tentacle attach points
     tentacle_attach.clear();
@@ -187,10 +191,11 @@ void Squid::switchColorsTemp(const SquidColorPreset& switch_to, float duration, 
     playlist.addKeyFrame(Action::tween(duration * 1000.0f, &color_prev_amount, 0.0f));
 }
 
-void Squid::switchColorsTemp(ofColor body_fill, ofColor body_outline,
-                             ofColor tentacle_fill, ofColor tentacle_outline,
-                             ofColor markings, float duration, float period){
+void Squid::switchColorsTemp(const ofColor& body_fill, const ofColor& body_outline,
+                             const ofColor& tentacle_fill, const ofColor& tentacle_outline,
+                             const ofColor& markings, float duration, float period){
     SquidColorPreset p = {body_fill, body_outline, tentacle_fill, tentacle_outline, markings};
+    ofLogVerbose("Squid") << tentacle_outline;
     switchColorsTemp(p, duration, period);
 }
 
@@ -432,9 +437,11 @@ void Squid::switchBehaviorState(BehaviorState next)
 
     switch (next) {
         case IDLE:
+            switchColors(kDefaultColors, 0.2);
             break;
 
         case PANIC:
+            switchColors(kPanicColors, 0.2);
             time_since_active = 0;
             switchMotionState(STILL);
             selectQuietGoal();
@@ -702,10 +709,10 @@ void Squid::tentacleGlide()
 
 void Squid::draw(bool draw_debug)
 {
+    tweenColors();
     if (has_face){
         drawScore();
     }
-    tweenColors();
     drawTentacles();
     drawBody();
 
@@ -819,7 +826,7 @@ void Squid::drawTentacles()
         p.curveTo(b2ToOf(seg1->GetWorldPoint(b2Vec2(-l, 0.6 * w))));
         p.setColor(colors_tweened.tentacles);
         p.draw();
-        p.setColor(colors_tweened.tentacles_outline);
+        ofSetColor(colors_tweened.tentacles_outline);
         ofSetLineWidth(2.0 * scale);
         p.getOutline()[0].draw();
     }

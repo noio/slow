@@ -55,6 +55,11 @@ void FlowCam::update(double delta_t)
         since_last_capture = 0;
     }
 }
+
+void FlowCam::draw(float x, float y, float width, float height){
+    frame_screen_im.draw(x, y, width, height);
+}
+
 void FlowCam::drawDebug()
 {
     ofPushStyle();
@@ -85,10 +90,6 @@ void FlowCam::drawDebug()
     ofPopStyle();
 }
 
-cv::Size FlowCam::getFlowSize() const
-{
-    return cv::Size(flow_width, flow_height);
-}
 
 void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
 {
@@ -126,6 +127,11 @@ void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
                                             cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
                                             cv::Point(flow_erosion_size, flow_erosion_size));
+}
+
+void FlowCam::setFlowThreshold(float threshold_low, float threshold_high){
+    flow_threshold_low = threshold_low;
+    flow_threshold_high = threshold_high;
 }
 
 

@@ -248,8 +248,7 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     }
 
     if (name == "FLOW_THRESHOLD") {
-        flowcam.flow_threshold_low = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
-        flowcam.flow_threshold_high = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
+        flowcam.setFlowThreshold(((ofxUIRangeSlider*) e.widget)->getScaledValueLow(), ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh());
     }
 
     if (name == "FLOW_EROSION_SIZE") {

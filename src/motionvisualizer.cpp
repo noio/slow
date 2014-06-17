@@ -64,14 +64,16 @@ void MotionVisualizer::update(double delta_t)
 
 void MotionVisualizer::updateFullTrails(double delta_t)
 {
-    float scale_flow_to_game = ofGetWidth() / (float)flowcam->flow_high.cols;
+    float scale_flow_to_game = ofGetWidth() / (float)flowcam->getFlowSize().width;
 
-    for (int ic = 0; ic < flowcam->contourfinder_low.size(); ic++) {
-        const ofPolyline& contour = flowcam->contourfinder_low.getPolyline(ic).getResampledBySpacing(ofGetHeight() * 0.01);
-        ofRectangle bbox = toOf(flowcam->contourfinder_low.getBoundingRect(ic));
+    const vector<ofPolyline>& contours = flowcam->getContoursLow();
+    
+    for (int ic = 0; ic < contours.size(); ic++) {
+        const ofPolyline& contour = contours[ic].getResampledBySpacing(ofGetHeight() * 0.01);
+        ofRectangle bbox = contour.getBoundingBox();
         float inv_size = 1 / (MIN(bbox.width, bbox.height) * scale_flow_to_game);
-        ofVec2f center = toOf(flowcam->contourfinder_low.getCenter(ic));
-        ofVec2f flow_dir = toOf(flowcam->flow.at<cv::Vec2f>(center.y, center.x));
+        ofVec2f center = bbox.getCenter();
+        ofVec2f flow_dir = flowcam->getFlowAt(center.x, center.y);
         float magnitude = flow_dir.length();
         flow_dir.normalize();
         center *= scale_flow_to_game;
@@ -112,7 +114,7 @@ void MotionVisualizer::updateFullTrails(double delta_t)
 void MotionVisualizer::draw()
 {
     ofSetColor(200, 200, 200, 255);
-    flowcam->frame_screen_im.draw(0, 0, ofGetWidth(), ofGetHeight());
+    flowcam->draw(0, 0, ofGetWidth(), ofGetHeight());
     drawTrailShapes();
     particles.draw();
 }

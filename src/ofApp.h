@@ -44,7 +44,6 @@ public:
     void guiEvent(ofxUIEventArgs& e);
 
     // Components
-    ofImage logo_im;
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
     FlowCam flowcam;

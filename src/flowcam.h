@@ -16,9 +16,7 @@ public:
     FlowCam& operator=(const FlowCam&) = delete; // no assign
     
     void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom);
-    
-    void update(double delta_t);
-    
+    void update();
     void draw(float x, float y, float width, float height);
     
     void drawDebug();
@@ -46,6 +44,8 @@ public:
 
     
 private:
+    void initGrabber();
+    void threadedFunction();
     void updateFrame();
     void updateFlow();
     void computeRoi();

@@ -53,6 +53,7 @@ public:
     Squid(){};
     Squid(const Squid&) = delete;            // no copy
     Squid& operator=(const Squid&) = delete; // no assign
+    ~Squid();
 
     
     // METHODS

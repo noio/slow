@@ -41,7 +41,7 @@ public:
 
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
-    const int pyrdown_steps = 2;
+    const int pyrdown_steps = 3;
 
     
 private:

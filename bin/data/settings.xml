@@ -4,11 +4,6 @@
     <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>2</Kind>
-    <Name>CAMERA</Name>
-    <Value>1</Value>
-</Widget>
-<Widget>
     <Kind>4</Kind>
     <Name>ZOOM</Name>
     <Value>1.000000000</Value>

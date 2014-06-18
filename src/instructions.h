@@ -20,7 +20,7 @@ public:
     
     void play();
     
-    float instruction_cooldown = 30;
+    float instruction_cooldown = 300;
     
     
 private:

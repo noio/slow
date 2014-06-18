@@ -450,6 +450,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case FACE:
+            switchColors(kGrabColors, 0.2);
             search_for_face = true;
             time_last_face = ofGetElapsedTimef();
             switchMotionState(LOCK);
@@ -458,6 +459,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case GRABBED:
+            switchColors(kGrabColors, 0.2);
             search_for_face = true;
             switchMotionState(LOCK);
             setGoal(pos_game);
@@ -813,7 +815,7 @@ void Squid::drawTentacles()
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
     float w = 0.5 * scale * segment_width / kPhysicsScale;
     float l = 0.5 * scale * segment_length / kPhysicsScale;
-
+    ofEnableAlphaBlending();
     // Alternate method: splines
     for (int i = 0; i < tentacle_attach.size(); i ++) {
         b2Body* seg1 = tentacles[i * num_segments];

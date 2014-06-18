@@ -35,8 +35,11 @@ typedef struct SquidColorPreset {
 const ofColor kSquidPink = ofColor::fromHex(0xCF44D3);
 const ofColor kSquidOutlineWhite = ofColor::fromHex(0xFFFFFF);
 const ofColor kSquidDefaultColor = ofColor::fromHex(0x4A86FF);
+const ofColor kSquidGreen = ofColor::fromHex(0x30d672);
+const ofColor kSquidTransparentWhite(255,255,255,96);
 const SquidColorPreset kDefaultColors = {kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor};
 const SquidColorPreset kPanicColors = {kSquidPink, kSquidOutlineWhite, kSquidPink, kSquidOutlineWhite, kSquidPink};
+const SquidColorPreset kGrabColors = {kSquidGreen, kSquidGreen, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
 
 ////////// CLASS DEF //////////
 

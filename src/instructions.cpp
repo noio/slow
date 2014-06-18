@@ -50,10 +50,13 @@ void Instructions::play()
     squid->stayAtPoint(ofPoint(ofGetWidth() * 0.81, ofGetHeight() * 0.40), 15 + 4);
     ofColor yellow(255,255,0, 255);
     ofColor black(0,0,0,255);
-    squid->switchColorsTemp(yellow, black, black, yellow, black, 0.2f, 5.0f);
+    squid->switchColorsTemp(yellow, black, black, yellow, black, 0.2f, 8.0f);
 
+    playlist.addToKeyFrame(Action::tween(200.0f, &instructions_alpha[0], 1.0));
+    playlist.addKeyFrame(Action::pause(7800.0f));
+    playlist.addKeyFrame(Action::tween(200.0f, &instructions_alpha[0], 0.0));
     // First three screens contain instructions, show slowly
-    for (int i = 0; i < 3; i++) {
+    for (int i = 1; i < 3; i++) {
         playlist.addToKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 1.0));
         playlist.addKeyFrame(Action::pause(4800.0f));
         playlist.addKeyFrame(Action::tween(200.0f, &instructions_alpha[i], 0.0));

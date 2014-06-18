@@ -66,7 +66,7 @@ private:
     
     ofImage frame_screen_im;
     
-    double since_last_capture;
+    float last_capture;
     
     int capture_width, capture_height, screen_width, screen_height, flow_width, flow_height;
     float zoom = 1.0;

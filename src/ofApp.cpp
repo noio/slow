@@ -61,10 +61,8 @@ void ofApp::setupGUI()
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
-    vector<string> capture_resolutions;
-    capture_resolutions.push_back("1080p");
-    capture_resolutions.push_back("720p");
-	gui->addRadio("CAPTURE RES", capture_resolutions, OFX_UI_ORIENTATION_HORIZONTAL);
+	gui->addLabelButton("720p", false);
+    gui->addLabelButton("1080p", false);
     // ----------
     gui->addLabel("OPTICAL FLOW");
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);

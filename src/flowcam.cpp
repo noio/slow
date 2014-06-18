@@ -3,13 +3,16 @@
 
 using namespace ofxCv;
 
-void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom)
+void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float in_zoom)
 {
     // Initialize member variables
-    setCaptureSize(in_capture_width, in_capture_height);
-    setScreenSize(in_screen_width, in_screen_height);
-    setZoom(zoom);
+    capture_width = in_capture_width;
+    capture_height = in_capture_height;
+    screen_width = in_screen_width;
+    screen_height = in_screen_height;
+    zoom = in_zoom;
     setFlowErosionSize(flow_erosion_size);
+    computeRoi();
     initGrabber();
     // Contourfinder setup
     contourfinder_high.setSimplify(true);
@@ -91,6 +94,7 @@ void FlowCam::setCaptureSize(int in_capture_width, int in_capture_height){
     capture_height = in_capture_height;
     computeRoi();
     unlock();
+    initGrabber();
 }
 
 void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
@@ -144,11 +148,11 @@ void FlowCam::initGrabber(){
         if (camera.listDevices().size() > 1) {
             camera.setDeviceID(1);
         }
-        camera.setUseTexture(false);
+        camera.setUseTexture(true);
         camera.initGrabber(capture_width, capture_height);
         ofLogNotice("FlowCam") << "Camera inited at " << camera.getWidth() << "x" << camera.getHeight();
     } else {
-        ofLogVerbose("FlowCam") << "Camera already inited";
+        ofLogWarning("FlowCam") << "Camera already inited";
     }
     unlock();
 }
@@ -171,7 +175,7 @@ void FlowCam::update(){
             updateFlow();
             has_data = true;
             //        ofLogNotice("FlowCam") << round(1/since_last_capture) << " captures/s";
-            since_last_capture = 0;
+            last_capture = ofGetElapsedTimef();
             unlock();
         }
     }
@@ -195,6 +199,7 @@ void FlowCam::updateFrame()
 
 void FlowCam::updateFlow()
 {
+    float since_last_capture = ofGetElapsedTimef() - last_capture;
     opticalflow.calcOpticalFlow(frame_gray);
     flow = opticalflow.getFlow();
     std::swap(flow_low_prev, flow_low); // TODO: Remove this whole flow_low_prev thing?

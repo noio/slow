@@ -6,12 +6,12 @@
 <Widget>
     <Kind>8</Kind>
     <Name>TIMEOUT</Name>
-    <Value>35991.808593750</Value>
+    <Value>35997.402343750</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -26,12 +26,12 @@
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_X</Name>
-    <Value>100</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_Y</Name>
-    <Value>100</Value>
+    <Value>18</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
@@ -61,6 +61,31 @@
     <LowValue>0.106770828</LowValue>
 </Widget>
 <Widget>
+    <Kind>4</Kind>
+    <Name>PUSH_FORCE</Name>
+    <Value>68.316833496</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>LOCAL_AREA</Name>
+    <Value>100.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>CORE_AREA</Name>
+    <Value>40.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX_LOCAL_FLOW</Name>
+    <Value>0.034653466</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX_CORE_FLOW</Name>
+    <Value>0.242574260</Value>
+</Widget>
+<Widget>
     <Kind>42</Kind>
     <Name>HUE</Name>
     <Value>200</Value>
@@ -69,4 +94,9 @@
     <Kind>42</Kind>
     <Name>HUE_RANGE</Name>
     <Value>69</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>ALPHA</Name>
+    <Value>1.000000000</Value>
 </Widget>

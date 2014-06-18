@@ -30,11 +30,11 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     trail_texture = toCv(trail_texture_im).clone();
     // Fill the alpha timeline
     vector<ofPoint> alphas;
-    alphas.push_back(ofPoint(0.0, 16));
-    alphas.push_back(ofPoint(0.48, 16));
-    alphas.push_back(ofPoint(0.5, 64));
-    alphas.push_back(ofPoint(0.52, 4));
-    alphas.push_back(ofPoint(2.0, 0.0));
+    alphas.push_back(ofPoint(0.0, 16 * trail_alpha_mtp));
+    alphas.push_back(ofPoint(0.48, 16 * trail_alpha_mtp));
+    alphas.push_back(ofPoint(0.5, 64 * trail_alpha_mtp));
+    alphas.push_back(ofPoint(0.52, 4 * trail_alpha_mtp));
+    alphas.push_back(ofPoint(2.0, 0.0 * trail_alpha_mtp));
     double t = 0;
     trail_alpha_timeline.clear();
 

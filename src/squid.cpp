@@ -241,8 +241,8 @@ void Squid::updateFlow()
 //    local_area_rect
     float local_flow_sum = cv::sum(flow_high(local_area_rect))[0] / local_area_rect.area() / 255.0;
     float core_flow_sum = cv::sum(flow_high(core_area_rect))[0] / core_area_rect.area() / 255.0;
-    local_flow = 0.8 * local_flow + 0.2 * ofMap(local_flow_sum, local_flow_min, local_flow_max, 0, 1);
-    core_flow = 0.8 * core_flow + 0.2 * ofMap(core_flow_sum, local_flow_min, local_flow_max, 0, 1);
+    local_flow = 0.8 * local_flow + 0.2 * local_flow_sum / local_flow_max;
+    core_flow = 0.6 * core_flow + 0.4 * core_flow_sum / core_flow_max;
 }
 
 void Squid::updateFinder()
@@ -872,10 +872,16 @@ void Squid::drawDebug()
     ofRect(core_area);
     // Local flow meter
     ofNoFill();
-    ofSetColor(ofColor::red);
+    ofSetColor(ofColor::green);
     ofRect(pos_game + ofPoint(0, 20), body_radius * scale, 12);
     ofFill();
     ofRect(pos_game + ofPoint(0, 20), ofClamp(local_flow, 0, 1) * body_radius * scale, 12);
+    ofNoFill();
+    ofSetColor(ofColor::red);
+    ofRect(pos_game + ofPoint(0, 40), body_radius * scale, 12);
+    ofFill();
+    ofRect(pos_game + ofPoint(0, 40), ofClamp(core_flow, 0, 1) * body_radius * scale, 12);
+
     // Draw face search window
     ofRectangle face_roi_rect = toOf(face_roi);
     face_roi_rect.scale(scale_frame_to_game);

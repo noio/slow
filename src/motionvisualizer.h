@@ -37,6 +37,7 @@ public:
     
     int trail_hue = 200;
     int trail_hue_range = 64;
+    float trail_alpha_mtp = 1.0;
     
 private:
     void updateFullTrails(double delta_t);

@@ -81,11 +81,11 @@ public:
 
     // PUBLIC SETTINGS
     
-    double push_force = 40.0;
-    double panic_force_multiplier = 2.0;
-    double tentacle_prep_force = 160.0f;
-    double tentacle_push_force = 80.0f;
-    double turn_torque = 60.0;
+    float push_force = 40.0;
+    float panic_force_multiplier = 2.0;
+    float tentacle_prep_force = 160.0f;
+    float tentacle_push_force = 80.0f;
+    float turn_torque = 60.0;
 
     double motion_time_prep1 = 0.15;
     double motion_time_prep2 = 0.1;
@@ -99,7 +99,6 @@ public:
     
     double min_velocity = 150;
     float max_goal_distance = 30;
-    double max_face_distance = 10;
     float goal_padding = 1.0; // relative to body_radius * scale
     
     int face_detection_threshold = 3;
@@ -109,8 +108,8 @@ public:
     float local_area_radius = 100;
     float core_area_radius = 40;
     
-    float local_flow_min = 0.01f;
     float local_flow_max = 0.02f;
+    float core_flow_max = 0.01f;
     
     double face_search_window = 0.2;
     double face_size_min = 0.6;  // This is relative to the full frame, not the face search window

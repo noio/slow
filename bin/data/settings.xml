@@ -1,4 +1,14 @@
 <Widget>
+    <Kind>12</Kind>
+    <Name>DEFAULT_TIMEOUT</Name>
+    <Value>36000</Value>
+</Widget>
+<Widget>
+    <Kind>8</Kind>
+    <Name>TIMEOUT</Name>
+    <Value>35991.808593750</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
     <Value>0</Value>
@@ -12,6 +22,16 @@
     <Kind>42</Kind>
     <Name>FLIP</Name>
     <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>12</Kind>
+    <Name>WINDOW_X</Name>
+    <Value>100</Value>
+</Widget>
+<Widget>
+    <Kind>12</Kind>
+    <Name>WINDOW_Y</Name>
+    <Value>100</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>

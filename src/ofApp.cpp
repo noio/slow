@@ -25,7 +25,7 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
-    ofSetLogLevel(OF_LOG_VERBOSE);
+    ofSetLogLevel(OF_LOG_NOTICE);
     // Flow camera
     if (flowcam.isThreadRunning()){
         flowcam.waitForThread(true);
@@ -50,21 +50,41 @@ void ofApp::setup()
 
 void ofApp::setupGUI()
 {
+    int w = 210;
     // Set up control panel
     gui->removeWidgets();
+    gui->setGlobalCanvasWidth(w);
     gui->setTheme(OFX_UI_THEME_MINBLACK);
     gui->setScrollAreaHeight(ofGetHeight());
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
     gui->addLabelButton("RESET", false);
+    defaultTimeoutTextInput = gui->addTextInput("DEFAULT_TIMEOUT", "3600");
+    defaultTimeoutTextInput->setAutoClear(false);
+    gui->addNumberDialer("TIMEOUT", 0, 36000, &timeout, 0);
     // ----------
-    gui->addLabel("SCREEN & CAMERA");
+    gui->addLabel("CAMERA");
     gui->addToggle("DEBUG", &draw_debug);
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
     gui->addIntSlider("FLIP", -1, 2, 1);
+    gui->setGlobalCanvasWidth(w/2);
+	gui->addLabelButton("720p", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addLabelButton("1080p", false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    gui->setGlobalCanvasWidth(w);
+    // -----------
+    gui->addLabel("RESOLUTION");
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
-	gui->addLabelButton("720p", false);
-    gui->addLabelButton("1080p", false);
+    gui->addLabel("WINDOW POSITION");
+    gui->setGlobalCanvasWidth(w/2);
+    windowXTextInput = gui->addTextInput("WINDOW_X", "0");
+    windowXTextInput->setAutoClear(false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    windowYTextInput = gui->addTextInput("WINDOW_Y", "0");
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    windowYTextInput->setAutoClear(false);
+    gui->setGlobalCanvasWidth(w);
     // ----------
     gui->addLabel("OPTICAL FLOW");
     gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
@@ -81,12 +101,16 @@ void ofApp::setupGUI()
     // Size
     ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
     // Position the GUI
+    gui->setWidth(w);
     gui->setPosition(ofGetWidth() - gui->getSRect()->width, 0);
     gui->setHeight(ofGetHeight());
     gui->setScrollAreaHeight(ofGetHeight());
     gui->autoSizeToFitWidgets();
     // Load settings
     gui->loadSettings("settings.xml");
+    // Set some other things
+    setTimeoutFromGUI();
+    setWindowPositionFromGUI();
 }
 
 void ofApp::setupPhysics()
@@ -126,6 +150,11 @@ void ofApp::update()
     }
 
     delta_t = ofGetLastFrameTime();
+    timeout -= delta_t;
+    if (timeout < 0){
+        ofLogNotice("ofApp") << "timeout after ";
+        std::exit(0);
+    }
     flowcam.update();
     squid.update(delta_t);
     highscores.update(delta_t);
@@ -278,4 +307,40 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "FLIP"){
         flowcam.setFlip(((ofxUIIntSlider*) e.widget)->getScaledValue());
     }
+    // Text fields
+    if(name == "DEFAULT_TIMEOUT")
+    {
+        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER || ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
+        {
+            setTimeoutFromGUI();
+        }
+    }
+    
+    if(name == "WINDOW_X")
+    {
+        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER || ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
+        {
+            setWindowPositionFromGUI();
+        }
+    }
+    
+    if(name == "WINDOW_Y")
+    {
+        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER || ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
+        {
+            setWindowPositionFromGUI();
+        }
+    }
+
+}
+
+void ofApp::setTimeoutFromGUI(){
+    timeout = ofToInt(defaultTimeoutTextInput->getTextString());
+}
+
+void ofApp::setWindowPositionFromGUI(){
+    ofSetWindowPosition(ofToInt(windowXTextInput->getTextString()), ofToInt(windowYTextInput->getTextString()));
 }

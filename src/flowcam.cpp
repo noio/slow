@@ -150,16 +150,17 @@ void FlowCam::loadLUT(string path)
 
 void FlowCam::initGrabber(){
     lock();
-    if (!camera.isInitialized()){
-        if (camera.listDevices().size() > 1) {
-            camera.setDeviceID(1);
-        }
-        camera.setUseTexture(true);
-        camera.initGrabber(capture_width, capture_height);
-        ofLogNotice("FlowCam") << "Camera inited at " << camera.getWidth() << "x" << camera.getHeight();
-    } else {
+    if (camera.isInitialized()){
         ofLogWarning("FlowCam") << "Camera already inited";
+        camera.close();
     }
+    
+    if (camera.listDevices().size() > 1) {
+        camera.setDeviceID(1);
+    }
+    camera.setUseTexture(true);
+    camera.initGrabber(capture_width, capture_height);
+    
     unlock();
 }
 

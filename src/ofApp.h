@@ -42,6 +42,9 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     void guiEvent(ofxUIEventArgs& e);
+    
+    void setTimeoutFromGUI();
+    void setWindowPositionFromGUI();
 
     // Components
     ofPtr<b2World> phys_world;
@@ -53,8 +56,12 @@ public:
     Instructions instructions;
     
     ofPtr<ofxUIScrollableCanvas> gui;
+    ofxUITextInput* defaultTimeoutTextInput;
+    ofxUITextInput* windowXTextInput;
+    ofxUITextInput* windowYTextInput;
     
     double delta_t;
+    float timeout = 36000;
     
     bool need_setup = false;
     

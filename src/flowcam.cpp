@@ -5,17 +5,12 @@ using namespace ofxCv;
 
 void FlowCam::setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom)
 {
-    // Initialize the camera first, before we do other stuff that depends on having a frame
-    // Use an external camera if one is connected
-    if (camera.listDevices().size() > 1) {
-        camera.setDeviceID(1);
-    }
-
     // Initialize member variables
     setCaptureSize(in_capture_width, in_capture_height);
     setScreenSize(in_screen_width, in_screen_height);
     setZoom(zoom);
     setFlowErosionSize(flow_erosion_size);
+    initGrabber();
     // Contourfinder setup
     contourfinder_high.setSimplify(true);
     contourfinder_high.setMinArea(80);
@@ -40,24 +35,10 @@ void FlowCam::reset()
     has_data = false;
 }
 
-void FlowCam::update(double delta_t)
-{
-    since_last_capture += delta_t;
-
-    camera.update();
-
-    if (camera.isFrameNew()) {
-        frame_full = toCv(camera);
-        updateFrame();
-        updateFlow();
-        has_data = true;
-        ofLogNotice("FlowCam") << round(1/since_last_capture) << " captures/s";
-        since_last_capture = 0;
-    }
-}
-
 void FlowCam::draw(float x, float y, float width, float height){
+    lock();
     frame_screen_im.draw(x, y, width, height);
+    unlock();
 }
 
 void FlowCam::drawDebug()
@@ -66,6 +47,7 @@ void FlowCam::drawDebug()
     // Draw the optical flow maps
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofSetColor(224, 160, 58, 128);
+    lock();
     ofxCv::drawMat(flow_low, 0, 0, ofGetWidth(), ofGetHeight());
     ofDisableBlendMode();
     ofPushMatrix();
@@ -76,15 +58,7 @@ void FlowCam::drawDebug()
     for (int i = 0; i < contourfinder_high.size(); i ++) {
         contourfinder_high.getPolyline(i).draw();
     }
-
-    ofSetColor(ofColor::green);
-
-    for (int i = 0; i < contourfinder_low.size(); i ++) {
-        cv::Rect r = contourfinder_low.getTracker().getSmoothed(contourfinder_low.getTracker().getLabelFromIndex(i));
-//        contourfinder_low.getPolyline(i).getResampledBySpacing(30).draw();
-        ofRect(toOf(r));
-//        cv::RotatedRect a = contourfinder_low.getMinAreaRect(i);
-    }
+    unlock();
 
     ofPopMatrix();
     ofPopStyle();
@@ -94,44 +68,46 @@ void FlowCam::drawDebug()
 void FlowCam::setScreenSize(int in_screen_width, int in_screen_height)
 {
     if (screen_width == in_screen_width && screen_height == in_screen_height) return;
-
+    lock();
     screen_width = in_screen_width;
     screen_height = in_screen_height;
     computeRoi();
+    unlock();
 }
 
 void FlowCam::setZoom(float in_zoom)
 {
     if (zoom == in_zoom) return;
-
+    lock();
     zoom = in_zoom;
     computeRoi();
+    unlock();
 }
 
 void FlowCam::setCaptureSize(int in_capture_width, int in_capture_height){
     if (capture_width == in_capture_width && capture_height == in_capture_height) return;
+    lock();
     capture_width = in_capture_width;
     capture_height = in_capture_height;
-    // Camera and video grabber
-    if (camera.isInitialized()) {
-        camera.close();
-    }
-    camera.initGrabber(in_capture_width, in_capture_height);
-    ofLogNotice("FlowCam") << "Camera set to " << camera.getWidth() << "x" << camera.getHeight();
     computeRoi();
+    unlock();
 }
 
 void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
 {
+    lock();
     flow_erosion_size = in_flow_erosion_size;
     open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
                                             cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
                                             cv::Point(flow_erosion_size, flow_erosion_size));
+    unlock();
 }
 
 void FlowCam::setFlowThreshold(float threshold_low, float threshold_high){
+    lock();
     flow_threshold_low = threshold_low;
     flow_threshold_high = threshold_high;
+    unlock();
 }
 
 
@@ -162,6 +138,44 @@ void FlowCam::loadLUT(string path)
 
 ////////// PRIVATE METHODS //////////
 
+void FlowCam::initGrabber(){
+    lock();
+    if (!camera.isInitialized()){
+        if (camera.listDevices().size() > 1) {
+            camera.setDeviceID(1);
+        }
+        camera.setUseTexture(false);
+        camera.initGrabber(capture_width, capture_height);
+        ofLogNotice("FlowCam") << "Camera inited at " << camera.getWidth() << "x" << camera.getHeight();
+    } else {
+        ofLogVerbose("FlowCam") << "Camera already inited";
+    }
+    unlock();
+}
+
+void FlowCam::threadedFunction()
+{
+    while (isThreadRunning()){
+        update();
+    }
+}
+
+void FlowCam::update(){
+    if (camera.isInitialized()){
+        camera.update();
+        
+        if (camera.isFrameNew()) {
+            lock();
+            frame_full = toCv(camera);
+            updateFrame();
+            updateFlow();
+            has_data = true;
+            //        ofLogNotice("FlowCam") << round(1/since_last_capture) << " captures/s";
+            since_last_capture = 0;
+            unlock();
+        }
+    }
+}
 
 
 void FlowCam::updateFrame()

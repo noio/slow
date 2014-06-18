@@ -25,11 +25,13 @@ void ofApp::setup()
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
-    ofSetLogLevel(OF_LOG_NOTICE);
-    // Load textures
-    logo_im.loadImage("assets/logo.png");
+    ofSetLogLevel(OF_LOG_VERBOSE);
     // Flow camera
+    if (flowcam.isThreadRunning()){
+        flowcam.waitForThread(true);
+    }
     flowcam.setup(capture_width, capture_height, ofGetWidth(), ofGetHeight(), 1.0);
+//    flowcam.startThread(true,true);
     // Visualizer
     visualizer.setup(&flowcam);
     // Highscore table
@@ -124,7 +126,7 @@ void ofApp::update()
     }
 
     delta_t = ofGetLastFrameTime();
-    flowcam.update(delta_t);
+    flowcam.update();
     squid.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);

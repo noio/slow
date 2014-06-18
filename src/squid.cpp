@@ -47,6 +47,17 @@ void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisua
     has_face = false;
 }
 
+Squid::~Squid() {
+    if (body != NULL) {
+        body->GetWorld()->DestroyBody(body);
+        
+        for (int i = 0; i < tentacles.size(); i ++) {
+            tentacles[i]->GetWorld()->DestroyBody(tentacles[i]);
+        }
+    }
+    objectfinder.waitForThread();
+}
+
 
 void Squid::setupPhysics()
 {

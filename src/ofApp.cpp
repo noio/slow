@@ -45,6 +45,7 @@ void ofApp::setup()
     // Gui Setup
     setupGUI();
     need_setup = false;
+//    flowcam.startThread(true, false);
 }
 
 void ofApp::setupGUI()
@@ -59,6 +60,7 @@ void ofApp::setupGUI()
     gui->addLabel("SCREEN & CAMERA");
     gui->addToggle("DEBUG", &draw_debug);
     gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
+    gui->addIntSlider("FLIP", -1, 2, 1);
     gui->addLabelButton("1080x480", false);
     gui->addLabelButton("768x288", false);
 	gui->addLabelButton("720p", false);
@@ -271,5 +273,9 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
     if (name == "768x288") {
         ofSetWindowShape(768, 288);
         need_setup = true;
+    }
+    
+    if (name == "FLIP"){
+        flowcam.setFlip(((ofxUIIntSlider*) e.widget)->getScaledValue());
     }
 }

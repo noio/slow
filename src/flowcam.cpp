@@ -114,6 +114,12 @@ void FlowCam::setFlowThreshold(float threshold_low, float threshold_high){
     unlock();
 }
 
+void FlowCam::setFlip(int in_flip){
+    lock();
+    flip = in_flip;
+    unlock();
+}
+
 
 void FlowCam::loadLUT(string path)
 {
@@ -184,7 +190,12 @@ void FlowCam::update(){
 
 void FlowCam::updateFrame()
 {
-    cv::flip(frame_full(capture_roi), frame, 1);
+    if (flip < 2){
+        cv::flip(frame_full(capture_roi), frame, flip);
+    } else {
+        frame = frame_full(capture_roi);
+    }
+
     cv::resize(frame, frame_screen, cv::Size(screen_width, screen_height), 0, 0, cv::INTER_NEAREST);
     toOf(frame_screen, frame_screen_im);
     cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);

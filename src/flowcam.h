@@ -38,6 +38,7 @@ public:
     void setScreenSize(int in_screen_width, int in_screen_height);
     void setCaptureSize(int in_capture_width, int in_capture_height);
     void setZoom(float in_zoom);
+    void setFlip(int flip);
     bool hasData(){return has_data;};
     
     const int pyrdown_steps = 3;
@@ -70,6 +71,7 @@ private:
     
     int capture_width, capture_height, screen_width, screen_height, flow_width, flow_height;
     float zoom = 1.0;
+    int flip = 1;
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
     int flow_erosion_size = 5;

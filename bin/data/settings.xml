@@ -9,6 +9,11 @@
     <Value>1.000000000</Value>
 </Widget>
 <Widget>
+    <Kind>42</Kind>
+    <Name>FLIP</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
     <HighValue>0.890625000</HighValue>

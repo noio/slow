@@ -121,6 +121,11 @@ void ofApp::setupGUI()
         // Size
         ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
         gui->loadSettings("settings.xml");
+        gui->setVisible(false);
+        // Set some other things
+        setTimeoutFromGUI();
+        setWindowPositionFromGUI();
+        setWindowSizeFromGUI();
         gui_initialized = true;
     }
     // Position the GUI
@@ -131,10 +136,6 @@ void ofApp::setupGUI()
     gui->autoSizeToFitWidgets();
     // Load settings
 
-    gui->setVisible(false);
-    // Set some other things
-    setTimeoutFromGUI();
-    setWindowPositionFromGUI();
 }
 
 void ofApp::setupPhysics()
@@ -399,6 +400,7 @@ void ofApp::setWindowPositionFromGUI(){
 
 void ofApp::setWindowSizeFromGUI(){
     ofSetWindowShape(ofToInt(windowWTextInput->getTextString()), ofToInt(windowHTextInput->getTextString()));
+    flowcam.setScreenSize(ofGetWidth(), ofGetHeight());
 }
 
 void ofApp::unfocusAllTextInputs(ofxUITextInput* except){

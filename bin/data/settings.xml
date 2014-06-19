@@ -6,12 +6,12 @@
 <Widget>
     <Kind>8</Kind>
     <Name>TIMEOUT</Name>
-    <Value>35996.109375000</Value>
+    <Value>35996.429687500</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>DEBUG</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -26,12 +26,12 @@
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_W</Name>
-    <Value>768</Value>
+    <Value>940</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_H</Name>
-    <Value>288</Value>
+    <Value>600</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>

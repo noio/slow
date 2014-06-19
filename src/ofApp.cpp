@@ -42,10 +42,10 @@ void ofApp::setup()
     squid.setup(phys_world, &flowcam, &visualizer, &highscores);
     // Instructions
     instructions.setup(&squid);
-    // Gui Setup
-    setupGUI();
     need_setup = false;
 //    flowcam.startThread(true, false);
+    // Gui Setup
+    setupGUI();
 }
 
 void ofApp::setupGUI()
@@ -127,6 +127,7 @@ void ofApp::setupGUI()
         setWindowPositionFromGUI();
         setWindowSizeFromGUI();
         gui_initialized = true;
+        need_setup = true;
     }
     // Position the GUI
     gui->setWidth(kGUIWidth);

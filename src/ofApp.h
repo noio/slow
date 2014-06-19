@@ -45,6 +45,8 @@ public:
     
     void setTimeoutFromGUI();
     void setWindowPositionFromGUI();
+    void setWindowSizeFromGUI();
+    void unfocusAllTextInputs(ofxUITextInput * except);
 
     // Components
     ofPtr<b2World> phys_world;
@@ -56,9 +58,14 @@ public:
     Instructions instructions;
     
     ofPtr<ofxUIScrollableCanvas> gui;
+    bool gui_initialized = false;
     ofxUITextInput* defaultTimeoutTextInput;
     ofxUITextInput* windowXTextInput;
     ofxUITextInput* windowYTextInput;
+    ofxUITextInput* windowWTextInput;
+    ofxUITextInput* windowHTextInput;
+    vector<ofxUITextInput*> textInputs;
+
     
     double delta_t;
     float timeout = 36000;
@@ -67,6 +74,6 @@ public:
     
     // Settings
     bool draw_debug = false;
-    int capture_width = 1920;
-    int capture_height = 1080;
+    int capture_width = 1280;
+    int capture_height = 720;
 };

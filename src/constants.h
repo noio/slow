@@ -19,6 +19,8 @@ const double kPhysicsScale = 30.0;
 
 const double kFrameRate = 32.0;
 
+const int kGUIWidth = 220;
+
 //const int kScreenWidth = 640;
 //const int kScreenHeight = 480
 

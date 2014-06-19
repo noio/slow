@@ -42,7 +42,6 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
         double amt = ofMap(t, alphas[0].x, alphas[1].x, 0, 1);
         trail_alpha_timeline.push_back( ofLerp(alphas[0].y, alphas[1].y, amt) );
         t += trail_alpha_resolution;
-        cout << t;
 
         if (t >= alphas[1].x) {
             alphas.erase(alphas.begin());

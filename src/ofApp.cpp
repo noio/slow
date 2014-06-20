@@ -203,7 +203,8 @@ void ofApp::draw()
 
     if (draw_debug) {
         flowcam.drawDebug();
-        ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(),0) + "fps (r98)", kLabelOffset);
+        ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(),0) + "fps (r99)", kLabelOffset);
+        ofDrawBitmapStringHighlight("[d]ebug view \n[g]ui \n[h]elp \n[ ] crash \n[i] sound on \n[o] sound off \n[r]eset", kLabelOffset + ofPoint(0,20));
     }
 }
 
@@ -240,6 +241,9 @@ void ofApp::keyPressed(int key)
         case 'o':
             sounds.setSoundsOn(false);
             break;
+            
+        case 'r':
+            need_setup = true;
 
         default:
             break;

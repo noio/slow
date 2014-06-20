@@ -6,28 +6,33 @@ void AmbientPlayer::setup(){
 }
 
 void AmbientPlayer::update(double delta_t){
+    if (!sounds_on) return;
     updateAmbientSound(delta_t);
 }
 
 void AmbientPlayer::playScared(){
+    if (!sounds_on) return;
     playRandomSound(scared_sounds);
-
 }
 
 void AmbientPlayer::playGrab(){
+    if (!sounds_on) return;
     grab_sound.play();
 }
 
 void AmbientPlayer::stopGrab(){
+    if (!sounds_on) return;
     grab_sound.stop();
 }
 
 void AmbientPlayer::playFace(){
+    if (!sounds_on) return;
     face_sound.play();
 }
 
 void AmbientPlayer::setSoundsOn(bool in_sounds_on){
     sounds_on = in_sounds_on;
+    ofLogNotice("AmbientPlayer") << "Sounds: " << (sounds_on ? "on" : "off");
 }
 
 void AmbientPlayer::bumpActivity(){

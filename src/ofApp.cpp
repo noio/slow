@@ -113,8 +113,8 @@ void ofApp::setupGUI()
         gui->addSlider("PUSH_FORCE", 20.0f, 100.0f, &squid.push_force);
         gui->addSlider("LOCAL_AREA", 80.0f, 200.0f, &squid.local_area_radius);
         gui->addSlider("CORE_AREA", 20.0f, 80.0f, &squid.core_area_radius);
-        gui->addSlider("MAX_LOCAL_FLOW", 0.0f, 1.0f, &squid.local_flow_max);
-        gui->addSlider("MAX_CORE_FLOW", 0.0, 1.0f, &squid.core_flow_max);
+        gui->addSlider("MAX_LOCAL_FLOW", .0f, .5f, &squid.local_flow_max);
+        gui->addSlider("MAX_CORE_FLOW", .0, .5f, &squid.core_flow_max);
         // ----------
         gui->addLabel("VISUALIZER");
         gui->addIntSlider("HUE", 0, 255, &visualizer.trail_hue);

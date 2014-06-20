@@ -34,12 +34,14 @@ void ofApp::setup()
 //    flowcam.startThread(true,true);
     // Visualizer
     visualizer.setup(&flowcam);
+    // Ambient Player
+    sounds.setup();
     // Highscore table
     highscores.setup(ofGetWidth() / 10, &visualizer);
     // Set up Box2d
     setupPhysics();
     // Squid setup
-    squid.setup(phys_world, &flowcam, &visualizer, &highscores);
+    squid.setup(phys_world, &flowcam, &visualizer, &sounds, &highscores);
     // Instructions
     instructions.setup(&squid);
     need_setup = false;

@@ -6,6 +6,7 @@
 #include "utilities.h"
 #include "flowcam.h"
 #include "motionvisualizer.h"
+#include "ambientplayer.h"
 #include "framerecord.h"
 #include "highscoretable.h"
 #include "objectfinderthreaded.h"
@@ -60,7 +61,7 @@ public:
 
     
     // METHODS
-    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, HighscoreTable* in_highscores);
+    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
     void update(double delta_t);
     void draw(bool draw_debug);
     
@@ -198,6 +199,7 @@ private:
     ofPtr<FrameRecord> face_anim;
     FlowCam* flowcam;
     MotionVisualizer *visualizer;
+    AmbientPlayer *sounds;
     HighscoreTable* highscores;
     
     BehaviorState behavior_state = IDLE;

@@ -6,7 +6,7 @@
 <Widget>
     <Kind>8</Kind>
     <Name>TIMEOUT</Name>
-    <Value>35996.429687500</Value>
+    <Value>35994.980468750</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -26,28 +26,28 @@
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_W</Name>
-    <Value>940</Value>
+    <Value>1061</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_H</Name>
-    <Value>600</Value>
+    <Value>411</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_X</Name>
-    <Value>110</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_Y</Name>
-    <Value>180</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
-    <HighValue>0.950495005</HighValue>
-    <LowValue>0.312500000</LowValue>
+    <HighValue>1.457547188</HighValue>
+    <LowValue>0.509433985</LowValue>
 </Widget>
 <Widget>
     <Kind>42</Kind>

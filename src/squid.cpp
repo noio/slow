@@ -12,11 +12,12 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, HighscoreTable* in_highscores)
+void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
 {
     phys_world = in_phys_world;
     flowcam = in_flowcam;
     visualizer = in_visualizer;
+    sounds = in_sounds;
     highscores = in_highscores;
     squish = 1.0f;
     colors_prev = kPanicColors;
@@ -347,11 +348,13 @@ void Squid::updateBehaviorState(double delta_t)
         case GRABBED:
             if (time_in_behavior_state > grab_time) {
                 search_for_face = false;
+                sounds->stopGrab();
                 switchBehaviorState(PANIC);
                 break;
             }
 
             if (sees_face) {
+                sounds->stopGrab();
                 switchBehaviorState(FACE);
                 break;
             }
@@ -454,6 +457,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case PANIC:
+            sounds->playScared();
             switchColors(kPanicColors, 0.2);
             time_last_active = ofGetElapsedTimef();
             switchMotionState(STILL);
@@ -461,6 +465,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case FACE:
+            sounds->playFace();
             switchColors(kGrabColors, 0.2);
             search_for_face = true;
             time_last_face = ofGetElapsedTimef();
@@ -470,6 +475,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             break;
 
         case GRABBED:
+            sounds->playGrab();
             switchColors(kGrabColors, 0.2);
             search_for_face = true;
             switchMotionState(LOCK);
@@ -877,7 +883,7 @@ void Squid::drawDebug()
     ofFill();
     ofRect(pos_game + ofPoint(0, 20), ofClamp(local_flow, 0, 1) * body_radius * scale, 12);
     ofNoFill();
-    ofSetColor(ofColor::red);
+    ofSetColor(ofColor::green);
     ofRect(pos_game + ofPoint(0, 40), body_radius * scale, 12);
     ofFill();
     ofRect(pos_game + ofPoint(0, 40), ofClamp(core_flow, 0, 1) * body_radius * scale, 12);

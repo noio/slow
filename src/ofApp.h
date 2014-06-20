@@ -53,6 +53,7 @@ public:
     b2Body* world_bounds = NULL;
     FlowCam flowcam;
     MotionVisualizer visualizer;
+    AmbientPlayer sounds;
     Squid squid;
     HighscoreTable highscores;
     Instructions instructions;

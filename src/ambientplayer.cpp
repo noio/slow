@@ -60,7 +60,6 @@ void AmbientPlayer::updateAmbientSound(double delta_t){
 
 ofSoundPlayer* AmbientPlayer::playRandomSound(vector<ofSoundPlayer>& sounds){
     int idx = ofRandomuf() * sounds.size();
-    ofLogNotice("AmbientPlayer") << "sound: " << idx;
     sounds[idx].play();
     return &sounds[idx];
 }

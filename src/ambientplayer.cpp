@@ -5,16 +5,13 @@ void AmbientPlayer::setup(){
     loadSounds();
 }
 
-void update(double delta_t){
-    float cur = ofGetElapsedTimef();
-//    if (cur - time_last_ambient > ambient_cooldown) {
-//        
-//    }
-    
+void AmbientPlayer::update(double delta_t){
+    updateAmbientSound(delta_t);
 }
 
 void AmbientPlayer::playScared(){
-    scared_sounds[ofRandomuf() * scared_sounds.size()].play();
+    playRandomSound(scared_sounds);
+
 }
 
 void AmbientPlayer::playGrab(){
@@ -33,11 +30,46 @@ void AmbientPlayer::setSoundsOn(bool in_sounds_on){
     sounds_on = in_sounds_on;
 }
 
+void AmbientPlayer::bumpActivity(){
+    last_activity = ofGetElapsedTimef();
+}
+
+void AmbientPlayer::updateAmbientSound(double delta_t){
+    float cur = ofGetElapsedTimef();
+    time_to_next_ambient -= delta_t;
+    if (time_to_next_ambient < 0){
+        if (cur - last_activity > 120){
+            if (active){
+                active = false;
+                siren_low_sound.play();
+            } else {
+                playRandomSound(ambient_sounds);
+            }
+            time_to_next_ambient = ofRandom(ambient_cooldown_inactive_min, ambient_cooldown_inactive_max);
+        } else {
+            if (!active){
+                active = true;
+                siren_high_sound.play();
+            } else {
+                playRandomSound(ambient_sounds);
+            }
+            time_to_next_ambient = ofRandom(ambient_cooldown_active_min, ambient_cooldown_active_max);
+        }
+    }
+}
+
+ofSoundPlayer* AmbientPlayer::playRandomSound(vector<ofSoundPlayer>& sounds){
+    int idx = ofRandomuf() * sounds.size();
+    ofLogNotice("AmbientPlayer") << "sound: " << idx;
+    sounds[idx].play();
+    return &sounds[idx];
+}
+
 void AmbientPlayer::loadSounds(){
     grab_sound.loadSound("sound/fx/grab.mp3");
     face_sound.loadSound("sound/fx/pop.mp3");
     siren_high_sound.loadSound("sound/fx/slow-hoog.mp3");
-    siren_low_sound.loadSound("sound/fx/slow_laag.mp3");
+    siren_low_sound.loadSound("sound/fx/slow-laag.mp3");
     
     vector<string> scared_sounds_filenames;
     scared_sounds_filenames.push_back("sound/notes/1 scharry.mp3");
@@ -97,8 +129,9 @@ void AmbientPlayer::loadSounds(){
 }
 
 void AmbientPlayer::loadSoundPlayers(const vector<string>& filenames, vector<ofSoundPlayer>& sounds){
-    sounds.resize(filenames.size());
+    sounds.clear();
     for (int i = 0; i < filenames.size(); i ++){
+        sounds.push_back(ofSoundPlayer());
         sounds[i].loadSound(filenames[i]);
     }
 }

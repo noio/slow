@@ -473,10 +473,11 @@ void Squid::switchBehaviorState(BehaviorState next)
             time_last_face = ofGetElapsedTimef();
             switchMotionState(LOCK);
             clearFace();
-            visualizer->sparkle(pos_game, body_radius);
+            visualizer->sparkle(found_face.getCenter(), body_radius);
             break;
 
         case GRABBED:
+            sounds->bumpActivity();
             sounds->playGrab();
             switchColors(kGrabColors, 0.2);
             search_for_face = true;

@@ -187,6 +187,7 @@ void ofApp::update()
     squid.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);
+    sounds.update(delta_t);
     instructions.update(delta_t);
     phys_world->Step(delta_t, 6, 2);
 }
@@ -230,6 +231,14 @@ void ofApp::keyPressed(int key)
 
         case ' ':
             ofSleepMillis(20000);
+            break;
+            
+        case 'i':
+            sounds.setSoundsOn(true);
+            break;
+            
+        case 'o':
+            sounds.setSoundsOn(false);
             break;
 
         default:

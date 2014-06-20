@@ -19,7 +19,11 @@ public:
     void playFace();
     void playScared();
     
+    void bumpActivity();
+    
 private:
+    void updateAmbientSound(double delta_t);
+    ofSoundPlayer* playRandomSound(vector<ofSoundPlayer>& sounds);
     void loadSounds();
     void loadSoundPlayers(const vector<string>& filenames, vector<ofSoundPlayer>& sounds);
 
@@ -30,9 +34,14 @@ private:
     
     bool sounds_on = true;
     
-    float time_next_ambient = 0.0;
-    float ambient_cooldown_min = 10.0;
-    float ambient_cooldown_max = 20.0;
+    double time_to_next_ambient = 0.0;
+    float last_activity = 0.0;
+    bool active = false;
+    
+    float ambient_cooldown_active_min = 10.0;
+    float ambient_cooldown_active_max = 15.0;
+    float ambient_cooldown_inactive_min = 15.0;
+    float ambient_cooldown_inactive_max = 30.0;
     
 };
 

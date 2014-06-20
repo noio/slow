@@ -338,6 +338,7 @@ void Squid::updateBehaviorState(double delta_t)
             if (time_in_behavior_state > face_pose_time) {
                 grabFace();
                 search_for_face = false;
+                sees_face = false;
                 switchBehaviorState(PANIC);
                 hintFadeOut();
                 break;
@@ -349,6 +350,7 @@ void Squid::updateBehaviorState(double delta_t)
         case GRABBED:
             if (time_in_behavior_state > grab_time) {
                 search_for_face = false;
+                sees_face = false;
                 sounds->stopGrab();
                 switchBehaviorState(PANIC);
                 hintFadeOut();

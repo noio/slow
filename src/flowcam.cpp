@@ -243,9 +243,15 @@ void FlowCam::updateFlow()
     cv::erode(flow_high, flow_high, open_kernel);
     cv::dilate(flow_high, flow_high, open_kernel);
     // Check for flow creep
-    if (cv::sum(flow_high)[0] / 255 / (float)(flow_high.cols * flow_high.rows) > 0.9){
-        ofLogNotice("FlowCam") << "flow creep detected; resetting";
-        reset();
+    global_flow = cv::sum(flow_high)[0] / 255 / (float)(flow_high.cols * flow_high.rows);
+    if (global_flow > 0.2f){
+        flow_creep_counter ++;
+        if (flow_creep_counter > 1000) {
+            ofLogNotice("FlowCam") << "flow creep detected; resetting";
+            reset();
+        }
+    } else {
+        flow_creep_counter = MAX(0, flow_creep_counter - 1);
     }
 //    flow_behind = flow_low_prev & (255 - flow_low);
 //    flow_new = flow_high & ( 255 - flow_high_prev);

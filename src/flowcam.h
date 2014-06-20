@@ -64,8 +64,9 @@ private:
     cv::Mat frame_full, frame, frame_gray, frame_screen;
     cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev; // flow_behind, flow_new;
 //    cv::Mat flow_hist;
-    
     ofImage frame_screen_im;
+    float global_flow;
+    int flow_creep_counter = 0;
     
     float last_capture;
     

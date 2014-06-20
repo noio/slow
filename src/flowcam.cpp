@@ -222,7 +222,7 @@ void FlowCam::updateFlow()
         flow = cv::Mat::zeros(frame_gray.rows, frame_gray.cols, CV_32FC2);
         flow_low_prev = cv::Mat::zeros(flow.rows, flow.cols, CV_8U);
         flow_high_prev = cv::Mat::zeros(flow.rows, flow.cols, CV_8U);
-        flow_hist = cv::Mat::zeros(flow.rows, flow.cols, CV_32FC1);
+//        flow_hist = cv::Mat::zeros(flow.rows, flow.cols, CV_32FC1);
     }
 
     std::vector<cv::Mat> xy(2);
@@ -242,11 +242,16 @@ void FlowCam::updateFlow()
     flow_high = magnitude > adj_flow_threshold_high; // & flow_low_prev > 0;
     cv::erode(flow_high, flow_high, open_kernel);
     cv::dilate(flow_high, flow_high, open_kernel);
-    flow_behind = flow_low_prev & (255 - flow_low);
-    flow_new = flow_high & ( 255 - flow_high_prev);
+    // Check for flow creep
+    if (cv::sum(flow_high)[0] / 255 / (float)(flow_high.cols * flow_high.rows) > 0.9){
+        ofLogNotice("FlowCam") << "flow creep detected; resetting";
+        reset();
+    }
+//    flow_behind = flow_low_prev & (255 - flow_low);
+//    flow_new = flow_high & ( 255 - flow_high_prev);
     // Update history image
-    cv::add(flow_hist, flow_behind, flow_hist, cv::noArray(), CV_32F);
-    flow_hist *= 0.9;
+//    cv::add(flow_hist, flow_behind, flow_hist, cv::noArray(), CV_32F);
+//    flow_hist *= 0.9;
     // Contourfinders
     contourfinder_low.findContours(flow_low);
     contourfinder_high.findContours(flow_high);

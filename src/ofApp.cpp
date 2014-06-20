@@ -203,7 +203,7 @@ void ofApp::draw()
 
     if (draw_debug) {
         flowcam.drawDebug();
-        ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()) + "fps", kLabelOffset);
+        ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(),0) + "fps (r98)", kLabelOffset);
     }
 }
 

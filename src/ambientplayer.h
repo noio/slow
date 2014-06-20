@@ -12,6 +12,8 @@ public:
     void setup();
     void update(double delta_t);
     
+    void setSoundsOn(bool in_sounds_on);
+    
     void playGrab();
     void stopGrab();
     void playFace();
@@ -25,6 +27,8 @@ private:
     vector<ofSoundPlayer> ambient_sounds;
     vector<ofSoundPlayer> scared_sounds;
     ofSoundPlayer* current_ambient_sound;
+    
+    bool sounds_on = true;
     
     float time_next_ambient = 0.0;
     float ambient_cooldown_min = 10.0;

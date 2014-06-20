@@ -339,6 +339,7 @@ void Squid::updateBehaviorState(double delta_t)
                 grabFace();
                 search_for_face = false;
                 switchBehaviorState(PANIC);
+                hintFadeOut();
                 break;
             }
 
@@ -350,6 +351,7 @@ void Squid::updateBehaviorState(double delta_t)
                 search_for_face = false;
                 sounds->stopGrab();
                 switchBehaviorState(PANIC);
+                hintFadeOut();
                 break;
             }
 
@@ -466,12 +468,12 @@ void Squid::switchBehaviorState(BehaviorState next)
 
         case FACE:
             sounds->playFace();
-            switchColors(kGrabColors, 0.2);
+            switchColors(kFaceColors, 0.2);
             search_for_face = true;
             time_last_face = ofGetElapsedTimef();
             switchMotionState(LOCK);
-            showCaptureHint();
             clearFace();
+            visualizer->sparkle(pos_game, body_radius);
             break;
 
         case GRABBED:
@@ -479,6 +481,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             switchColors(kGrabColors, 0.2);
             search_for_face = true;
             switchMotionState(LOCK);
+            hintFadeIn();
             setGoal(pos_game);
             break;
 
@@ -602,7 +605,7 @@ void Squid::clearFace()
         highscores->add(face_time, face_anim);
         has_face = false;
     }
-
+    sees_face = false;
     face_time = 0.0;
     face_anim = ofPtr<FrameRecord>(new FrameRecord(face_mask_mat));
 }
@@ -619,11 +622,14 @@ void Squid::grabFace()
     has_face = true;
 }
 
-void Squid::showCaptureHint()
+
+void Squid::hintFadeIn()
 {
-    hint_progress = 0;
+    hint_rotation = 0;
     playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 255.0));
-    playlist.addKeyFrame(Action::tween(4000.f, &hint_progress, 1.0));
+}
+
+void Squid::hintFadeOut(){
     playlist.addKeyFrame(Action::tween(500.f, &hint_alpha, 0.0));
 }
 
@@ -743,16 +749,13 @@ void Squid::draw(bool draw_debug)
 
     // Draw Hint
     if (hint_alpha > 0) {
+        hint_rotation ++;
         ofPushMatrix();
         ofRectangle hint_draw_rect(-body_radius, -body_radius, body_radius * 2, body_radius * 2);
 //        ofRectangle hint_draw_rect(-found_face.width / 2, -found_face.height / 2, found_face.width, found_face.height);
-        hint_draw_rect.scaleFromCenter(scale * 1.5);
-        ofTranslate(found_face.getCenter());
-        ofPolyline p;
-        ofSetLineWidth(4 * scale);
-        p.arc(0, 0, hint_draw_rect.width / 2, hint_draw_rect.width / 2, hint_progress * 360, true, 100);
-        p.draw();
-        ofRotate(-360.0 * hint_progress);
+        hint_draw_rect.scaleFromCenter(scale * 1.8);
+        ofTranslate(pos_game);
+        ofRotate(-hint_rotation);
         ofSetColor(255, 255, 255, hint_alpha);
         hint_im.draw(hint_draw_rect);
         ofPopMatrix();

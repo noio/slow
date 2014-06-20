@@ -29,6 +29,10 @@ void AmbientPlayer::playFace(){
     face_sound.play();
 }
 
+void AmbientPlayer::setSoundsOn(bool in_sounds_on){
+    sounds_on = in_sounds_on;
+}
+
 void AmbientPlayer::loadSounds(){
     grab_sound.loadSound("sound/fx/grab.mp3");
     face_sound.loadSound("sound/fx/pop.mp3");

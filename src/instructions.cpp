@@ -37,6 +37,7 @@ void Instructions::draw()
             ofSetColor(255, 255, 255, 255);
             instructions_ims[i].draw(draw_pos, ofGetWidth(), draw_height);
             ofSetColor(255, 200, 255, 255 * (1.0 - instructions_alpha[i]));
+            ofFill();
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             ofDisableAlphaBlending();
         }

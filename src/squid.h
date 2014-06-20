@@ -41,6 +41,7 @@ const ofColor kSquidTransparentWhite(255,255,255,96);
 const SquidColorPreset kDefaultColors = {kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor};
 const SquidColorPreset kPanicColors = {kSquidPink, kSquidOutlineWhite, kSquidPink, kSquidOutlineWhite, kSquidPink};
 const SquidColorPreset kGrabColors = {kSquidGreen, kSquidGreen, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
+const SquidColorPreset kFaceColors = {kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
 
 ////////// CLASS DEF //////////
 
@@ -148,7 +149,8 @@ private:
     void clearFace();
     void grabFace();
     
-    void showCaptureHint();
+    void hintFadeIn();
+    void hintFadeOut();
     
     void bodyPush(double delta_t);
     void turnToAngle(float target_angle, double delta_t);
@@ -232,7 +234,7 @@ private:
     float squish = 1.0f;
     
     float hint_alpha = 0.0f;
-    float hint_progress = 0.0f;
+    float hint_rotation = 0.0f;
     
     SquidColorPreset colors_cur;
     SquidColorPreset colors_prev;

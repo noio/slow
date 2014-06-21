@@ -248,7 +248,7 @@ void Squid::updateFlow()
 
 void Squid::updateFinder()
 {
-    if (waiting_for_face_results) {
+    if (search_for_face && waiting_for_face_results) {
         int num_found;
         ofRectangle first_face;
 
@@ -337,9 +337,8 @@ void Squid::updateBehaviorState(double delta_t)
 
             if (time_in_behavior_state > face_pose_time) {
                 grabFace();
-                search_for_face = false;
-                sees_face = false;
                 switchBehaviorState(PANIC);
+                stopFaceSearch();
                 hintFadeOut();
                 break;
             }
@@ -349,10 +348,9 @@ void Squid::updateBehaviorState(double delta_t)
 
         case GRABBED:
             if (time_in_behavior_state > grab_time) {
-                search_for_face = false;
-                sees_face = false;
                 sounds->stopGrab();
                 switchBehaviorState(PANIC);
+                stopFaceSearch();
                 hintFadeOut();
                 break;
             }
@@ -471,7 +469,6 @@ void Squid::switchBehaviorState(BehaviorState next)
         case FACE:
             sounds->playFace();
             switchColors(kFaceColors, 0.2);
-            search_for_face = true;
             time_last_face = ofGetElapsedTimef();
             switchMotionState(LOCK);
             clearFace();
@@ -482,8 +479,8 @@ void Squid::switchBehaviorState(BehaviorState next)
             sounds->bumpActivity();
             sounds->playGrab();
             switchColors(kGrabColors, 0.2);
-            search_for_face = true;
             switchMotionState(LOCK);
+            startFaceSearch();
             hintFadeIn();
             setGoal(pos_game);
             break;
@@ -600,6 +597,17 @@ void Squid::setGoal(float x, float y)
 void Squid::setGoal(const ofPoint& in_goal)
 {
     setGoal(in_goal.x, in_goal.y);
+}
+
+void Squid::startFaceSearch(){
+    sees_face = false;
+    search_for_face = true;
+}
+
+void Squid::stopFaceSearch(){
+    search_for_face = false;
+    sees_face = false;
+    waiting_for_face_results = false;
 }
 
 void Squid::clearFace()

@@ -148,6 +148,8 @@ private:
     
     void clearFace();
     void grabFace();
+    void startFaceSearch();
+    void stopFaceSearch();
     
     void hintFadeIn();
     void hintFadeOut();

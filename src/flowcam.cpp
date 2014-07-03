@@ -40,7 +40,13 @@ void FlowCam::reset()
 
 void FlowCam::draw(float x, float y, float width, float height){
     lock();
-    frame_screen_im.draw(x, y, width, height);
+    if (frame_screen_im.isAllocated()){
+        frame_screen_im.draw(x, y, width, height);
+    } else {
+        ofClear(0, 0, 0);
+        ofSetColor(255, 255, 255);
+        ofDrawBitmapString("[No Camera Feed]", ofGetWidth() / 2, ofGetHeight() / 2);
+    }
     unlock();
 }
 

@@ -34,19 +34,16 @@ void ofApp::setup()
     highscores.setup(ofGetWidth() / 10, &visualizer);
     // Set up Box2d
     phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
-    createPhysicsBounds();
     // Squid setup
     squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores);
     // Instructions
     instructions.setup(&squid);
-    setup_done = true;
 }
 
 void ofApp::setupGUI()
 {
     OFX_REMOTEUI_SERVER_SETUP(44040); //start server
     
-    OFX_REMOTEUI_SERVER_SET_CALLBACK(ofApp::remoteUICallback);
     OFX_REMOTEUI_SERVER_NEW_GROUP("Global");
     OFX_REMOTEUI_SERVER_SHARE_PARAM(draw_debug);
     //
@@ -86,36 +83,6 @@ void ofApp::setupGUI()
     OFX_REMOTEUI_SERVER_LOAD_FROM_XML();
 
 }
-
-void ofApp::createPhysicsBounds()
-{
-    if (phys_world == NULL)
-    if (world_bounds != NULL) {
-        world_bounds->GetWorld()->DestroyBody(world_bounds);
-    }
-
-    // Set up the world bounds
-    b2BodyDef boundsBodyDef;
-    boundsBodyDef.position.Set(0, 0);
-    world_bounds = phys_world->CreateBody(&boundsBodyDef);
-    b2EdgeShape shape;
-    b2AABB rec = ofToB2(ofRectangle(-kGameSizePadding, -kGameSizePadding,
-                                    (ofGetWidth() + kGameSizePadding * 2), (ofGetHeight() + kGameSizePadding * 2)));
-    //right wall
-    shape.Set(b2Vec2(rec.upperBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
-    world_bounds->CreateFixture(&shape, 0.0f);
-    //left wall
-    shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.lowerBound.x, rec.upperBound.y));
-    world_bounds->CreateFixture(&shape, 0.0f);
-    // top wall
-    shape.Set(b2Vec2(rec.lowerBound.x, rec.lowerBound.y), b2Vec2(rec.upperBound.x, rec.lowerBound.y));
-    world_bounds->CreateFixture(&shape, 0.0f);
-    // bottom wall
-    shape.Set(b2Vec2(rec.lowerBound.x, rec.upperBound.y), b2Vec2(rec.upperBound.x, rec.upperBound.y));
-    world_bounds->CreateFixture(&shape, 0.0f);
-}
-
-
 
 //--------------------------------------------------------------
 void ofApp::update()
@@ -221,13 +188,9 @@ void ofApp::mouseReleased(int x, int y, int button)
 void ofApp::windowResized(int w, int h)
 {
     ofLogNotice("ofApp") << "resized " << w << "x" << h;
-    if (setup_done)
-    {
-        window_width = w;
-        window_height = h;
-        createPhysicsBounds();
-        videofeed->setAspectRatio(w, h);
-    }
+    window_width = w;
+    window_height = h;
+    videofeed->setAspectRatio(w, h);
 }
 
 //--------------------------------------------------------------
@@ -240,11 +203,3 @@ void ofApp::dragEvent(ofDragInfo dragInfo)
 {
 }
 
-void ofApp::remoteUICallback(RemoteUIServerCallBackArg arg){
-    switch (arg.action) {
-		case CLIENT_UPDATED_PARAM: cout << "CLIENT_UPDATED_PARAM: "<< arg.paramName << " - ";
-			arg.param.print();
-			break;
-		default:break;
-	}
-}

@@ -22,7 +22,6 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     flowcam = in_flowcam;
     particles.setup(ofGetWidth(), ofGetHeight(), 4, 2048);
     particles.setTimeStep(1 / kFrameRate);
-    trailhistory.clear();
     trailshapes.clear();
     // Fill the alpha timeline
     vector<ofPoint> alphas;

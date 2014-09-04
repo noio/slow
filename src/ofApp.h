@@ -40,9 +40,7 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    
-    static void remoteUICallback(RemoteUIServerCallBackArg arg);
-    
+        
     // Components
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
@@ -55,8 +53,6 @@ public:
     Instructions instructions;
     
     double delta_t;
-    
-    bool setup_done = false;
     
     // Settings
     bool draw_debug = false;

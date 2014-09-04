@@ -19,11 +19,6 @@ typedef struct Trailshape {
     ofMesh shape;
 } Trailshape;
 
-typedef struct Trailtail {
-    unsigned int length;
-    ofPolyline tail;
-    ofPoint direction;
-} Trailtail;
 
 ofPolyline lineFacingNormal(const ofPolyline& input, const ofPoint& normal, float max_angle);
 
@@ -52,7 +47,6 @@ private:
     double trail_alpha_resolution = 0.1;
     double trail_alpha_life;
     
-    map<unsigned int, Trailtail> trailhistory;
     deque<Trailshape> trailshapes;
 
 };

@@ -6,7 +6,7 @@
 <Widget>
     <Kind>8</Kind>
     <Name>TIMEOUT</Name>
-    <Value>35989.992187500</Value>
+    <Value>35997.296875000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -26,28 +26,28 @@
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_W</Name>
-    <Value>1061</Value>
+    <Value>746</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_H</Name>
-    <Value>411</Value>
+    <Value>485</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_X</Name>
-    <Value>0</Value>
+    <Value>20</Value>
 </Widget>
 <Widget>
     <Kind>12</Kind>
     <Name>WINDOW_Y</Name>
-    <Value>0</Value>
+    <Value>20</Value>
 </Widget>
 <Widget>
     <Kind>6</Kind>
     <Name>FLOW_THRESHOLD</Name>
-    <HighValue>1.457547188</HighValue>
-    <LowValue>0.509433985</LowValue>
+    <HighValue>1.231132030</HighValue>
+    <LowValue>0.155660376</LowValue>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -67,8 +67,8 @@
 <Widget>
     <Kind>6</Kind>
     <Name>FACE_SIZE</Name>
-    <HighValue>0.622291625</HighValue>
-    <LowValue>0.106770828</LowValue>
+    <HighValue>0.278867930</HighValue>
+    <LowValue>0.075471699</LowValue>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -88,12 +88,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MAX_LOCAL_FLOW</Name>
-    <Value>0.034653466</Value>
+    <Value>0.049528301</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MAX_CORE_FLOW</Name>
-    <Value>0.242574260</Value>
+    <Value>0.049528301</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>

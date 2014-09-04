@@ -1,5 +1,6 @@
 #pragma once
 
+#include "videofeed.h"
 #include "flowcam.h"
 #include "motionvisualizer.h"
 #include "squid.h"
@@ -51,6 +52,7 @@ public:
     // Components
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
+    ofPtr<VideoFeed> videofeed;
     FlowCam flowcam;
     MotionVisualizer visualizer;
     AmbientPlayer sounds;

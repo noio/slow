@@ -150,8 +150,9 @@ void Squid::setupTextures()
  - Plan a path to goal
  - Move to goal (low level)
  */
-void Squid::update(double delta_t)
+void Squid::update(double delta_t, const cv::Mat& frame)
 {
+    latest_frame = frame;
     // Some position and direction helpers
     ofPoint game_size(ofGetWidth(), ofGetHeight(), 1);
     pos_game = b2ToOf(body->GetPosition());
@@ -218,7 +219,7 @@ void Squid::updateFlow()
     const cv::Mat flow_high = flowcam->getFlowHigh();
     cv::Mat flow_high_float;
     flow_high.convertTo(flow_high_float, CV_32F, 1 / 255.0f);
-    cv::Size flow_size = flowcam->getFlowSize();
+    ofPoint flow_size = flowcam->getSize();
     cv::resize(flow_high_float, sections, kSectionsSize, 0, 0,  CV_INTER_AREA);
     ofxCv::blur(sections, 2); // Blurring favors quiet sections that neighbor quiet sections.
     cv::Mat noise(kSectionsSize, CV_32F); // Add some noise to avoid (0,0) bias when looking for minimum
@@ -227,7 +228,7 @@ void Squid::updateFlow()
     // Compute local area flow
     local_area = ofRectangle(pos_game - local_area_radius * scale, pos_game + local_area_radius * scale);
     core_area = ofRectangle(pos_game - core_area_radius * scale, pos_game + core_area_radius * scale);
-    float scale_game_to_flow = (float)flow_size.width / ofGetWidth();
+    float scale_game_to_flow = flow_size.x / ofGetWidth();
     cv::Rect local_area_rect(local_area.x * scale_game_to_flow,
                              local_area.y * scale_game_to_flow,
                              local_area.width * scale_game_to_flow,
@@ -236,10 +237,9 @@ void Squid::updateFlow()
                             core_area.y * scale_game_to_flow,
                             core_area.width * scale_game_to_flow,
                             core_area.height * scale_game_to_flow);
-    cv::Rect screen_rect(0, 0, flow_size.width, flow_size.height);
+    cv::Rect screen_rect(0, 0, flow_size.x, flow_size.y);
     local_area_rect &= screen_rect;
     core_area_rect &= screen_rect;
-//    local_area_rect
     float local_flow_sum = cv::sum(flow_high(local_area_rect))[0] / local_area_rect.area() / 255.0;
     float core_flow_sum = cv::sum(flow_high(core_area_rect))[0] / core_area_rect.area() / 255.0;
     local_flow = 0.8 * local_flow + 0.2 * local_flow_sum / local_flow_max;
@@ -274,16 +274,15 @@ void Squid::updateFinder()
 
     if (search_for_face && !waiting_for_face_results) {
         // Only compute a width because the face search window is square.
-        cv::Size frame_size = flowcam->getFrameSize();
-        scale_frame_to_game = (double)ofGetWidth() / (double)frame_size.width;
-        int face_search_width = MIN(frame_size.width, frame_size.height) * face_search_window;
-        face_roi = cv::Rect(MAX(0, MIN(frame_size.width - face_search_width, (pos_game.x / scale_frame_to_game - face_search_width / 2))),
-                            MAX(0, MIN(frame_size.height - face_search_width, (pos_game.y / scale_frame_to_game - face_search_width / 2))),
+        scale_frame_to_game = ofGetWidth() / (float)latest_frame.cols;
+        int face_search_width = MIN(latest_frame.cols, latest_frame.rows) * face_search_window;
+        face_roi = cv::Rect(MAX(0, MIN(latest_frame.cols - face_search_width, (pos_game.x / scale_frame_to_game - face_search_width / 2))),
+                            MAX(0, MIN(latest_frame.rows - face_search_width, (pos_game.y / scale_frame_to_game - face_search_width / 2))),
                             face_search_width, face_search_width);
         // Face size is relative to frame, not face search window, so rescale and cap at 1.0
         float min_size_scale = MIN(1.0, face_size_min / face_search_window);
         float max_size_scale = MIN(1.0, face_size_max / face_search_window);
-        bool was_free = objectfinder.startDetection(flowcam->getFrame(), face_roi, min_size_scale, max_size_scale);
+        bool was_free = objectfinder.startDetection(latest_frame, face_roi, min_size_scale, max_size_scale);
         waiting_for_face_results = true;
         ofLogVerbose("Squid") << "searching: " << search_for_face;
     }
@@ -551,8 +550,8 @@ void Squid::selectQuietGoal()
 
 void Squid::moveGoalWithFlow()
 {
-    cv::Size flow_size = flowcam->getFlowSize();
-    ofPoint scale_flow_to_game = ofPoint(ofGetWidth() / (float)flow_size.width, ofGetHeight() / (float)flow_size.height);
+    ofPoint flow_size = flowcam->getSize();
+    ofPoint scale_flow_to_game = ofPoint(ofGetWidth() / (float)flow_size.x, ofGetHeight() / (float)flow_size.y);
     ofPoint closest;
     float min_distance = ofGetWidth() * ofGetHeight();
 
@@ -570,7 +569,7 @@ void Squid::moveGoalWithFlow()
     ofPoint pos_flow = goal / scale_flow_to_game;
     ofPoint direction = flowcam->getFlowAt(pos_flow.x, pos_flow.y);
 
-    if (direction.length() < flowcam->getFlowThresholdLow() && min_distance < local_area_radius * scale) {
+    if (direction.length() < flowcam->flow_threshold_low && min_distance < local_area_radius * scale) {
         setGoal(closest);
     } else {
         setGoal(goal + direction * scale_flow_to_game);
@@ -623,13 +622,12 @@ void Squid::clearFace()
 
 void Squid::grabFace()
 {
-    cv::Size frame_size = flowcam->getFrameSize();
-    scale_frame_to_game = ofGetWidth() / (float)frame_size.width;
+    scale_frame_to_game = ofGetWidth() / (float)latest_frame.cols;
     ofRectangle extract = ofRectangle(found_face);
     extract.scaleFromCenter(face_grab_padding);
     cv::Rect face_region(extract.x / scale_frame_to_game, extract.y / scale_frame_to_game, extract.width / scale_frame_to_game, extract.height / scale_frame_to_game);
-    face_region &= cv::Rect(0, 0, frame_size.width, frame_size.height);
-    face_anim->grab(flowcam->getFrame(), face_region, 0.2);
+    face_region &= cv::Rect(0, 0, latest_frame.cols, latest_frame.rows);
+    face_anim->grab(latest_frame, face_region, 0.2);
     has_face = true;
 }
 

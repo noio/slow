@@ -18,6 +18,7 @@
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
+		E229EE3519B86EB600874F2C /* videofeed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E229EE3319B86EB600874F2C /* videofeed.cpp */; };
 		E244DE8B194E19DD0099BE28 /* instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E244DE89194E19DD0099BE28 /* instructions.cpp */; };
 		E245AEFB194F3F3600B41F9B /* objectfinderthreaded.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */; };
 		E2492023193F338300528EA5 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2491FFC193F338300528EA5 /* ofxEasing.cpp */; };
@@ -220,6 +221,8 @@
 		D29DD28C195CD81267F3C8A1 /* Distance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Distance.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h; sourceTree = SOURCE_ROOT; };
 		D347FB65D19015303863922A /* Wrappers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Wrappers.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Wrappers.cpp; sourceTree = SOURCE_ROOT; };
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
+		E229EE3319B86EB600874F2C /* videofeed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = videofeed.cpp; sourceTree = "<group>"; };
+		E229EE3419B86EB600874F2C /* videofeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videofeed.h; sourceTree = "<group>"; };
 		E244DE89194E19DD0099BE28 /* instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instructions.cpp; sourceTree = "<group>"; };
 		E244DE8A194E19DD0099BE28 /* instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instructions.h; sourceTree = "<group>"; };
 		E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectfinderthreaded.cpp; sourceTree = "<group>"; };
@@ -1290,6 +1293,8 @@
 				E29D5C3018FD2E0C00890C23 /* squid.cpp */,
 				E29D5C2F18FD2C9B00890C23 /* squid.h */,
 				E2DB5C5E1919187800885AC3 /* utilities.h */,
+				E229EE3319B86EB600874F2C /* videofeed.cpp */,
+				E229EE3419B86EB600874F2C /* videofeed.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1516,6 +1521,7 @@
 				E2492030193F338300528EA5 /* ofxKeyframe.cpp in Sources */,
 				E2E9313B18F42F7F007BC76B /* ofxUIFPSSlider.cpp in Sources */,
 				E25839BE191BBB1A0049E948 /* b2CircleShape.cpp in Sources */,
+				E229EE3519B86EB600874F2C /* videofeed.cpp in Sources */,
 				E25839CE191BBB1A0049E948 /* b2ChainAndPolygonContact.cpp in Sources */,
 				E2492028193F338300528EA5 /* ofxEasingElastic.cpp in Sources */,
 				E2E9314F18F42F7F007BC76B /* ofxUISortableList.cpp in Sources */,

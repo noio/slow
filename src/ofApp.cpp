@@ -7,9 +7,6 @@
 
 using namespace ofxCv;
 
-using std::cout;
-using std::endl;
-
 ofApp::ofApp()
 {
     gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
@@ -26,12 +23,12 @@ void ofApp::setup()
     ofClear(0, 0, 0, 255);
     ofEnableAlphaBlending();
     ofSetLogLevel(OF_LOG_NOTICE);
-    // Flow camera
-    if (flowcam.isThreadRunning()){
-        flowcam.waitForThread(true);
-    }
-    flowcam.setup(capture_width, capture_height, ofGetWidth(), ofGetHeight(), 1.0);
-//    flowcam.startThread(true,true);
+    // Videofeed
+    VideoFeedWebcam* webcam = new VideoFeedWebcam();
+    webcam->setup(0, capture_width, capture_height);
+    webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
+    videofeed = ofPtr<VideoFeed>(webcam);
+    flowcam.setup(160);
     // Visualizer
     visualizer.setup(&flowcam);
     // Ambient Player
@@ -183,8 +180,12 @@ void ofApp::update()
         ofLogNotice("ofApp") << "timeout after ";
         std::exit(0);
     }
-    flowcam.update();
-    squid.update(delta_t);
+    cv::Mat frame;
+    if (videofeed->getFrame(frame))
+    {
+        flowcam.update(frame);
+    }
+    squid.update(delta_t, frame);
     highscores.update(delta_t);
     visualizer.update(delta_t);
     sounds.update(delta_t);
@@ -196,6 +197,8 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+    //TODO Set color
+    videofeed->draw(0, 0, ofGetWidth(), ofGetHeight());
     visualizer.draw();
     highscores.draw();
     instructions.draw();
@@ -305,13 +308,6 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
         gui->saveSettings("settings.xml");
         need_setup = true;
     }
-    
-    if (name == "1080p"){
-        flowcam.setCaptureSize(1920, 1080);
-    }
-    if (name == "720p"){
-        flowcam.setCaptureSize(1280, 720);
-    }
 
     if (name == "FACE_SEARCH_WINDOW") {
         squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
@@ -322,20 +318,12 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
         squid.face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
     }
 
-    if (name == "FLOW_THRESHOLD") {
-        flowcam.setFlowThreshold(((ofxUIRangeSlider*) e.widget)->getScaledValueLow(), ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh());
-    }
-
     if (name == "FLOW_EROSION_SIZE") {
         flowcam.setFlowErosionSize((int)(((ofxUIIntSlider*) e.widget)->getScaledValue()));
     }
 
     if (name == "SQUID_SCALE") {
         squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
-    }
-
-    if (name == "ZOOM") {
-        flowcam.setZoom(((ofxUISlider*) e.widget)->getScaledValue());
     }
 
     if (name == "1080x480") {
@@ -348,9 +336,6 @@ void ofApp::guiEvent(ofxUIEventArgs& e)
         need_setup = true;
     }
     
-    if (name == "FLIP"){
-        flowcam.setFlip(((ofxUIIntSlider*) e.widget)->getScaledValue());
-    }
     // Text fields
     if (kind == OFX_UI_WIDGET_TEXTINPUT){
         ofxUITextInput *ti = (ofxUITextInput *) e.widget;
@@ -416,7 +401,7 @@ void ofApp::setWindowPositionFromGUI(){
 
 void ofApp::setWindowSizeFromGUI(){
     ofSetWindowShape(ofToInt(windowWTextInput->getTextString()), ofToInt(windowHTextInput->getTextString()));
-    flowcam.setScreenSize(ofGetWidth(), ofGetHeight());
+
 }
 
 void ofApp::unfocusAllTextInputs(ofxUITextInput* except){

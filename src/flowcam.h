@@ -1,86 +1,64 @@
 
-#ifndef SLOW_FLOWCAM_H_
-#define SLOW_FLOWCAM_H_
+#ifndef MOVE_FLOWCAM_H_
+#define MOVE_FLOWCAM_H_
 
 #include "ofMain.h"
 #include "ofxCv.h"
 
 #include <iostream>
 
-using std::string;
+using namespace std;
+using namespace cv;
 
-class FlowCam : public ofThread {
+class FlowCam
+{
 public:
-    FlowCam(){};
+    FlowCam() {};
     FlowCam(const FlowCam&) = delete;            // no copy
     FlowCam& operator=(const FlowCam&) = delete; // no assign
-    
-    void setup(int in_capture_width, int in_capture_height, int in_screen_width, int in_screen_height, float zoom);
-    void update();
-    void draw(float x, float y, float width, float height);
-    
+
+    void setup(int max_flow_width);
+    void update(Mat frame);
+
     void drawDebug();
-    
-    void loadLUT(string path);
-    
-    float getFlowThresholdLow() const {return flow_threshold_low; };
-    cv::Size getFlowSize() const { return cv::Size(flow_width, flow_height); };
-    cv::Size getFrameSize() const { return cv::Size(frame.cols, frame.rows); };
+
+    ofPoint getSize() const { return ofPoint(frame_gray.cols, frame_gray.rows); };
+    cv::Mat getFlow() const { return flow; }
     cv::Mat getFlowHigh() const { return flow_high; };
-    cv::Mat getFlowLow() const { return flow_low; };
-    ofVec2f getFlowAt(float x, float y) { return ofxCv::toOf(flow.at<cv::Vec2f>(y, x)); };
-    cv::Mat getFrame() const { return frame; };
-    const vector<ofPolyline>&  getContoursHigh() const { return contourfinder_high.getPolylines(); };
-    const vector<ofPolyline>&  getContoursLow() const { return contourfinder_low.getPolylines(); };
+    cv::Mat getFLowHighHist() const { return flow_high_hist; };
+    ofVec2f getFlowAt(float x, float y) const { return ofxCv::toOf(flow.at<cv::Vec2f>(y, x)); };
+    ofVec2f getFlowAtUnitPos(float x, float y) const { return ofxCv::toOf(flow.at<cv::Vec2f>( y * flow.rows, x * flow.cols) ); };
+    const vector<ofPolyline>& getContoursLow() const { return contourfinder_low.getPolylines(); };
+    const vector<ofPolyline>& getContoursHigh() const { return contourfinder_high.getPolylines(); };
 
-    void setFlowThreshold(float threshold_low, float threshold_high);
     void setFlowErosionSize(int in_flow_erosion_size);
-    void setScreenSize(int in_screen_width, int in_screen_height);
-    void setCaptureSize(int in_capture_width, int in_capture_height);
-    void setZoom(float in_zoom);
-    void setFlip(int flip);
-    bool hasData(){return has_data;};
+    bool hasData() { return has_data; };
     
-    const int pyrdown_steps = 3;
-
-    
-private:
-    void initGrabber();
-    void threadedFunction();
-    void updateFrame();
-    void updateFlow();
-    void computeRoi();
-    void applyLUT();
-    void reset();
-    
-    cv::Mat open_kernel;
-    ofVideoGrabber camera;
-    cv::Rect capture_roi;
-    
-    ofxCv::FlowFarneback opticalflow;
-    ofxCv::ContourFinder contourfinder_low;
-    ofxCv::ContourFinder contourfinder_high;
-    
-    cv::Mat frame_full, frame, frame_gray, frame_screen;
-    cv::Mat magnitude, angle, flow, flow_low, flow_low_prev, flow_high, flow_high_prev; // flow_behind, flow_new;
-//    cv::Mat flow_hist;
-    ofImage frame_screen_im;
-    float global_flow;
-    int flow_creep_counter = 0;
-    
-    float last_capture;
-    
-    int capture_width, capture_height, screen_width, screen_height, flow_width, flow_height;
-    float zoom = 1.0;
-    int flip = 1;
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
-    int flow_erosion_size = 5;
+
+private:
+    void reset();
+
+    cv::Mat open_kernel;
+
+    ofxCv::FlowFarneback opticalflow;
     
+    ofxCv::ContourFinder contourfinder_low, contourfinder_high;
+
+    cv::Mat frame_gray, frame_screen;
+    cv::Mat magnitude, angle, flow, flow_low, flow_high, flow_high_hist;
+
+    float global_flow;
+    int flow_creep_counter = 0;
+
+    int max_flow_width = 240;
+
+    int flow_erosion_size;
+
+    float last_update = 0;
     bool has_data = false;
-    bool LUTloaded = false;
-	ofVec3f lut[32][32][32];
 };
 
 
-#endif /* defined(__slow__flowcam__) */
+#endif /* defined(MOVE_FLOWCAM_H_) */

@@ -63,7 +63,7 @@ public:
     
     // METHODS
     void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
-    void update(double delta_t);
+    void update(double delta_t, const cv::Mat& frame);
     void draw(bool draw_debug);
     
     void stayAtPoint(const ofPoint& target, double duration);
@@ -205,6 +205,7 @@ private:
     MotionVisualizer *visualizer;
     AmbientPlayer *sounds;
     HighscoreTable* highscores;
+    cv::Mat latest_frame;
     
     BehaviorState behavior_state = IDLE;
     MotionState motion_state = STILL;

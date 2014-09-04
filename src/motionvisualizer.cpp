@@ -24,10 +24,6 @@ void MotionVisualizer::setup(FlowCam* in_flowcam)
     particles.setTimeStep(1 / kFrameRate);
     trailhistory.clear();
     trailshapes.clear();
-    trail_overlay = cv::Mat(flowcam->getFlowSize(), CV_8UC3);
-    ofImage trail_texture_im;
-    trail_texture_im.loadImage("assets/trail_texture.png");
-    trail_texture = toCv(trail_texture_im).clone();
     // Fill the alpha timeline
     vector<ofPoint> alphas;
     alphas.push_back(ofPoint(0.0, 16 * trail_alpha_mtp));
@@ -63,7 +59,7 @@ void MotionVisualizer::update(double delta_t)
 
 void MotionVisualizer::updateFullTrails(double delta_t)
 {
-    float scale_flow_to_game = ofGetWidth() / (float)flowcam->getFlowSize().width;
+    float scale_flow_to_game = ofGetWidth() / flowcam->getSize().x;
 
     const vector<ofPolyline>& contours = flowcam->getContoursLow();
     
@@ -112,8 +108,6 @@ void MotionVisualizer::updateFullTrails(double delta_t)
 
 void MotionVisualizer::draw()
 {
-    ofSetColor(200, 200, 200, 255);
-    flowcam->draw(0, 0, ofGetWidth(), ofGetHeight());
     drawTrailShapes();
     particles.draw();
 }

@@ -9,9 +9,8 @@
 
 #include "ofMain.h"
 #include "ofxCv.h"
-#include "ofxUI.h"
-#include "ofxFluid.h"
 #include "ofxDelaunay.h"
+#include "ofxRemoteUIServer.h"
 #include "Box2D/Box2D.h"
 
 #include <vector>
@@ -23,15 +22,14 @@ class ofApp : public ofBaseApp
 {
 
 public:
-    ofApp();
     
     void setup();
     void update();
     void draw();
     void exit();
-    
-    void setupPhysics();
+
     void setupGUI();
+    void createPhysicsBounds();
         
     void keyPressed(int key);
     void keyReleased(int key);
@@ -42,13 +40,9 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    void guiEvent(ofxUIEventArgs& e);
     
-    void setTimeoutFromGUI();
-    void setWindowPositionFromGUI();
-    void setWindowSizeFromGUI();
-    void unfocusAllTextInputs(ofxUITextInput * except);
-
+    static void remoteUICallback(RemoteUIServerCallBackArg arg);
+    
     // Components
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
@@ -61,10 +55,17 @@ public:
     Instructions instructions;
     
     double delta_t;
-    float timeout = 36000;
+    
+    bool setup_done = false;
     
     // Settings
     bool draw_debug = false;
-    int capture_width = 1280;
-    int capture_height = 720;
+    int window_x = 20;
+    int window_y = 100;
+    int window_width = 896;
+    int window_height = 288;
+    VideoFeedWebcamResolution capture_res = WEBCAM_RES_720;
+    
+    // Mirrored settings
+    float squid_scale = 1.0;
 };

@@ -2,16 +2,11 @@
 #include "ofApp.h"
 #include "constants.h"
 #include "utilities.h"
-#include "ofxRemoteUIServer.h"
+
 
 #include "math.h"
 
 using namespace ofxCv;
-
-ofApp::ofApp()
-{
-    phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
-}
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -20,9 +15,14 @@ void ofApp::setup()
     ofSetFrameRate(kFrameRate);
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
     ofSetLogLevel(OF_LOG_NOTICE);
+    // Gui Setup
+    setupGUI();
+    // Window setup
+    ofSetWindowPosition(window_x, window_y);
+    ofSetWindowShape(window_width, window_height);
     // Videofeed
     VideoFeedWebcam* webcam = new VideoFeedWebcam();
-    webcam->setup(0, capture_width, capture_height);
+    webcam->setup(0, capture_res);
     webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
     videofeed = ofPtr<VideoFeed>(webcam);
     flowcam.setup(160);
@@ -33,29 +33,40 @@ void ofApp::setup()
     // Highscore table
     highscores.setup(ofGetWidth() / 10, &visualizer);
     // Set up Box2d
-    setupPhysics();
+    phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
+    createPhysicsBounds();
     // Squid setup
-    squid.setup(phys_world, &flowcam, &visualizer, &sounds, &highscores);
+    squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores);
     // Instructions
     instructions.setup(&squid);
-    // Gui Setup
-    setupGUI();
+    setup_done = true;
 }
 
 void ofApp::setupGUI()
 {
     OFX_REMOTEUI_SERVER_SETUP(44040); //start server
+    
+    OFX_REMOTEUI_SERVER_SET_CALLBACK(ofApp::remoteUICallback);
     OFX_REMOTEUI_SERVER_NEW_GROUP("Global");
     OFX_REMOTEUI_SERVER_SHARE_PARAM(draw_debug);
-    // TODO OFX_REMOTEUI_SERVER_SHARE_PARAM(flip)
-    // TODO camera res
-    // TODO resolution & position
-    
+    //
+    OFX_REMOTEUI_SERVER_NEW_GROUP("Reboot");
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid_scale, 0.2, 4.0);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_x, 0, ofGetScreenWidth() / 2);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_y, 0, ofGetScreenHeight() / 2);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_width, 320, 1024);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_height, 240, 768);
+    vector<string> resolutions;
+    resolutions.push_back("640x480");
+    resolutions.push_back("720p");
+    resolutions.push_back("1080p");
+    OFX_REMOTEUI_SERVER_SHARE_ENUM_PARAM(capture_res, 0, 2, resolutions);
+    //
     OFX_REMOTEUI_SERVER_NEW_GROUP("Flow");
     OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
     OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
     OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
-    
+    //
     OFX_REMOTEUI_SERVER_NEW_GROUP("Squishy");
     // TODO callback for scale
     OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_search_window, 0.1, 1.0);
@@ -72,10 +83,13 @@ void ofApp::setupGUI()
     OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_hue_range, 0, 255);
     OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_alpha_mtp, 0, 4.0);
 
+    OFX_REMOTEUI_SERVER_LOAD_FROM_XML();
+
 }
 
-void ofApp::setupPhysics()
+void ofApp::createPhysicsBounds()
 {
+    if (phys_world == NULL)
     if (world_bounds != NULL) {
         world_bounds->GetWorld()->DestroyBody(world_bounds);
     }
@@ -107,11 +121,7 @@ void ofApp::setupPhysics()
 void ofApp::update()
 {
     delta_t = ofGetLastFrameTime();
-    timeout -= delta_t;
-    if (timeout < 0){
-        ofLogNotice("ofApp") << "timeout after ";
-        std::exit(0);
-    }
+
     cv::Mat frame;
     if (videofeed->getFrame(frame))
     {
@@ -147,6 +157,9 @@ void ofApp::draw()
 void ofApp::exit()
 {
     videofeed.reset();
+    window_x = ofGetWindowPositionX();
+    window_y = ofGetWindowPositionY();
+    ofLogVerbose("ofApp") << "exiting";
 }
 
 //--------------------------------------------------------------
@@ -208,7 +221,13 @@ void ofApp::mouseReleased(int x, int y, int button)
 void ofApp::windowResized(int w, int h)
 {
     ofLogNotice("ofApp") << "resized " << w << "x" << h;
-    // TODO HANDLE DIS
+    if (setup_done)
+    {
+        window_width = w;
+        window_height = h;
+        createPhysicsBounds();
+        videofeed->setAspectRatio(w, h);
+    }
 }
 
 //--------------------------------------------------------------
@@ -219,4 +238,13 @@ void ofApp::gotMessage(ofMessage msg)
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo)
 {
+}
+
+void ofApp::remoteUICallback(RemoteUIServerCallBackArg arg){
+    switch (arg.action) {
+		case CLIENT_UPDATED_PARAM: cout << "CLIENT_UPDATED_PARAM: "<< arg.paramName << " - ";
+			arg.param.print();
+			break;
+		default:break;
+	}
 }

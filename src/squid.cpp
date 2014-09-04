@@ -12,8 +12,9 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
+void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
 {
+    scale = in_scale;
     phys_world = in_phys_world;
     flowcam = in_flowcam;
     visualizer = in_visualizer;
@@ -750,6 +751,7 @@ void Squid::tentacleGlide()
 void Squid::draw(bool draw_debug)
 {
     tweenColors();
+    ofEnableAlphaBlending();
     if (has_face){
         drawScore();
     }
@@ -758,6 +760,7 @@ void Squid::draw(bool draw_debug)
 
     // Draw Hint
     if (hint_alpha > 0) {
+
         hint_rotation ++;
         ofPushMatrix();
         ofRectangle hint_draw_rect(-body_radius, -body_radius, body_radius * 2, body_radius * 2);
@@ -773,6 +776,8 @@ void Squid::draw(bool draw_debug)
     if (draw_debug) {
         drawDebug();
     }
+    ofSetColor(255, 255, 255, 255);
+    ofDisableAlphaBlending();
 }
 
 void Squid::tweenColors(){
@@ -812,7 +817,6 @@ void Squid::drawBody()
     float body_radius_s = body_radius * scale;
     // Trasnform to body position
     ofPushMatrix();
-    ofEnableAlphaBlending();
     ofTranslate(pos_game);
     ofRotate(body->GetAngle() * RAD_TO_DEG);
     ofRectangle body_draw_rect(-body_radius_s, -body_radius_s, body_radius_s * 2, body_radius_s * 2);
@@ -845,7 +849,6 @@ void Squid::drawTentacles()
     ofRectangle tentacle_draw_rect(-segment_length * scale * 0.5, -segment_width * scale * 0.5, segment_length * scale, segment_width * scale);
     float w = 0.5 * scale * segment_width / kPhysicsScale;
     float l = 0.5 * scale * segment_length / kPhysicsScale;
-    ofEnableAlphaBlending();
     // Alternate method: splines
     for (int i = 0; i < tentacle_attach.size(); i ++) {
         b2Body* seg1 = tentacles[i * num_segments];
@@ -1003,11 +1006,4 @@ std::string Squid::getState()
     }
 
     return state;
-}
-
-void Squid::setScale(float in_scale)
-{
-    scale = in_scale;
-    setupPhysics();
-    setupTextures();
 }

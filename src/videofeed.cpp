@@ -8,7 +8,7 @@ void VideoFeedStatic::setup(string path)
 }
 
 
-void VideoFeedWebcam::setup(int device, int capture_width, int capture_height)
+void VideoFeedWebcam::setup(int device, VideoFeedWebcamResolution res)
 {
     Poco::ScopedLock<ofMutex> lock(mutex);
     waitForThread(true);
@@ -17,6 +17,26 @@ void VideoFeedWebcam::setup(int device, int capture_width, int capture_height)
         camera.close();
     }
     camera.setDeviceID(device);
+    int capture_width, capture_height;
+    switch (res) {
+        case WEBCAM_RES_480:
+            capture_width = 640;
+            capture_height = 480;
+            break;
+            
+        case WEBCAM_RES_720:
+            capture_width = 1280;
+            capture_height = 720;
+            break;
+            
+        case WEBCAM_RES_1080:
+            capture_width = 1920;
+            capture_height = 1080;
+            break;
+            
+        default:
+            break;
+    }
     camera.initGrabber(capture_width, capture_height, false);
     setFlip(1);
     startThread(true, false);

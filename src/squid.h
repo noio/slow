@@ -62,7 +62,7 @@ public:
 
     
     // METHODS
-    void setup(ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
+    void setup(float in_scale, ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
     void update(double delta_t, const cv::Mat& frame);
     void draw(bool draw_debug);
     
@@ -72,12 +72,11 @@ public:
     void switchColorsTemp(const ofColor& body_fill, const ofColor& body_outline, const ofColor& tentacle_fill, const ofColor& tentacle_outline, const ofColor& markings, float duration, float period);
 
     
-    // GETTERS & SETTERS
+    // GETTERS
     ofPoint getPosition() const;
     float getBodyAngle() const;
     ofPoint getGoalDirection() const;
     double getLastActivity() const;
-    void setScale(float in_scale);
     float getTimeLastFace() const {return time_last_face;};
     std::string getState();
 

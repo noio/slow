@@ -9,6 +9,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace ofxCv;
 
 class FlowCam
 {
@@ -23,13 +24,13 @@ public:
     void drawDebug();
 
     ofPoint getSize() const { return ofPoint(frame_gray.cols, frame_gray.rows); };
-    cv::Mat getFlow() const { return flow; }
-    cv::Mat getFlowHigh() const { return flow_high; };
-    cv::Mat getFLowHighHist() const { return flow_high_hist; };
-    ofVec2f getFlowAt(float x, float y) const { return ofxCv::toOf(flow.at<cv::Vec2f>(y, x)); };
-    ofVec2f getFlowAtUnitPos(float x, float y) const { return ofxCv::toOf(flow.at<cv::Vec2f>( y * flow.rows, x * flow.cols) ); };
-    const vector<ofPolyline>& getContoursLow() const { return contourfinder_low.getPolylines(); };
+    Mat getFlow() const { return flow; }
+    Mat getFlowHigh() const { return flow_high; };
+    Mat getFLowHighHist() const { return flow_high_hist; };
+    ofVec2f getFlowAt(float x, float y) const { return toOf(flow.at<Vec2f>(y, x)); };
+    ofVec2f getFlowAtUnitPos(float x, float y) const { return toOf(flow.at<Vec2f>( y * flow.rows, x * flow.cols) ); };
     const vector<ofPolyline>& getContoursHigh() const { return contourfinder_high.getPolylines(); };
+    const vector<ofPolyline>& getContoursLow() const { return contourfinder_low.getPolylines(); };
 
     bool hasData() { return has_data; };
     
@@ -40,14 +41,11 @@ public:
 private:
     void reset();
 
-    cv::Mat open_kernel;
+    ContourFinder contourfinder_low, contourfinder_high;
+    FlowFarneback opticalflow;
 
-    ofxCv::FlowFarneback opticalflow;
-    
-    ofxCv::ContourFinder contourfinder_low, contourfinder_high;
-
-    cv::Mat frame_gray, frame_screen;
-    cv::Mat magnitude, angle, flow, flow_low, flow_high, flow_high_hist;
+    Mat frame_gray, frame_screen;
+    Mat magnitude, angle, flow, flow_low, flow_high, flow_high_hist;
 
     float global_flow;
     int flow_creep_counter = 0;

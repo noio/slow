@@ -113,9 +113,9 @@ public:
     float local_flow_max = 0.02f;
     float core_flow_max = 0.01f;
     
-    double face_search_window = 0.2;
-    double face_size_min = 0.6;  // This is relative to the full frame, not the face search window
-    double face_size_max = 0.05; // This is relative to the full frame, not the face search window
+    float face_search_window = 0.2;
+    float face_size_min = 0.6;  // This is relative to the full frame, not the face search window
+    float face_size_max = 0.05; // This is relative to the full frame, not the face search window
     
     const ofColor kIdleColor = ofColor::fromHex(0x53A8BF);
     const ofColor kFaceColor = ofColor::fromHex(0xDAEBEF);

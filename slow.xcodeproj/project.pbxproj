@@ -86,6 +86,25 @@
 		E25839E0191BBB1A0049E948 /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E25839AE191BBB1A0049E948 /* b2WeldJoint.cpp */; };
 		E25839E1191BBB1A0049E948 /* b2WheelJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E25839B0191BBB1A0049E948 /* b2WheelJoint.cpp */; };
 		E25839E2191BBB1A0049E948 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E25839B3191BBB1A0049E948 /* b2Rope.cpp */; };
+		E264C10C19B87EE500015120 /* ofxRemoteUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C0D319B87EE500015120 /* ofxRemoteUI.cpp */; };
+		E264C10D19B87EE500015120 /* ofxRemoteUIClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C0D519B87EE500015120 /* ofxRemoteUIClient.cpp */; };
+		E264C10E19B87EE500015120 /* ofxRemoteUINeigbors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C0D719B87EE500015120 /* ofxRemoteUINeigbors.cpp */; };
+		E264C10F19B87EE500015120 /* ofxRemoteUIServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C0D919B87EE500015120 /* ofxRemoteUIServer.cpp */; };
+		E264C11019B87EE500015120 /* uriencode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C0DD19B87EE500015120 /* uriencode.cpp */; };
+		E264C14C19B8836300015120 /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C14219B8835200015120 /* ofxOscBundle.cpp */; };
+		E264C14D19B8836300015120 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C14419B8835200015120 /* ofxOscMessage.cpp */; };
+		E264C14E19B8836300015120 /* ofxOscParameterSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C14619B8835200015120 /* ofxOscParameterSync.cpp */; };
+		E264C14F19B8836300015120 /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C14819B8835200015120 /* ofxOscReceiver.cpp */; };
+		E264C15019B8836300015120 /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C14A19B8835200015120 /* ofxOscSender.cpp */; };
+		E264C15119B883FE00015120 /* IpEndpointName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C12619B8835200015120 /* IpEndpointName.cpp */; };
+		E264C15219B883FE00015120 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C12B19B8835200015120 /* NetworkingUtils.cpp */; };
+		E264C15319B883FE00015120 /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C12C19B8835200015120 /* UdpSocket.cpp */; };
+		E264C15419B883FE00015120 /* NetworkingUtilsWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13019B8835200015120 /* NetworkingUtilsWin.cpp */; };
+		E264C15519B883FE00015120 /* UdpSocketWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13119B8835200015120 /* UdpSocketWin.cpp */; };
+		E264C15619B883FE00015120 /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13619B8835200015120 /* OscOutboundPacketStream.cpp */; };
+		E264C15719B883FE00015120 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13919B8835200015120 /* OscPrintReceivedElements.cpp */; };
+		E264C15819B883FE00015120 /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13B19B8835200015120 /* OscReceivedElements.cpp */; };
+		E264C15919B883FE00015120 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E264C13D19B8835200015120 /* OscTypes.cpp */; };
 		E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */; };
 		E29D5C3118FD2E0C00890C23 /* squid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E29D5C3018FD2E0C00890C23 /* squid.cpp */; };
 		E2C45DBE1945DCA400376929 /* highscoretable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2C45DBC1945DCA400376929 /* highscoretable.cpp */; };
@@ -365,6 +384,53 @@
 		E25839B1191BBB1A0049E948 /* b2WheelJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2WheelJoint.h; sourceTree = "<group>"; };
 		E25839B3191BBB1A0049E948 /* b2Rope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2Rope.cpp; sourceTree = "<group>"; };
 		E25839B4191BBB1A0049E948 /* b2Rope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2Rope.h; sourceTree = "<group>"; };
+		E264C0D219B87EE500015120 /* dirent_vs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirent_vs.h; sourceTree = "<group>"; };
+		E264C0D319B87EE500015120 /* ofxRemoteUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRemoteUI.cpp; sourceTree = "<group>"; };
+		E264C0D419B87EE500015120 /* ofxRemoteUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRemoteUI.h; sourceTree = "<group>"; };
+		E264C0D519B87EE500015120 /* ofxRemoteUIClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRemoteUIClient.cpp; sourceTree = "<group>"; };
+		E264C0D619B87EE500015120 /* ofxRemoteUIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRemoteUIClient.h; sourceTree = "<group>"; };
+		E264C0D719B87EE500015120 /* ofxRemoteUINeigbors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRemoteUINeigbors.cpp; sourceTree = "<group>"; };
+		E264C0D819B87EE500015120 /* ofxRemoteUINeigbors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRemoteUINeigbors.h; sourceTree = "<group>"; };
+		E264C0D919B87EE500015120 /* ofxRemoteUIServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRemoteUIServer.cpp; sourceTree = "<group>"; };
+		E264C0DA19B87EE500015120 /* ofxRemoteUIServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRemoteUIServer.h; sourceTree = "<group>"; };
+		E264C0DB19B87EE500015120 /* ofxRemoteUISimpleNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRemoteUISimpleNotifications.h; sourceTree = "<group>"; };
+		E264C0DC19B87EE500015120 /* RemoteParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteParam.h; sourceTree = "<group>"; };
+		E264C0DD19B87EE500015120 /* uriencode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = uriencode.cpp; sourceTree = "<group>"; };
+		E264C0DE19B87EE500015120 /* uriencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uriencode.h; sourceTree = "<group>"; };
+		E264C12619B8835200015120 /* IpEndpointName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IpEndpointName.cpp; sourceTree = "<group>"; };
+		E264C12719B8835200015120 /* IpEndpointName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IpEndpointName.h; sourceTree = "<group>"; };
+		E264C12819B8835200015120 /* NetworkingUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkingUtils.h; sourceTree = "<group>"; };
+		E264C12919B8835200015120 /* PacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PacketListener.h; sourceTree = "<group>"; };
+		E264C12B19B8835200015120 /* NetworkingUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkingUtils.cpp; sourceTree = "<group>"; };
+		E264C12C19B8835200015120 /* UdpSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UdpSocket.cpp; sourceTree = "<group>"; };
+		E264C12D19B8835200015120 /* TimerListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimerListener.h; sourceTree = "<group>"; };
+		E264C12E19B8835200015120 /* UdpSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UdpSocket.h; sourceTree = "<group>"; };
+		E264C13019B8835200015120 /* NetworkingUtilsWin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkingUtilsWin.cpp; sourceTree = "<group>"; };
+		E264C13119B8835200015120 /* UdpSocketWin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UdpSocketWin.cpp; sourceTree = "<group>"; };
+		E264C13319B8835200015120 /* MessageMappingOscPacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageMappingOscPacketListener.h; sourceTree = "<group>"; };
+		E264C13419B8835200015120 /* OscException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscException.h; sourceTree = "<group>"; };
+		E264C13519B8835200015120 /* OscHostEndianness.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscHostEndianness.h; sourceTree = "<group>"; };
+		E264C13619B8835200015120 /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscOutboundPacketStream.cpp; sourceTree = "<group>"; };
+		E264C13719B8835200015120 /* OscOutboundPacketStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscOutboundPacketStream.h; sourceTree = "<group>"; };
+		E264C13819B8835200015120 /* OscPacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscPacketListener.h; sourceTree = "<group>"; };
+		E264C13919B8835200015120 /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscPrintReceivedElements.cpp; sourceTree = "<group>"; };
+		E264C13A19B8835200015120 /* OscPrintReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscPrintReceivedElements.h; sourceTree = "<group>"; };
+		E264C13B19B8835200015120 /* OscReceivedElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscReceivedElements.cpp; sourceTree = "<group>"; };
+		E264C13C19B8835200015120 /* OscReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
+		E264C13D19B8835200015120 /* OscTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
+		E264C13E19B8835200015120 /* OscTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		E264C14019B8835200015120 /* ofxOsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOsc.h; sourceTree = "<group>"; };
+		E264C14119B8835200015120 /* ofxOscArg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscArg.h; sourceTree = "<group>"; };
+		E264C14219B8835200015120 /* ofxOscBundle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscBundle.cpp; sourceTree = "<group>"; };
+		E264C14319B8835200015120 /* ofxOscBundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscBundle.h; sourceTree = "<group>"; };
+		E264C14419B8835200015120 /* ofxOscMessage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscMessage.cpp; sourceTree = "<group>"; };
+		E264C14519B8835200015120 /* ofxOscMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscMessage.h; sourceTree = "<group>"; };
+		E264C14619B8835200015120 /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscParameterSync.cpp; sourceTree = "<group>"; };
+		E264C14719B8835200015120 /* ofxOscParameterSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscParameterSync.h; sourceTree = "<group>"; };
+		E264C14819B8835200015120 /* ofxOscReceiver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscReceiver.cpp; sourceTree = "<group>"; };
+		E264C14919B8835200015120 /* ofxOscReceiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscReceiver.h; sourceTree = "<group>"; };
+		E264C14A19B8835200015120 /* ofxOscSender.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscSender.cpp; sourceTree = "<group>"; };
+		E264C14B19B8835200015120 /* ofxOscSender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscSender.h; sourceTree = "<group>"; };
 		E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
 		E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
 		E29D5C2418FBDF5300890C23 /* Particle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
@@ -666,6 +732,8 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E264C12119B8835200015120 /* ofxOsc */,
+				E264C00E19B87EE400015120 /* ofxRemoteUI */,
 				E2491FCC193F338300528EA5 /* ofxPlaylist */,
 				E2E427B91937338700CF93F7 /* ofxFluid */,
 				E2E427CD1937338700CF93F7 /* ofxFX */,
@@ -981,6 +1049,141 @@
 				E25839B4191BBB1A0049E948 /* b2Rope.h */,
 			);
 			path = Rope;
+			sourceTree = "<group>";
+		};
+		E264C00E19B87EE400015120 /* ofxRemoteUI */ = {
+			isa = PBXGroup;
+			children = (
+				E264C0D119B87EE500015120 /* src */,
+			);
+			name = ofxRemoteUI;
+			path = ../../../addons/ofxRemoteUI;
+			sourceTree = "<group>";
+		};
+		E264C0D119B87EE500015120 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E264C0D219B87EE500015120 /* dirent_vs.h */,
+				E264C0D319B87EE500015120 /* ofxRemoteUI.cpp */,
+				E264C0D419B87EE500015120 /* ofxRemoteUI.h */,
+				E264C0D519B87EE500015120 /* ofxRemoteUIClient.cpp */,
+				E264C0D619B87EE500015120 /* ofxRemoteUIClient.h */,
+				E264C0D719B87EE500015120 /* ofxRemoteUINeigbors.cpp */,
+				E264C0D819B87EE500015120 /* ofxRemoteUINeigbors.h */,
+				E264C0D919B87EE500015120 /* ofxRemoteUIServer.cpp */,
+				E264C0DA19B87EE500015120 /* ofxRemoteUIServer.h */,
+				E264C0DB19B87EE500015120 /* ofxRemoteUISimpleNotifications.h */,
+				E264C0DC19B87EE500015120 /* RemoteParam.h */,
+				E264C0DD19B87EE500015120 /* uriencode.cpp */,
+				E264C0DE19B87EE500015120 /* uriencode.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E264C12119B8835200015120 /* ofxOsc */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12219B8835200015120 /* libs */,
+				E264C13F19B8835200015120 /* src */,
+			);
+			name = ofxOsc;
+			path = ../../../addons/ofxOsc;
+			sourceTree = "<group>";
+		};
+		E264C12219B8835200015120 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12319B8835200015120 /* oscpack */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		E264C12319B8835200015120 /* oscpack */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12419B8835200015120 /* src */,
+			);
+			path = oscpack;
+			sourceTree = "<group>";
+		};
+		E264C12419B8835200015120 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12519B8835200015120 /* ip */,
+				E264C13219B8835200015120 /* osc */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E264C12519B8835200015120 /* ip */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12619B8835200015120 /* IpEndpointName.cpp */,
+				E264C12719B8835200015120 /* IpEndpointName.h */,
+				E264C12819B8835200015120 /* NetworkingUtils.h */,
+				E264C12919B8835200015120 /* PacketListener.h */,
+				E264C12A19B8835200015120 /* posix */,
+				E264C12D19B8835200015120 /* TimerListener.h */,
+				E264C12E19B8835200015120 /* UdpSocket.h */,
+				E264C12F19B8835200015120 /* win32 */,
+			);
+			path = ip;
+			sourceTree = "<group>";
+		};
+		E264C12A19B8835200015120 /* posix */ = {
+			isa = PBXGroup;
+			children = (
+				E264C12B19B8835200015120 /* NetworkingUtils.cpp */,
+				E264C12C19B8835200015120 /* UdpSocket.cpp */,
+			);
+			path = posix;
+			sourceTree = "<group>";
+		};
+		E264C12F19B8835200015120 /* win32 */ = {
+			isa = PBXGroup;
+			children = (
+				E264C13019B8835200015120 /* NetworkingUtilsWin.cpp */,
+				E264C13119B8835200015120 /* UdpSocketWin.cpp */,
+			);
+			path = win32;
+			sourceTree = "<group>";
+		};
+		E264C13219B8835200015120 /* osc */ = {
+			isa = PBXGroup;
+			children = (
+				E264C13319B8835200015120 /* MessageMappingOscPacketListener.h */,
+				E264C13419B8835200015120 /* OscException.h */,
+				E264C13519B8835200015120 /* OscHostEndianness.h */,
+				E264C13619B8835200015120 /* OscOutboundPacketStream.cpp */,
+				E264C13719B8835200015120 /* OscOutboundPacketStream.h */,
+				E264C13819B8835200015120 /* OscPacketListener.h */,
+				E264C13919B8835200015120 /* OscPrintReceivedElements.cpp */,
+				E264C13A19B8835200015120 /* OscPrintReceivedElements.h */,
+				E264C13B19B8835200015120 /* OscReceivedElements.cpp */,
+				E264C13C19B8835200015120 /* OscReceivedElements.h */,
+				E264C13D19B8835200015120 /* OscTypes.cpp */,
+				E264C13E19B8835200015120 /* OscTypes.h */,
+			);
+			path = osc;
+			sourceTree = "<group>";
+		};
+		E264C13F19B8835200015120 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E264C14019B8835200015120 /* ofxOsc.h */,
+				E264C14119B8835200015120 /* ofxOscArg.h */,
+				E264C14219B8835200015120 /* ofxOscBundle.cpp */,
+				E264C14319B8835200015120 /* ofxOscBundle.h */,
+				E264C14419B8835200015120 /* ofxOscMessage.cpp */,
+				E264C14519B8835200015120 /* ofxOscMessage.h */,
+				E264C14619B8835200015120 /* ofxOscParameterSync.cpp */,
+				E264C14719B8835200015120 /* ofxOscParameterSync.h */,
+				E264C14819B8835200015120 /* ofxOscReceiver.cpp */,
+				E264C14919B8835200015120 /* ofxOscReceiver.h */,
+				E264C14A19B8835200015120 /* ofxOscSender.cpp */,
+				E264C14B19B8835200015120 /* ofxOscSender.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		E2E427B91937338700CF93F7 /* ofxFluid */ = {
@@ -1358,6 +1561,8 @@
 				Japanese,
 				French,
 				German,
+				Base,
+				en,
 			);
 			mainGroup = E4B69B4A0A3A1720003C02F2;
 			productRefGroup = E4B69B4A0A3A1720003C02F2;
@@ -1408,11 +1613,13 @@
 			files = (
 				E2E4289C1937338900CF93F7 /* ofxFXObject.cpp in Sources */,
 				E2E9319B18F43158007BC76B /* tinyxmlerror.cpp in Sources */,
+				E264C15119B883FE00015120 /* IpEndpointName.cpp in Sources */,
 				E2E9315518F42F7F007BC76B /* ofxUITextInput.cpp in Sources */,
 				E25839B6191BBB1A0049E948 /* b2CollideCircle.cpp in Sources */,
 				E244DE8B194E19DD0099BE28 /* instructions.cpp in Sources */,
 				E249202D193F338300528EA5 /* ofxEasingQuint.cpp in Sources */,
 				E2E9314718F42F7F007BC76B /* ofxUIMultiImageToggle.cpp in Sources */,
+				E264C10D19B87EE500015120 /* ofxRemoteUIClient.cpp in Sources */,
 				E2492025193F338300528EA5 /* ofxEasingBounce.cpp in Sources */,
 				E25839E0191BBB1A0049E948 /* b2WeldJoint.cpp in Sources */,
 				E2E9314C18F42F7F007BC76B /* ofxUIRotarySlider.cpp in Sources */,
@@ -1421,18 +1628,25 @@
 				E2E9313618F42F7F007BC76B /* ofxUICircleSlider.cpp in Sources */,
 				E2E9319D18F43158007BC76B /* ofxXmlSettings.cpp in Sources */,
 				E2E9313318F42F7F007BC76B /* ofxUIBiLabelSlider.cpp in Sources */,
+				E264C14E19B8836300015120 /* ofxOscParameterSync.cpp in Sources */,
 				E2E9314518F42F7F007BC76B /* ofxUIMovingGraph.cpp in Sources */,
 				E2E9319C18F43158007BC76B /* tinyxmlparser.cpp in Sources */,
 				E254A37618F583F7007C3AFA /* Delaunay.cpp in Sources */,
+				E264C11019B87EE500015120 /* uriencode.cpp in Sources */,
 				E2492026193F338300528EA5 /* ofxEasingCirc.cpp in Sources */,
 				E25839C5191BBB1A0049E948 /* b2StackAllocator.cpp in Sources */,
 				E25839C6191BBB1A0049E948 /* b2Timer.cpp in Sources */,
 				E2C45DBE1945DCA400376929 /* highscoretable.cpp in Sources */,
 				E2E9313018F42F7F007BC76B /* ofxUI2DGraph.cpp in Sources */,
+				E264C15919B883FE00015120 /* OscTypes.cpp in Sources */,
+				E264C15719B883FE00015120 /* OscPrintReceivedElements.cpp in Sources */,
+				E264C14D19B8836300015120 /* ofxOscMessage.cpp in Sources */,
+				E264C15319B883FE00015120 /* UdpSocket.cpp in Sources */,
 				E2E2333019543A2F00EFD6B9 /* ambientplayer.cpp in Sources */,
 				E25839BD191BBB1A0049E948 /* b2ChainShape.cpp in Sources */,
 				E25839C9191BBB1A0049E948 /* b2Fixture.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				E264C15619B883FE00015120 /* OscOutboundPacketStream.cpp in Sources */,
 				E25839CF191BBB1A0049E948 /* b2CircleContact.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				E25839C0191BBB1A0049E948 /* b2PolygonShape.cpp in Sources */,
@@ -1442,6 +1656,7 @@
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
 				E25839D3191BBB1A0049E948 /* b2EdgeAndPolygonContact.cpp in Sources */,
 				E2E9315318F42F7F007BC76B /* ofxUITabBar.cpp in Sources */,
+				E264C15419B883FE00015120 /* NetworkingUtilsWin.cpp in Sources */,
 				E249203B19406E8C00528EA5 /* flowcam.cpp in Sources */,
 				E2E9313F18F42F7F007BC76B /* ofxUIImageSlider.cpp in Sources */,
 				E2E4288F1937338900CF93F7 /* ofxFluid.cpp in Sources */,
@@ -1464,11 +1679,13 @@
 				E2E9315018F42F7F007BC76B /* ofxUISpacer.cpp in Sources */,
 				E25839D1191BBB1A0049E948 /* b2ContactSolver.cpp in Sources */,
 				45CC483A999BF1065A6B926C /* Distance.cpp in Sources */,
+				E264C14F19B8836300015120 /* ofxOscReceiver.cpp in Sources */,
 				E25839BA191BBB1A0049E948 /* b2Distance.cpp in Sources */,
 				E25839DC191BBB1A0049E948 /* b2PrismaticJoint.cpp in Sources */,
 				5CC34D433F5806179935B89D /* Flow.cpp in Sources */,
 				2023EF517ED2D8B397511D4B /* Helpers.cpp in Sources */,
 				E249202A193F338300528EA5 /* ofxEasingLinear.cpp in Sources */,
+				E264C10C19B87EE500015120 /* ofxRemoteUI.cpp in Sources */,
 				E25839C1191BBB1A0049E948 /* b2BlockAllocator.cpp in Sources */,
 				E2E9314918F42F7F007BC76B /* ofxUIRadio.cpp in Sources */,
 				E25839D9191BBB1A0049E948 /* b2Joint.cpp in Sources */,
@@ -1476,6 +1693,7 @@
 				E2E9313918F42F7F007BC76B /* ofxUIEventArgs.cpp in Sources */,
 				E249202F193F338300528EA5 /* ofxEventKeyframe.cpp in Sources */,
 				E2E9314218F42F7F007BC76B /* ofxUILabelButton.cpp in Sources */,
+				E264C15819B883FE00015120 /* OscReceivedElements.cpp in Sources */,
 				E25839E2191BBB1A0049E948 /* b2Rope.cpp in Sources */,
 				E25839CD191BBB1A0049E948 /* b2ChainAndCircleContact.cpp in Sources */,
 				E25839C7191BBB1A0049E948 /* b2Body.cpp in Sources */,
@@ -1494,6 +1712,7 @@
 				E2492031193F338300528EA5 /* ofxPlaylist.cpp in Sources */,
 				E25839CA191BBB1A0049E948 /* b2Island.cpp in Sources */,
 				E2E9314618F42F7F007BC76B /* ofxUIMultiImageButton.cpp in Sources */,
+				E264C15519B883FE00015120 /* UdpSocketWin.cpp in Sources */,
 				E25839C8191BBB1A0049E948 /* b2ContactManager.cpp in Sources */,
 				E2492024193F338300528EA5 /* ofxEasingBack.cpp in Sources */,
 				E25839BF191BBB1A0049E948 /* b2EdgeShape.cpp in Sources */,
@@ -1517,11 +1736,14 @@
 				E2E9313518F42F7F007BC76B /* ofxUICanvas.cpp in Sources */,
 				E249202E193F338300528EA5 /* ofxEasingSine.cpp in Sources */,
 				E2E9313E18F42F7F007BC76B /* ofxUIImageSampler.cpp in Sources */,
+				E264C15019B8836300015120 /* ofxOscSender.cpp in Sources */,
 				E2E9314118F42F7F007BC76B /* ofxUILabel.cpp in Sources */,
 				E2492030193F338300528EA5 /* ofxKeyframe.cpp in Sources */,
 				E2E9313B18F42F7F007BC76B /* ofxUIFPSSlider.cpp in Sources */,
 				E25839BE191BBB1A0049E948 /* b2CircleShape.cpp in Sources */,
 				E229EE3519B86EB600874F2C /* videofeed.cpp in Sources */,
+				E264C10E19B87EE500015120 /* ofxRemoteUINeigbors.cpp in Sources */,
+				E264C15219B883FE00015120 /* NetworkingUtils.cpp in Sources */,
 				E25839CE191BBB1A0049E948 /* b2ChainAndPolygonContact.cpp in Sources */,
 				E2492028193F338300528EA5 /* ofxEasingElastic.cpp in Sources */,
 				E2E9314F18F42F7F007BC76B /* ofxUISortableList.cpp in Sources */,
@@ -1535,7 +1757,9 @@
 				E249203F1941CC8900528EA5 /* motionvisualizer.cpp in Sources */,
 				E2E9314018F42F7F007BC76B /* ofxUIImageToggle.cpp in Sources */,
 				E29D5C2218FBDF4600890C23 /* ParticleSystem.cpp in Sources */,
+				E264C10F19B87EE500015120 /* ofxRemoteUIServer.cpp in Sources */,
 				E2E9314B18F42F7F007BC76B /* ofxUIRectangle.cpp in Sources */,
+				E264C14C19B8836300015120 /* ofxOscBundle.cpp in Sources */,
 				DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */,
 				E25839C4191BBB1A0049E948 /* b2Settings.cpp in Sources */,
 				E25839D6191BBB1A0049E948 /* b2DistanceJoint.cpp in Sources */,
@@ -1590,6 +1814,7 @@
 					../../../addons/ofxCv/src,
 					../../../addons/ofxOpenCv/libs/opencv/include,
 					src/libs,
+					"../../../addons/ofxOsc/**",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
@@ -1637,6 +1862,7 @@
 					../../../addons/ofxCv/src,
 					../../../addons/ofxOpenCv/libs/opencv/include,
 					src/libs,
+					"../../../addons/ofxOsc/**",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
@@ -1658,6 +1884,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/Users/Tom/Projects/dropstuff/code/openFrameworks/addons/ofxRemoteUI/OSX,
+					Client/Frameworks,
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1750,6 +1978,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/Users/Tom/Projects/dropstuff/code/openFrameworks/addons/ofxRemoteUI/OSX,
+					Client/Frameworks,
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;

@@ -60,20 +60,8 @@ public:
     HighscoreTable highscores;
     Instructions instructions;
     
-    ofPtr<ofxUIScrollableCanvas> gui;
-    bool gui_initialized = false;
-    ofxUITextInput* defaultTimeoutTextInput;
-    ofxUITextInput* windowXTextInput;
-    ofxUITextInput* windowYTextInput;
-    ofxUITextInput* windowWTextInput;
-    ofxUITextInput* windowHTextInput;
-    vector<ofxUITextInput*> textInputs;
-
-    
     double delta_t;
     float timeout = 36000;
-    
-    bool need_setup = false;
     
     // Settings
     bool draw_debug = false;

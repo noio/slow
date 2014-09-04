@@ -2,6 +2,7 @@
 #include "ofApp.h"
 #include "constants.h"
 #include "utilities.h"
+#include "ofxRemoteUIServer.h"
 
 #include "math.h"
 
@@ -9,7 +10,6 @@ using namespace ofxCv;
 
 ofApp::ofApp()
 {
-    gui = ofPtr<ofxUIScrollableCanvas> (new ofxUIScrollableCanvas(0, 0, 200, ofGetHeight()));
     phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
 }
 
@@ -18,10 +18,7 @@ void ofApp::setup()
 {
     // Generic openframeworks setup
     ofSetFrameRate(kFrameRate);
-    ofSetBackgroundAuto(false);
     ofSetMinMagFilters(GL_NEAREST, GL_NEAREST);
-    ofClear(0, 0, 0, 255);
-    ofEnableAlphaBlending();
     ofSetLogLevel(OF_LOG_NOTICE);
     // Videofeed
     VideoFeedWebcam* webcam = new VideoFeedWebcam();
@@ -41,100 +38,39 @@ void ofApp::setup()
     squid.setup(phys_world, &flowcam, &visualizer, &sounds, &highscores);
     // Instructions
     instructions.setup(&squid);
-    need_setup = false;
-//    flowcam.startThread(true, false);
     // Gui Setup
     setupGUI();
 }
 
 void ofApp::setupGUI()
 {
-    if (!gui_initialized){
-        // Clear control panel
-        gui->removeWidgets();
-        textInputs.clear();
-        // Set it up
-        gui->setGlobalCanvasWidth(kGUIWidth);
-        gui->setTheme(OFX_UI_THEME_MINBLACK);
-        gui->setScrollAreaHeight(ofGetHeight());
-        gui->setFontSize(OFX_UI_FONT_SMALL, 6);
-        gui->addLabelButton("RESET", false);
-        defaultTimeoutTextInput = gui->addTextInput("DEFAULT_TIMEOUT", "3600");
-        defaultTimeoutTextInput->setAutoClear(false);
-        textInputs.push_back(defaultTimeoutTextInput);
-        gui->addNumberDialer("TIMEOUT", 0, 36000, &timeout, 0);
-        // ----------
-        gui->addLabel("CAMERA");
-        gui->addToggle("DEBUG", &draw_debug);
-        gui->addSlider("ZOOM", 1.0, 2.0, 1.0);
-        gui->addIntSlider("FLIP", -1, 2, 1);
-        gui->setGlobalCanvasWidth(kGUIWidth/2);
-        gui->addLabelButton("720p", false);
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        gui->addLabelButton("1080p", false);
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-        gui->setGlobalCanvasWidth(kGUIWidth);
-        // -----------
-        gui->addLabel("RESOLUTION");
-        gui->addLabelButton("768x288", false);
-        gui->setGlobalCanvasWidth(kGUIWidth/2);
-        windowWTextInput = gui->addTextInput("WINDOW_W", ofToString(ofGetWidth()));
-        windowWTextInput->setAutoClear(false);
-        textInputs.push_back(windowWTextInput);
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        windowHTextInput = gui->addTextInput("WINDOW_H", ofToString(ofGetHeight()));
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-        windowHTextInput->setAutoClear(false);
-        textInputs.push_back(windowHTextInput);
-        gui->setGlobalCanvasWidth(kGUIWidth);
-        gui->addLabel("WINDOW POSITION");
-        gui->setGlobalCanvasWidth(kGUIWidth/2);
-        windowXTextInput = gui->addTextInput("WINDOW_X", "0");
-        windowXTextInput->setAutoClear(false);
-        textInputs.push_back(windowXTextInput);
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        windowYTextInput = gui->addTextInput("WINDOW_Y", "0");
-        gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-        windowYTextInput->setAutoClear(false);
-        textInputs.push_back(windowYTextInput);
-        gui->setGlobalCanvasWidth(kGUIWidth);
-        // ----------
-        gui->addLabel("OPTICAL FLOW");
-        gui->addRangeSlider("FLOW_THRESHOLD", 0.0, 3.0, 0.1, 0.5);
-        gui->addIntSlider("FLOW_EROSION_SIZE", 1, 11, 5);
-        // ----------
-        gui->addLabel("SQUISHY");
-        gui->addSlider("SQUID_SCALE", 0.5f, 3.0f, 1.9f);
-        gui->addSlider("FACE_SEARCH_WINDOW", 0.05, 1.0, 0.2);
-        gui->addRangeSlider("FACE_SIZE", 0.02, 1.0, 0.05, 0.4);
-        gui->addSlider("PUSH_FORCE", 20.0f, 100.0f, &squid.push_force);
-        gui->addSlider("LOCAL_AREA", 80.0f, 200.0f, &squid.local_area_radius);
-        gui->addSlider("CORE_AREA", 20.0f, 80.0f, &squid.core_area_radius);
-        gui->addSlider("MAX_LOCAL_FLOW", .0f, .5f, &squid.local_flow_max);
-        gui->addSlider("MAX_CORE_FLOW", .0, .5f, &squid.core_flow_max);
-        // ----------
-        gui->addLabel("VISUALIZER");
-        gui->addIntSlider("HUE", 0, 255, &visualizer.trail_hue);
-        gui->addIntSlider("HUE_RANGE", 0, 255, &visualizer.trail_hue_range);
-        gui->addSlider("ALPHA", 0.0, 4.0, &visualizer.trail_alpha_mtp);
-        // Size
-        ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
-        gui->loadSettings("settings.xml");
-        gui->setVisible(false);
-        // Set some other things
-        setTimeoutFromGUI();
-        setWindowPositionFromGUI();
-        setWindowSizeFromGUI();
-        gui_initialized = true;
-        need_setup = true;
-    }
-    // Position the GUI
-    gui->setWidth(kGUIWidth);
-    gui->setPosition(ofGetWidth() - kGUIWidth, 0);
-    gui->setHeight(ofGetHeight());
-    gui->setScrollAreaHeight(ofGetHeight());
-    gui->autoSizeToFitWidgets();
-    // Load settings
+    OFX_REMOTEUI_SERVER_SETUP(44040); //start server
+    OFX_REMOTEUI_SERVER_NEW_GROUP("Global");
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(draw_debug);
+    // TODO OFX_REMOTEUI_SERVER_SHARE_PARAM(flip)
+    // TODO camera res
+    // TODO resolution & position
+    
+    OFX_REMOTEUI_SERVER_NEW_GROUP("Flow");
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    
+    OFX_REMOTEUI_SERVER_NEW_GROUP("Squishy");
+    // TODO callback for scale
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_search_window, 0.1, 1.0);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_size_min, 0.05, 0.2);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_size_max, 0.1, 1.0);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.push_force, 20, 100);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.local_area_radius, 80, 200);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.core_area_radius, 20, 80);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
+    
+    OFX_REMOTEUI_SERVER_NEW_GROUP("Visualizer");
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_hue, 0, 255);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_hue_range, 0, 255);
+    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_alpha_mtp, 0, 4.0);
 
 }
 
@@ -170,10 +106,6 @@ void ofApp::setupPhysics()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (need_setup) {
-        setup();
-    }
-
     delta_t = ofGetLastFrameTime();
     timeout -= delta_t;
     if (timeout < 0){
@@ -207,24 +139,20 @@ void ofApp::draw()
     if (draw_debug) {
         flowcam.drawDebug();
         ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(),0) + "fps (r99)", kLabelOffset);
-        ofDrawBitmapStringHighlight("[d]ebug view \n[g]ui \n[h]elp \n[ ] crash \n[i] sound on \n[o] sound off \n[r]eset", kLabelOffset + ofPoint(0,20));
+        ofDrawBitmapStringHighlight("[d]ebug view \n[h]elp \n[ ] crash \n[i] sound on \n[o] sound off \n[r]eset", kLabelOffset + ofPoint(0,20));
     }
 }
 
 
 void ofApp::exit()
 {
-    gui->saveSettings("settings.xml");
+    videofeed.reset();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
     switch (key) {
-        case 'g':
-            gui->toggleVisible();
-            break;
-
         case 'd':
             draw_debug = !draw_debug;
             break;
@@ -245,9 +173,6 @@ void ofApp::keyPressed(int key)
             sounds.setSoundsOn(false);
             break;
             
-        case 'r':
-            need_setup = true;
-
         default:
             break;
     }
@@ -283,9 +208,7 @@ void ofApp::mouseReleased(int x, int y, int button)
 void ofApp::windowResized(int w, int h)
 {
     ofLogNotice("ofApp") << "resized " << w << "x" << h;
-    need_setup = true;
-    windowWTextInput->setTextString(ofToString(w));
-    windowHTextInput->setTextString(ofToString(h));
+    // TODO HANDLE DIS
 }
 
 //--------------------------------------------------------------
@@ -296,118 +219,4 @@ void ofApp::gotMessage(ofMessage msg)
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo)
 {
-}
-
-//--------------------------------------------------------------
-void ofApp::guiEvent(ofxUIEventArgs& e)
-{
-    string name = e.widget->getName();
-    int kind = e.widget->getKind();
-
-    if (name == "RESET") {
-        gui->saveSettings("settings.xml");
-        need_setup = true;
-    }
-
-    if (name == "FACE_SEARCH_WINDOW") {
-        squid.face_search_window = ((ofxUISlider*) e.widget)->getScaledValue();
-    }
-
-    if (name == "FACE_SIZE") {
-        squid.face_size_min = ((ofxUIRangeSlider*) e.widget)->getScaledValueLow();
-        squid.face_size_max = ((ofxUIRangeSlider*) e.widget)->getScaledValueHigh();
-    }
-
-    if (name == "FLOW_EROSION_SIZE") {
-        flowcam.setFlowErosionSize((int)(((ofxUIIntSlider*) e.widget)->getScaledValue()));
-    }
-
-    if (name == "SQUID_SCALE") {
-        squid.setScale(((ofxUISlider*) e.widget)->getScaledValue());
-    }
-
-    if (name == "1080x480") {
-        ofSetWindowShape(1080, 480);
-        need_setup = true;
-    }
-
-    if (name == "768x288") {
-        ofSetWindowShape(768, 288);
-        need_setup = true;
-    }
-    
-    // Text fields
-    if (kind == OFX_UI_WIDGET_TEXTINPUT){
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS){
-            unfocusAllTextInputs(ti);
-        }
-    }
-
-    if(name == "DEFAULT_TIMEOUT")
-    {
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            setTimeoutFromGUI();
-        }
-    }
-    
-    if(name == "WINDOW_X")
-    {
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            setWindowPositionFromGUI();
-        }
-    }
-    
-    if(name == "WINDOW_Y")
-    {
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            setWindowPositionFromGUI();
-        }
-    }
-    
-    if(name == "WINDOW_W")
-    {
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            setWindowSizeFromGUI();
-        }
-    }
-    
-    if(name == "WINDOW_H")
-    {
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
-        if(ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            setWindowSizeFromGUI();
-        }
-    }
-
-}
-
-void ofApp::setTimeoutFromGUI(){
-    timeout = ofToInt(defaultTimeoutTextInput->getTextString());
-}
-
-void ofApp::setWindowPositionFromGUI(){
-    ofSetWindowPosition(ofToInt(windowXTextInput->getTextString()), ofToInt(windowYTextInput->getTextString()));
-}
-
-void ofApp::setWindowSizeFromGUI(){
-    ofSetWindowShape(ofToInt(windowWTextInput->getTextString()), ofToInt(windowHTextInput->getTextString()));
-
-}
-
-void ofApp::unfocusAllTextInputs(ofxUITextInput* except){
-    for (int i = 0; i < textInputs.size(); i ++){
-        if (except != textInputs[i]){
-            textInputs[i]->setFocus(false);
-        }
-    }
 }

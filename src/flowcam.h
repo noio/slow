@@ -31,11 +31,11 @@ public:
     const vector<ofPolyline>& getContoursLow() const { return contourfinder_low.getPolylines(); };
     const vector<ofPolyline>& getContoursHigh() const { return contourfinder_high.getPolylines(); };
 
-    void setFlowErosionSize(int in_flow_erosion_size);
     bool hasData() { return has_data; };
     
     float flow_threshold_low = 0.1f;
     float flow_threshold_high = 0.5f;
+    int flow_erosion_size = 5;
 
 private:
     void reset();
@@ -53,8 +53,6 @@ private:
     int flow_creep_counter = 0;
 
     int max_flow_width = 240;
-
-    int flow_erosion_size;
 
     float last_update = 0;
     bool has_data = false;

@@ -837,6 +837,7 @@ void Squid::drawBody()
     ofSetColor(colors_tweened.markings);
     markings_bubble_im.draw(body_draw_rect_squished);
     ofPopMatrix();
+    ofSetColor(255, 255, 255, 255);
 }
 
 void Squid::drawTentacles()
@@ -878,7 +879,10 @@ void Squid::drawDebug()
     // Draw the grids
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofSetColor(255, 0, 255, 128);
-    drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight());
+    if (!sections.empty())
+    {
+        drawMat(sections, 0, 0, ofGetWidth(), ofGetHeight());
+    }
     ofDisableBlendMode();
     ofSetColor(0, 255, 0, 255);
     // Draw the local area

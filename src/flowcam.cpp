@@ -4,8 +4,6 @@ using namespace ofxCv;
 
 void FlowCam::setup(int max_flow_width)
 {
-    // Initialize member variables
-    setFlowErosionSize(5);
     // OpticalFlow setup
     opticalflow.setPyramidScale(0.5);
     opticalflow.setNumLevels(2);
@@ -39,7 +37,10 @@ void FlowCam::drawDebug()
     // Draw the optical flow maps
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofSetColor(224, 160, 58, 128);
-    ofxCv::drawMat(flow_high, 0, 0, ofGetWidth(), ofGetHeight());
+    if (!flow_high.empty())
+    {
+        ofxCv::drawMat(flow_high, 0, 0, ofGetWidth(), ofGetHeight());
+    }
     ofDisableBlendMode();
     ofPushMatrix();
     ofSetLineWidth(4.0);
@@ -47,14 +48,6 @@ void FlowCam::drawDebug()
     ofScale(ofGetWidth() / (float)flow_high.cols, ofGetHeight() / (float)flow_high.rows);
     ofPopMatrix();
     ofPopStyle();
-}
-
-void FlowCam::setFlowErosionSize(int in_flow_erosion_size)
-{
-    flow_erosion_size = in_flow_erosion_size;
-    open_kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-                                            cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
-                                            cv::Point(flow_erosion_size, flow_erosion_size));
 }
 
 
@@ -85,14 +78,13 @@ void FlowCam::update(cv::Mat frame)
     //
     // Low speed mask
     flow_low = magnitude > flow_threshold_low; // & magnitude < adj_flow_threshold_high;
-    cv::dilate(flow_low, flow_low, open_kernel);
-    cv::erode(flow_low, flow_low, open_kernel);
-    cv::erode(flow_low, flow_low, open_kernel);
+    ofxCv::dilate(flow_low, flow_low, flow_erosion_size);
+    ofxCv::erode(flow_low, flow_low, flow_erosion_size * 2);
     //
     // Compute the high speed mask
     flow_high = magnitude > flow_threshold_high;
-    cv::erode(flow_high, flow_high, open_kernel);
-    cv::dilate(flow_high, flow_high, open_kernel);
+    ofxCv::dilate(flow_low, flow_low, flow_erosion_size);
+    ofxCv::erode(flow_low, flow_low, flow_erosion_size);
     // Update history
     if (flow_high_hist.size() != flow_high.size())
     {

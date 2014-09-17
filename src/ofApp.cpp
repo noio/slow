@@ -52,45 +52,47 @@ void ofApp::setup()
 
 void ofApp::setupGUI()
 {
-    OFX_REMOTEUI_SERVER_SETUP(44040); //start server
+    RUI_SETUP(44040); //start server
     
-    OFX_REMOTEUI_SERVER_NEW_GROUP("Global");
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(draw_debug);
+    RUI_NEW_GROUP("Global");
+    RUI_SHARE_PARAM(draw_debug);
     //
-    OFX_REMOTEUI_SERVER_NEW_GROUP("Reboot");
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid_scale, 0.2, 4.0);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_x, 0, ofGetScreenWidth() / 2);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_y, 0, ofGetScreenHeight() / 2);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_width, 320, 1024);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(window_height, 240, 768);
+    RUI_NEW_GROUP("Reboot");
+    RUI_SHARE_PARAM(squid_scale, 0.2, 4.0);
+    RUI_SHARE_PARAM(window_x, 0, ofGetScreenWidth() / 2);
+    RUI_SHARE_PARAM(window_y, 0, ofGetScreenHeight() / 2);
+    RUI_SHARE_PARAM(window_width, 320, 1024);
+    RUI_SHARE_PARAM(window_height, 240, 768);
     vector<string> resolutions;
     resolutions.push_back("640x480");
     resolutions.push_back("720p");
     resolutions.push_back("1080p");
-    OFX_REMOTEUI_SERVER_SHARE_ENUM_PARAM(capture_res, 0, 2, resolutions);
+    RUI_SHARE_ENUM_PARAM(capture_res, 0, 2, resolutions);
+    RUI_SHARE_PARAM(use_imagefeed);
+    RUI_SHARE_PARAM(imagefeed_address);
     //
-    OFX_REMOTEUI_SERVER_NEW_GROUP("Flow");
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    RUI_NEW_GROUP("Flow");
+    RUI_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
     //
-    OFX_REMOTEUI_SERVER_NEW_GROUP("Squishy");
+    RUI_NEW_GROUP("Squishy");
     // TODO callback for scale
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_search_window, 0.1, 1.0);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_size_min, 0.05, 0.2);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.face_size_max, 0.1, 1.0);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.push_force, 20, 100);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.local_area_radius, 80, 200);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.core_area_radius, 20, 80);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
+    RUI_SHARE_PARAM(squid.face_search_window, 0.1, 1.0);
+    RUI_SHARE_PARAM(squid.face_size_min, 0.05, 0.2);
+    RUI_SHARE_PARAM(squid.face_size_max, 0.1, 1.0);
+    RUI_SHARE_PARAM(squid.push_force, 20, 100);
+    RUI_SHARE_PARAM(squid.local_area_radius, 80, 200);
+    RUI_SHARE_PARAM(squid.core_area_radius, 20, 80);
+    RUI_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
+    RUI_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
     
-    OFX_REMOTEUI_SERVER_NEW_GROUP("Visualizer");
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_hue, 0, 255);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_hue_range, 0, 255);
-    OFX_REMOTEUI_SERVER_SHARE_PARAM(visualizer.trail_alpha_mtp, 0, 4.0);
+    RUI_NEW_GROUP("Visualizer");
+    RUI_SHARE_PARAM(visualizer.trail_hue, 0, 255);
+    RUI_SHARE_PARAM(visualizer.trail_hue_range, 0, 255);
+    RUI_SHARE_PARAM(visualizer.trail_alpha_mtp, 0, 4.0);
 
-    OFX_REMOTEUI_SERVER_LOAD_FROM_XML();
+    RUI_LOAD_FROM_XML();
 
 }
 

@@ -2,6 +2,7 @@
 #include "constants.h"
 
 using namespace ofxCv;
+using namespace ofxDS;
 
 ofPolyline lineFacingNormal(const ofPolyline& input, const ofPoint& normal, float max_angle)
 {
@@ -60,7 +61,7 @@ void MotionVisualizer::updateFullTrails(double delta_t)
 {
     float scale_flow_to_game = ofGetWidth() / flowcam->getSize().x;
 
-    const vector<ofPolyline>& contours = flowcam->getContoursLow();
+    const vector<ofPolyline>& contours = flowcam->getContoursHigh();
     
     for (int ic = 0; ic < contours.size(); ic++) {
         const ofPolyline& contour = contours[ic].getResampledBySpacing(ofGetHeight() * 0.01);

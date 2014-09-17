@@ -12,7 +12,7 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world, FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
+void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world, ofxDS::FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
 {
     scale = in_scale;
     phys_world = in_phys_world;
@@ -760,7 +760,7 @@ void Squid::draw(bool draw_debug)
 
     // Draw Hint
     if (hint_alpha > 0) {
-
+        ofEnableAlphaBlending();
         hint_rotation ++;
         ofPushMatrix();
         ofRectangle hint_draw_rect(-body_radius, -body_radius, body_radius * 2, body_radius * 2);
@@ -813,6 +813,7 @@ void Squid::drawScore(){
 
 void Squid::drawBody()
 {
+    ofEnableAlphaBlending();
     // Draw body
     float body_radius_s = body_radius * scale;
     // Trasnform to body position

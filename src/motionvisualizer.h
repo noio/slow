@@ -5,6 +5,7 @@
 #include "ParticleSystem.h"
 #include "flowcam.h"
 #include "ofxCv.h"
+#include "ofxDropstuff.h"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -24,7 +25,7 @@ ofPolyline lineFacingNormal(const ofPolyline& input, const ofPoint& normal, floa
 
 class MotionVisualizer {
 public:
-    void setup(FlowCam* in_flowcam);
+    void setup(ofxDS::FlowCam* in_flowcam);
     void update(double delta_t);
     void draw();
     void trail(ofPoint pos, ofPoint dir, float radius);
@@ -40,7 +41,7 @@ private:
     void drawTrailShapes();
     
     ParticleSystem particles;
-    FlowCam* flowcam;
+    ofxDS::FlowCam* flowcam;
     
     double t;
     vector<float> trail_alpha_timeline;

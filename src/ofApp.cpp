@@ -7,6 +7,7 @@
 #include "math.h"
 
 using namespace ofxCv;
+using namespace ofxDS;
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -21,10 +22,19 @@ void ofApp::setup()
     ofSetWindowPosition(window_x, window_y);
     ofSetWindowShape(window_width, window_height);
     // Videofeed
-    VideoFeedWebcam* webcam = new VideoFeedWebcam();
-    webcam->setup(0, capture_res);
-    webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
-    videofeed = ofPtr<VideoFeed>(webcam);
+    if (use_imagefeed){
+        VideoFeedImageURL* feed = new VideoFeedImageURL();
+        feed->setup(imagefeed_address);
+        feed->setAspectRatio(ofGetWidth(), ofGetHeight());
+        videofeed = ofPtr<VideoFeed>(feed);
+    }
+    else
+    {
+        VideoFeedWebcam* webcam = new VideoFeedWebcam();
+        webcam->setup(0, capture_res);
+        webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
+        videofeed = ofPtr<VideoFeed>(webcam);
+    }
     flowcam.setup(160);
     // Visualizer
     visualizer.setup(&flowcam);

@@ -62,7 +62,7 @@ public:
 
     
     // METHODS
-    void setup(float in_scale, ofPtr<b2World> phys_world, FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
+    void setup(float in_scale, ofPtr<b2World> phys_world, ofxDS::FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
     void update(double delta_t, const cv::Mat& frame);
     void draw(bool draw_debug);
     
@@ -200,7 +200,7 @@ private:
     cv::Mat face_mask_mat;
     cv::Rect face_roi;
     ofPtr<FrameRecord> face_anim;
-    FlowCam* flowcam;
+    ofxDS::FlowCam* flowcam;
     MotionVisualizer *visualizer;
     AmbientPlayer *sounds;
     HighscoreTable* highscores;

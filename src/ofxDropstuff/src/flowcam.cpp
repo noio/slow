@@ -1,5 +1,8 @@
 #include "flowcam.h"
 
+using namespace ofxDS;
+using namespace std;
+using namespace cv;
 using namespace ofxCv;
 
 void FlowCam::setup(int max_flow_width)
@@ -12,12 +15,6 @@ void FlowCam::setup(int max_flow_width)
     opticalflow.setPolyN(5);
     opticalflow.setPolySigma(1.2);
     //
-    contourfinder_high.setSimplify(true);
-    contourfinder_high.setMinArea(80);
-    contourfinder_high.getTracker().setSmoothingRate(0.2);
-    contourfinder_low.setSimplify(true);
-    contourfinder_low.setMinArea(80);
-    contourfinder_low.getTracker().setSmoothingRate(0.2);
     //
     flow = Mat::zeros(2, 2, CV_32FC2);
     //
@@ -59,7 +56,14 @@ void FlowCam::update(Mat frame)
                                        cv::Size(2 * flow_erosion_size + 1, 2 * flow_erosion_size + 1),
                                        cv::Point(flow_erosion_size, flow_erosion_size));
     float delta_t = ofGetElapsedTimef() - last_update;
-    cvtColor(frame, frame_gray, CV_BGR2GRAY);
+    if (frame.channels() > 1)
+    {
+        cvtColor(frame, frame_gray, CV_RGB2GRAY);
+    }
+    else
+    {
+        frame_gray = frame;
+    }
     while (frame_gray.cols > max_flow_width)
     {
         pyrDown(frame_gray, frame_gray);
@@ -87,8 +91,10 @@ void FlowCam::update(Mat frame)
     //
     // Compute the high speed mask
     flow_high = magnitude > flow_threshold_high;
-    dilate(flow_low, flow_low, kernel);
-    erode(flow_low, flow_low, kernel);
+    dilate(flow_high, flow_high, kernel);
+    erode(flow_high, flow_high, kernel);
+    //
+    contourfinder.findContours(flow_high);
     // Update history
     if (flow_high_hist.size() != flow_high.size())
     {
@@ -97,9 +103,7 @@ void FlowCam::update(Mat frame)
     flow_high_hist += flow_high * (delta_t * 2);
     flow_high_hist -= 1;
     blur(flow_high_hist, flow_high_hist, 3);
-    //
-    contourfinder_high.findContours(flow_high);
-    contourfinder_low.findContours(flow_low);
+    has_data = true;
     //
     // Check for flow creep
     global_flow = sum(flow_high)[0] / 255 / (float)(flow_high.cols * flow_high.rows);
@@ -116,6 +120,5 @@ void FlowCam::update(Mat frame)
     {
         flow_creep_counter = MAX(0, flow_creep_counter - 1);
     }
-    has_data = true;
     last_update = ofGetElapsedTimef();
 }

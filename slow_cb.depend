@@ -6563,42 +6563,40 @@
 1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\rope\b2rope.h
 	<Box2D/Common/b2Math.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\main.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\main.cpp
 	"ofMain.h"
 	"ofApp.h"
 	"constants.h"
 
-1403030826 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
-	"flowcam.h"
+1411216823 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
 	"motionvisualizer.h"
 	"squid.h"
 	"highscoretable.h"
 	"instructions.h"
+	"ofxDropstuff.h"
 	"ofMain.h"
 	"ofxCv.h"
-	"ofxUI.h"
-	"ofxFluid.h"
-	"ofxDelaunay.h"
+	"ofxRemoteUIServer.h"
 	"Box2D/Box2D.h"
 	<vector>
 
-1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
 	"motionvisualizer.h"
 	"constants.h"
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.cpp
 	"objectfinderthreaded.h"
 
-1403031958 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
+1411218288 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
 	"ofApp.h"
 	"constants.h"
 	"utilities.h"
 	"math.h"
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.cpp
 	"ParticleSystem.h"
 
-1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
+1410969889 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
 	"squid.h"
 	"constants.h"
 	"ofxCv.h"
@@ -6920,4 +6918,430 @@
 	<netinet/tcp.h>
 	<winsock2.h>
 	<ws2tcpip.h>
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscparametersync.cpp
+	"ofxOscParameterSync.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscparametersync.h
+	"ofxOscSender.h"
+	"ofxOscReceiver.h"
+	"ofParameter.h"
+	"ofParameterGroup.h"
+
+1410260597 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscsender.h
+	<string>
+	"OscTypes.h"
+	"OscOutboundPacketStream.h"
+	"ofxOscBundle.h"
+	"ofxOscMessage.h"
+	"ofParameter.h"
+	"ofParameterGroup.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscreceiver.h
+	<deque>
+	"ofMain.h"
+	<windows.h>
+	<pthread.h>
+	"OscTypes.h"
+	"OscPacketListener.h"
+	"UdpSocket.h"
+	"ofxOscMessage.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscpacketlistener.h
+	"OscReceivedElements.h"
+	"../ip/PacketListener.h"
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscreceiver.cpp
+	"ofxOscReceiver.h"
+	<pthread.h>
+	<iostream>
+	<assert.h>
+
+1410260597 source:c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscsender.cpp
+	"ofxOscSender.h"
+	"ofUtils.h"
+	"ofParameterGroup.h"
+	"UdpSocket.h"
+	<assert.h>
+
+1410438479 source:c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteui.cpp
+	"ofxRemoteUI.h"
+	<iostream>
+	<stdlib.h>
+	"uriencode.h"
+	<sstream>
+	<arpa/inet.h>
+	<net/if.h>
+	<ifaddrs.h>
+	<windows.h>
+	<iphlpapi.h>
+	<WinSock2.h>
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteui.h
+	"ofxOsc.h"
+	<set>
+	<vector>
+	<unordered_map>
+	<memory>
+	<tr1/unordered_map>
+	"RemoteParam.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxosc.h
+	"ofxOscArg.h"
+	"ofxOscMessage.h"
+	"ofxOscSender.h"
+	"ofxOscReceiver.h"
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\remoteparam.h
+	<stdio.h>
+	<sstream>
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\uriencode.h
+	<iostream>
+
+1410438479 source:c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuiclient.cpp
+	"ofxRemoteUIClient.h"
+	<iostream>
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuiclient.h
+	"ofxRemoteUI.h"
+	"ofxOsc.h"
+	<map>
+	<set>
+	<vector>
+	"ofxRemoteUINeigbors.h"
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuineigbors.h
+	"ofxRemoteUI.h"
+	"ofxOsc.h"
+	<unordered_map>
+	<memory>
+	<tr1/unordered_map>
+
+1410438479 source:c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuineigbors.cpp
+	"ofxRemoteUINeigbors.h"
+	<sstream>
+	<iostream>
+
+1410438479 source:c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuiserver.cpp
+	<winsock2.h>
+	<iostream>
+	<algorithm>
+	<string>
+	<string.h>
+	"dirent.h"
+	<mach-o/dyld.h>
+	"dirent_vs.h"
+	<sys/stat.h>
+	<time.h>
+	"ofxRemoteUIServer.h"
+	<Poco/Path.h>
+	<Poco/Environment.h>
+	<Poco/Process.h>
+	<Poco/Util/Application.h>
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\dirent_vs.h
+	<stdio.h>
+	<stdarg.h>
+	<windef.h>
+	<winbase.h>
+	<wchar.h>
+	<string.h>
+	<stdlib.h>
+	<malloc.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<errno.h>
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuiserver.h
+	"ofxOsc.h"
+	"ofxXmlSettings.h"
+	"ofxRemoteUI.h"
+	<map>
+	<set>
+	<vector>
+	"ofxRemoteUISimpleNotifications.h"
+
+1410438479 c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\ofxremoteuisimplenotifications.h
+	"ofMain.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\environment.h
+	"Poco/Foundation.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process.h
+	"Poco/Foundation.h"
+	"Process_WINCE.h"
+	"Poco/Process_WIN32U.h"
+	"Poco/Process_WIN32.h"
+	"Poco/Process_VX.h"
+	"Poco/Process_UNIX.h"
+	"Poco/Process_VMS.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_wince.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<vector>
+	"Poco/UnWindows.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_win32u.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<vector>
+	"Poco/UnWindows.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_win32.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<vector>
+	"Poco/UnWindows.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_vx.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_unix.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<unistd.h>
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\process_vms.h
+	"Poco/Foundation.h"
+	"Poco/RefCountedObject.h"
+	<vector>
+	<unistd.h>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\application.h
+	"Poco/Util/Util.h"
+	"Poco/Util/Subsystem.h"
+	"Poco/Util/LayeredConfiguration.h"
+	"Poco/Util/OptionSet.h"
+	"Poco/AutoPtr.h"
+	"Poco/Logger.h"
+	"Poco/Path.h"
+	"Poco/Timestamp.h"
+	"Poco/Timespan.h"
+	"Poco/AutoPtr.h"
+	<cstdarg>
+	<vector>
+	<typeinfo>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\util.h
+	"Poco/Foundation.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\subsystem.h
+	"Poco/Util/Util.h"
+	"Poco/RefCountedObject.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\layeredconfiguration.h
+	"Poco/Util/Util.h"
+	"Poco/Util/AbstractConfiguration.h"
+	"Poco/AutoPtr.h"
+	<list>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\abstractconfiguration.h
+	"Poco/Util/Util.h"
+	"Poco/Mutex.h"
+	"Poco/RefCountedObject.h"
+	"Poco/BasicEvent.h"
+	<vector>
+	<utility>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\basicevent.h
+	"Poco/AbstractEvent.h"
+	"Poco/DefaultStrategy.h"
+	"Poco/AbstractDelegate.h"
+	"Poco/Mutex.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\defaultstrategy.h
+	"Poco/NotificationStrategy.h"
+	"Poco/SharedPtr.h"
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\optionset.h
+	"Poco/Util/Util.h"
+	"Poco/Util/Option.h"
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\option.h
+	"Poco/Util/Util.h"
+	"Poco/Util/OptionCallback.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\util\optioncallback.h
+	"Poco/Util/Util.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\logger.h
+	"Poco/Foundation.h"
+	"Poco/Channel.h"
+	"Poco/Message.h"
+	"Poco/Format.h"
+	<map>
+	<vector>
+	<cstddef>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\channel.h
+	"Poco/Foundation.h"
+	"Poco/Configurable.h"
+	"Poco/Mutex.h"
+	"Poco/RefCountedObject.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\configurable.h
+	"Poco/Foundation.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\message.h
+	"Poco/Foundation.h"
+	"Poco/Timestamp.h"
+	<map>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\format.h
+	"Poco/Foundation.h"
+	"Poco/Any.h"
+	<vector>
+
+1410438479 source:c:\users\tom\projects\openframeworks\addons\ofxremoteui\src\uriencode.cpp
+	"uriencode.h"
+	<iostream>
+
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\fileloader.cpp
+	"fileloader.h"
+	"Poco/Net/HTTPSession.h"
+	"Poco/Net/HTTPClientSession.h"
+	"Poco/Net/HTTPRequest.h"
+	"Poco/Net/HTTPResponse.h"
+	"Poco/Path.h"
+	"Poco/URI.h"
+	"Poco/Exception.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httprequest.h
+	"Poco/Net/Net.h"
+	"Poco/Net/HTTPMessage.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httpmessage.h
+	"Poco/Net/Net.h"
+	"Poco/Net/MessageHeader.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\messageheader.h
+	"Poco/Net/Net.h"
+	"Poco/Net/NameValueCollection.h"
+	<ostream>
+	<istream>
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\namevaluecollection.h
+	"Poco/Net/Net.h"
+	"Poco/String.h"
+	<map>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\string.h
+	"Poco/Foundation.h"
+	"Poco/Ascii.h"
+	<cstring>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\ascii.h
+	"Poco/Foundation.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httpresponse.h
+	"Poco/Net/Net.h"
+	"Poco/Net/HTTPMessage.h"
+	"Poco/Net/HTTPCookie.h"
+	"Poco/Timestamp.h"
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httpcookie.h
+	"Poco/Net/Net.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\uri.h
+	"Poco/Foundation.h"
+	<vector>
+
+1410969889 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\flowcam.cpp
+	"flowcam.h"
+
+1410969889 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\skeletonfeed.cpp
+	"skeletonfeed.h"
+
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\skeletonfeed.h
+	"fileloader.h"
+	"ofMain.h"
+	"ofxJSON.h"
+
+1410438522 c:\users\tom\projects\openframeworks\addons\ofxjson\src\ofxjson.h
+	<json/json.h>
+	"ofxJSONElement.h"
+
+1410438522 c:\users\tom\projects\openframeworks\addons\ofxjson\libs\jsoncpp\include\json\json.h
+	<cpptl/config.h>
+	"config.h"
+	"forwards.h"
+	"forwards.h"
+	<string>
+	<vector>
+	<map>
+	<cpptl/smallmap.h>
+	<cpptl/forwards.h>
+	"features.h"
+	"value.h"
+	<deque>
+	<iosfwd>
+	<stack>
+	<string>
+	"value.h"
+	<vector>
+	<string>
+	<stdlib.h>
+	"config.h"
+	<stdexcept>
+
+1410438522 c:\users\tom\projects\openframeworks\addons\ofxjson\src\ofxjsonelement.h
+	<string>
+	<json/json.h>
+	"ofLog.h"
+	"ofURLFileLoader.h"
+
+1410969889 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\videofeed.cpp
+	"videofeed.h"
+	"utilities.h"
+
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ambientplayer.cpp
+	"ambientplayer.h"
+
+1410438522 source:c:\users\tom\projects\openframeworks\addons\ofxjson\src\ofxjsonelement.cpp
+	"ofxJSONElement.h"
+
+1410438522 source:c:\users\tom\projects\openframeworks\addons\ofxjson\libs\jsoncpp\src\jsoncpp.cpp
+	"json/json.h"
+	<json/assertions.h>
+	<json/reader.h>
+	<json/value.h>
+	"json_tool.h"
+	<utility>
+	<cstdio>
+	<cassert>
+	<cstring>
+	<istream>
+	<stdlib.h>
+	<assert.h>
+	<json/assertions.h>
+	<json/value.h>
+	<json/writer.h>
+	"json_batchallocator.h"
+	<math.h>
+	<sstream>
+	<utility>
+	<cstring>
+	<cassert>
+	<cpptl/conststring.h>
+	<cstddef>
+	"json_internalarray.inl"
+	"json_internalmap.inl"
+	"json_valueiterator.inl"
+	<json/writer.h>
+	"json_tool.h"
+	<utility>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<sstream>
+	<iomanip>
 

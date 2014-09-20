@@ -53,14 +53,14 @@ void ofApp::setup()
 void ofApp::setupGUI()
 {
     RUI_SETUP(44040); //start server
-    
+
     RUI_NEW_GROUP("Global");
     RUI_SHARE_PARAM(draw_debug);
     //
     RUI_NEW_GROUP("Reboot");
     RUI_SHARE_PARAM(squid_scale, 0.2, 4.0);
-    RUI_SHARE_PARAM(window_x, 0, ofGetScreenWidth() / 2);
-    RUI_SHARE_PARAM(window_y, 0, ofGetScreenHeight() / 2);
+    RUI_SHARE_PARAM(window_x, 0, 500);
+    RUI_SHARE_PARAM(window_y, 0, 500);
     RUI_SHARE_PARAM(window_width, 320, 1024);
     RUI_SHARE_PARAM(window_height, 240, 768);
     vector<string> resolutions;
@@ -86,7 +86,7 @@ void ofApp::setupGUI()
     RUI_SHARE_PARAM(squid.core_area_radius, 20, 80);
     RUI_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
     RUI_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
-    
+
     RUI_NEW_GROUP("Visualizer");
     RUI_SHARE_PARAM(visualizer.trail_hue, 0, 255);
     RUI_SHARE_PARAM(visualizer.trail_hue_range, 0, 255);
@@ -136,8 +136,8 @@ void ofApp::draw()
 void ofApp::exit()
 {
     videofeed.reset();
-    window_x = ofGetWindowPositionX();
-    window_y = ofGetWindowPositionY();
+    //window_x = ofGetWindowPositionX();
+    //window_y = ofGetWindowPositionY();
     ofLogVerbose("ofApp") << "exiting";
 }
 
@@ -156,15 +156,15 @@ void ofApp::keyPressed(int key)
         case ' ':
             ofSleepMillis(20000);
             break;
-            
+
         case 'i':
             sounds.setSoundsOn(true);
             break;
-            
+
         case 'o':
             sounds.setSoundsOn(false);
             break;
-            
+
         default:
             break;
     }

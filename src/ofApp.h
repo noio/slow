@@ -8,7 +8,6 @@
 #include "ofxDropstuff.h"
 #include "ofMain.h"
 #include "ofxCv.h"
-#include "ofxDelaunay.h"
 #include "ofxRemoteUIServer.h"
 #include "Box2D/Box2D.h"
 
@@ -21,7 +20,7 @@ class ofApp : public ofBaseApp
 {
 
 public:
-    
+
     void setup();
     void update();
     void draw();
@@ -29,7 +28,7 @@ public:
 
     void setupGUI();
     void createPhysicsBounds();
-        
+
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -39,7 +38,7 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-        
+
     // Components
     ofPtr<b2World> phys_world;
     b2Body* world_bounds = NULL;
@@ -50,9 +49,9 @@ public:
     Squid squid;
     HighscoreTable highscores;
     Instructions instructions;
-    
+
     double delta_t;
-    
+
     // Settings
     bool draw_debug = false;
     bool use_imagefeed = false;
@@ -62,7 +61,7 @@ public:
     int window_width = 896;
     int window_height = 288;
     ofxDS::VideoFeedWebcamResolution capture_res = ofxDS::WEBCAM_RES_720;
-    
+
     // Mirrored settings
     float squid_scale = 1.0;
 };

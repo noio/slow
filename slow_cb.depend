@@ -3298,17 +3298,17 @@
 	"ofxCv.h"
 	<iostream>
 
-1402919059 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\src\etf.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\src\etf.cpp
 	"ETF.h"
 	"imatrix.h"
 	"ofMain.h"
 
-1402919059 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\etf.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\etf.h
 	"imatrix.h"
 
-1402919059 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\imatrix.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\imatrix.h
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\ofmain.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\ofmain.h
 	"ofConstants.h"
 	"ofFileUtils.h"
 	"ofLog.h"
@@ -3361,7 +3361,7 @@
 	"ofMesh.h"
 	"ofNode.h"
 
-1403032822 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofconstants.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofconstants.h
 	<stdint.h>
 	<TargetConditionals.h>
 	<windows.h>
@@ -3408,7 +3408,7 @@
 	<algorithm>
 	<cfloat>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\glew\include\gl\glew.h
+1410260589 c:\users\tom\projects\openframeworks\libs\glew\include\gl\glew.h
 	<stddef.h>
 	<inttypes.h>
 	<stdint.h>
@@ -3416,21 +3416,21 @@
 	<OpenGL/glu.h>
 	<GL/glu.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\glew\include\gl\wglew.h
+1410260589 c:\users\tom\projects\openframeworks\libs\glew\include\gl\wglew.h
 	<windows.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\glu\include\glu.h
+1410260589 c:\users\tom\projects\openframeworks\libs\glu\include\glu.h
 	"glu_mangle.h"
 	<GL/gl.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\tess2\include\tesselator.h
+1410260597 c:\users\tom\projects\openframeworks\libs\tess2\include\tesselator.h
 	<TargetConditionals.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\offileutils.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\offileutils.h
 	"ofConstants.h"
 	"Poco/File.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file.h
 	"Poco/Foundation.h"
 	"Poco/Timestamp.h"
 	<vector>
@@ -3441,7 +3441,7 @@
 	"Poco/File_UNIX.h"
 	"Poco/File_VMS.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\foundation.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\foundation.h
 	"Poco/Config.h"
 	"Poco/Platform.h"
 	"Poco/Platform_WIN32.h"
@@ -3452,88 +3452,88 @@
 	"Poco/Types.h"
 	<string>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\config.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\config.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_win32.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_win32.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_vms.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_vms.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_vx.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_vx.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_posix.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\platform_posix.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\bugcheck.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\bugcheck.h
 	"Poco/Foundation.h"
 	<string>
 	<iostream>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\types.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\types.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\timestamp.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\timestamp.h
 	"Poco/Foundation.h"
 	<ctime>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_wince.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_wince.h
 	"Poco/Foundation.h"
 	"Poco/Timestamp.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_win32u.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_win32u.h
 	"Poco/Foundation.h"
 	"Poco/Timestamp.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_win32.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_win32.h
 	"Poco/Foundation.h"
 	"Poco/Timestamp.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_vx.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_vx.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_unix.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_unix.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_vms.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\file_vms.h
 	"Poco/Foundation.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\oflog.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\oflog.h
 	"ofConstants.h"
 	"ofFileUtils.h"
 	"ofTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\oftypes.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\oftypes.h
 	"ofConstants.h"
 	"ofColor.h"
 	<memory>
 	<tr1/memory>
 	"Poco/Mutex.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofcolor.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofcolor.h
 	<limits>
 	"ofMath.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmath.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmath.h
 	"ofPoint.h"
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofpoint.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofpoint.h
 	"ofVec3f.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec3f.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec3f.h
 	"ofVec2f.h"
 	"ofVec4f.h"
 	"ofConstants.h"
 	<cmath>
 	<iostream>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec2f.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec2f.h
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec4f.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvec4f.h
 	"ofConstants.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/ScopedLock.h"
@@ -3542,47 +3542,48 @@
 	"Poco/Mutex_VX.h"
 	"Poco/Mutex_POSIX.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\exception.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\exception.h
 	"Poco/Foundation.h"
 	<stdexcept>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\scopedlock.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\scopedlock.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_wince.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_wince.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/UnWindows.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\unwindows.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\unwindows.h
 	<windows.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_win32.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_win32.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/UnWindows.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_vx.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_vx.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	<semLib.h>
 	<errno.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_posix.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\mutex_posix.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	<pthread.h>
 	<errno.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofsystemutils.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofsystemutils.h
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofthread.h
-	"ofConstants.h"
-	"ofTypes.h"
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofthread.h
+	"Poco/AtomicCounter.h"
 	"Poco/Thread.h"
 	"Poco/Runnable.h"
+	"ofConstants.h"
+	"ofTypes.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread.h
 	"Poco/Foundation.h"
 	"Poco/Mutex.h"
 	"Poco/Thread_WINCE.h"
@@ -3590,20 +3591,20 @@
 	"Poco/Thread_VX.h"
 	"Poco/Thread_POSIX.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_wince.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_wince.h
 	"Poco/Foundation.h"
 	"Poco/Runnable.h"
 	"Poco/UnWindows.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\runnable.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\runnable.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_win32.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_win32.h
 	"Poco/Foundation.h"
 	"Poco/Runnable.h"
 	"Poco/UnWindows.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_vx.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_vx.h
 	"Poco/Foundation.h"
 	"Poco/Runnable.h"
 	"Poco/SignalHandler.h"
@@ -3613,50 +3614,50 @@
 	<taskLib.h>
 	<taskVarLib.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\signalhandler.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\signalhandler.h
 	"Poco/Foundation.h"
 	<vector>
 	<setjmp.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/Event_WIN32.h"
 	"Poco/Event_VX.h"
 	"Poco/Event_POSIX.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_win32.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_win32.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/UnWindows.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_vx.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_vx.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	<semLib.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_posix.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\event_posix.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	<pthread.h>
 	<errno.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\refcountedobject.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\refcountedobject.h
 	"Poco/Foundation.h"
 	"Poco/AtomicCounter.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\atomiccounter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\atomiccounter.h
 	"Poco/Foundation.h"
 	"Poco/UnWindows.h"
 	<libkern/OSAtomic.h>
 	"Poco/Mutex.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\autoptr.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\autoptr.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	<algorithm>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_posix.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\thread_posix.h
 	"Poco/Foundation.h"
 	"Poco/Runnable.h"
 	"Poco/SignalHandler.h"
@@ -3669,7 +3670,7 @@
 	<errno.h>
 	<cstring>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofurlfileloader.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofurlfileloader.h
 	<deque>
 	<queue>
 	"ofThread.h"
@@ -3677,12 +3678,12 @@
 	"ofFileUtils.h"
 	"Poco/Condition.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofevents.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofevents.h
 	"ofConstants.h"
 	"ofPoint.h"
 	"ofEventUtils.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofeventutils.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofeventutils.h
 	"ofConstants.h"
 	"Poco/PriorityEvent.h"
 	"Poco/PriorityDelegate.h"
@@ -3690,12 +3691,12 @@
 	<stdio.h>
 	<stdlib.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\priorityevent.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\priorityevent.h
 	"Poco/AbstractEvent.h"
 	"Poco/PriorityStrategy.h"
 	"Poco/AbstractPriorityDelegate.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractevent.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractevent.h
 	"Poco/Foundation.h"
 	"Poco/SingletonHolder.h"
 	"Poco/SharedPtr.h"
@@ -3703,17 +3704,17 @@
 	"Poco/ActiveMethod.h"
 	"Poco/Mutex.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\singletonholder.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\singletonholder.h
 	"Poco/Foundation.h"
 	"Poco/Mutex.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sharedptr.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sharedptr.h
 	"Poco/Foundation.h"
 	"Poco/Exception.h"
 	"Poco/AtomicCounter.h"
 	<algorithm>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activeresult.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activeresult.h
 	"Poco/Foundation.h"
 	"Poco/Mutex.h"
 	"Poco/Event.h"
@@ -3721,14 +3722,14 @@
 	"Poco/Exception.h"
 	<algorithm>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activemethod.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activemethod.h
 	"Poco/Foundation.h"
 	"Poco/ActiveResult.h"
 	"Poco/ActiveRunnable.h"
 	"Poco/ActiveStarter.h"
 	"Poco/AutoPtr.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activerunnable.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activerunnable.h
 	"Poco/Foundation.h"
 	"Poco/ActiveResult.h"
 	"Poco/Runnable.h"
@@ -3736,53 +3737,53 @@
 	"Poco/AutoPtr.h"
 	"Poco/Exception.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activestarter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\activestarter.h
 	"Poco/Foundation.h"
 	"Poco/ThreadPool.h"
 	"Poco/ActiveRunnable.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\threadpool.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\threadpool.h
 	"Poco/Foundation.h"
 	"Poco/Thread.h"
 	"Poco/Mutex.h"
 	<vector>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\prioritystrategy.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\prioritystrategy.h
 	"Poco/NotificationStrategy.h"
 	"Poco/SharedPtr.h"
 	<vector>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\notificationstrategy.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\notificationstrategy.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractprioritydelegate.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractprioritydelegate.h
 	"Poco/Foundation.h"
 	"Poco/AbstractDelegate.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractdelegate.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\abstractdelegate.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\prioritydelegate.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\prioritydelegate.h
 	"Poco/Foundation.h"
 	"Poco/AbstractPriorityDelegate.h"
 	"Poco/PriorityExpire.h"
 	"Poco/FunctionPriorityDelegate.h"
 	"Poco/Mutex.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\priorityexpire.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\priorityexpire.h
 	"Poco/Foundation.h"
 	"Poco/Timestamp.h"
 	"Poco/AbstractPriorityDelegate.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\functionprioritydelegate.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\functionprioritydelegate.h
 	"Poco/Foundation.h"
 	"Poco/AbstractPriorityDelegate.h"
 	"Poco/Mutex.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofdelegate.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\events\ofdelegate.h
 	"Poco/AbstractPriorityDelegate.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\condition.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\condition.h
 	"Poco/Foundation.h"
 	"Poco/Mutex.h"
 	"Poco/ScopedUnlock.h"
@@ -3790,21 +3791,21 @@
 	"Poco/Exception.h"
 	<deque>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\scopedunlock.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\scopedunlock.h
 	"Poco/Foundation.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofutils.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofutils.h
 	"ofConstants.h"
 	<bitset>
 	"ofLog.h"
 	<shellapi.h>
 	"Poco/Path.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\path.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\path.h
 	"Poco/Foundation.h"
 	<vector>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofbasetypes.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofbasetypes.h
 	"ofPoint.h"
 	"ofRectangle.h"
 	"ofConstants.h"
@@ -3814,12 +3815,12 @@
 	"ofMatrix4x4.h"
 	"ofTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofrectangle.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofrectangle.h
 	"ofConstants.h"
 	"ofPoint.h"
 	"ofLog.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofmesh.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofmesh.h
 	"ofVec3f.h"
 	"ofVec2f.h"
 	"ofColor.h"
@@ -3827,32 +3828,32 @@
 	"ofConstants.h"
 	"ofGLUtils.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglutils.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglutils.h
 	"ofConstants.h"
 	"ofTypes.h"
 	"ofPixels.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpixels.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpixels.h
 	"ofConstants.h"
 	"ofUtils.h"
 	"ofColor.h"
 	"ofMath.h"
 	<limits>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmatrix4x4.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmatrix4x4.h
 	"ofVec3f.h"
 	"ofVec4f.h"
 	"ofQuaternion.h"
 	"ofConstants.h"
 	<cmath>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofquaternion.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofquaternion.h
 	"ofConstants.h"
 	"ofVec3f.h"
 	"ofVec4f.h"
 	<cmath>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofxml.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofxml.h
 	"ofMain.h"
 	<numeric>
 	<Poco/DOM/Document.h>
@@ -3874,7 +3875,7 @@
 	<Poco/DOM/NamedNodeMap.h>
 	<Poco/DOM/ChildNodesList.h>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\document.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\document.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractContainerNode.h"
 	"Poco/DOM/DocumentEvent.h"
@@ -3883,93 +3884,93 @@
 	"Poco/XML/NamePool.h"
 	"Poco/AutoReleasePool.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xml.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xml.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\abstractcontainernode.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\abstractcontainernode.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractNode.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\abstractnode.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\abstractnode.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/Node.h"
 	"Poco/DOM/MutationEvent.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\node.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\node.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/EventTarget.h"
 	"Poco/XML/XMLString.h"
 	"Poco/SAX/NamespaceSupport.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\eventtarget.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\eventtarget.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/DOMObject.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domobject.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domobject.h
 	"Poco/XML/XML.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlstring.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlstring.h
 	"Poco/XML/XML.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\namespacesupport.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\namespacesupport.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 	<set>
 	<map>
 	<vector>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\mutationevent.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\mutationevent.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/Event.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\event.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\event.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 	"Poco/DOM/DOMObject.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\documentevent.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\documentevent.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\element.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\element.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractContainerNode.h"
 	"Poco/XML/Name.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\name.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\name.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\namepool.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\namepool.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 	"Poco/XML/Name.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\autoreleasepool.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\autoreleasepool.h
 	"Poco/Foundation.h"
 	<list>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\documentfragment.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\documentfragment.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractContainerNode.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domparser.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domparser.h
 	"Poco/XML/XML.h"
 	"Poco/SAX/SAXParser.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\saxparser.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\saxparser.h
 	"Poco/XML/XML.h"
 	"Poco/SAX/XMLReader.h"
 	"Poco/XML/ParserEngine.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\xmlreader.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\xmlreader.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\parserengine.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\parserengine.h
 	"Poco/XML/XML.h"
 	<expat.h>
 	"Poco/XML/expat.h"
@@ -3980,39 +3981,39 @@
 	<map>
 	<vector>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\expat.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\expat.h
 	<stdlib.h>
 	"expat_external.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\expat_external.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\expat_external.h
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlstream.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlstream.h
 	"Poco/XML/XML.h"
 	<istream>
 	<ostream>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\locator.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\locator.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\textencoding.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\textencoding.h
 	"Poco/Foundation.h"
 	"Poco/SharedPtr.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domexception.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domexception.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLException.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlexception.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlexception.h
 	"Poco/XML/XML.h"
 	"Poco/Exception.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\saxexception.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\saxexception.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLException.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlwriter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\xml\xmlwriter.h
 	"Poco/XML/XML.h"
 	"Poco/SAX/ContentHandler.h"
 	"Poco/SAX/LexicalHandler.h"
@@ -4026,95 +4027,96 @@
 	<vector>
 	<map>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\contenthandler.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\contenthandler.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\lexicalhandler.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\lexicalhandler.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\dtdhandler.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\sax\dtdhandler.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\streamconverter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\streamconverter.h
 	"Poco/Foundation.h"
 	"Poco/TextEncoding.h"
 	"Poco/UnbufferedStreamBuf.h"
 	<istream>
 	<ostream>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\unbufferedstreambuf.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\unbufferedstreambuf.h
 	"Poco/Foundation.h"
 	"Poco/StreamUtil.h"
 	<streambuf>
 	<iosfwd>
 	<ios>
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\streamutil.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\streamutil.h
 	"Poco/Foundation.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domwriter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\domwriter.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 	"Poco/XML/XMLStream.h"
 	"Poco/TextEncoding.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\attr.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\attr.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractNode.h"
 	"Poco/DOM/Element.h"
 	"Poco/XML/Name.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\text.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\text.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/CharacterData.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\characterdata.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\characterdata.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/AbstractNode.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodeiterator.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodeiterator.h
 	"Poco/XML/XML.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodefilter.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodefilter.h
 	"Poco/XML/XML.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\namednodemap.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\namednodemap.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/DOMObject.h"
 	"Poco/XML/XMLString.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\childnodeslist.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\childnodeslist.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/NodeList.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodelist.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\dom\nodelist.h
 	"Poco/XML/XML.h"
 	"Poco/DOM/DOMObject.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofparameter.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofparameter.h
 	"ofEvents.h"
 	"ofTypes.h"
 	"ofUtils.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofparametergroup.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\types\ofparametergroup.h
 	<map>
 	"Poco/Any.h"
 	"ofConstants.h"
 	"ofLog.h"
 	"ofParameter.h"
+	"ofTypes.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\any.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\any.h
 	"Poco/Exception.h"
 	<algorithm>
 	<typeinfo>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvectormath.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofvectormath.h
 	"ofVec2f.h"
 	"ofVec3f.h"
 	"ofVec4f.h"
@@ -4122,10 +4124,10 @@
 	"ofMatrix4x4.h"
 	"ofQuaternion.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmatrix3x3.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\math\ofmatrix3x3.h
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\communication\ofserial.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\communication\ofserial.h
 	"ofConstants.h"
 	"ofTypes.h"
 	<termios.h>
@@ -4138,7 +4140,7 @@
 	<winioctl.h>
 	<initguid.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\communication\ofarduino.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\communication\ofarduino.h
 	<list>
 	<vector>
 	<string>
@@ -4146,21 +4148,21 @@
 	"ofEvents.h"
 	"ofSerial.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\offbo.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\offbo.h
 	"ofTexture.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\oftexture.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\oftexture.h
 	"ofPoint.h"
 	"ofRectangle.h"
 	"ofBaseTypes.h"
 	"ofConstants.h"
 	"ofVboMesh.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofvbomesh.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofvbomesh.h
 	"ofMesh.h"
 	"ofVbo.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofvbo.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofvbo.h
 	"ofConstants.h"
 	"ofVec3f.h"
 	"ofColor.h"
@@ -4169,7 +4171,7 @@
 	"ofGLUtils.h"
 	<map>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglrenderer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglrenderer.h
 	"ofBaseTypes.h"
 	"ofPolyline.h"
 	"ofMatrix4x4.h"
@@ -4177,13 +4179,13 @@
 	"ofGraphics.h"
 	"ofMatrixStack.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpolyline.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpolyline.h
 	"ofPoint.h"
 	"ofConstants.h"
 	<deque>
 	"ofRectangle.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofgraphics.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofgraphics.h
 	"ofConstants.h"
 	"ofColor.h"
 	"ofPoint.h"
@@ -4192,27 +4194,27 @@
 	"ofTypes.h"
 	"ofBaseTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofmatrixstack.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\utils\ofmatrixstack.h
 	<stack>
 	"ofConstants.h"
 	"ofRectangle.h"
 	"ofGraphics.h"
 	"ofMatrix4x4.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\oflight.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\oflight.h
 	"ofNode.h"
 	"ofColor.h"
 	"of3dGraphics.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofnode.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofnode.h
 	"ofVectorMath.h"
 	"of3dUtils.h"
 	"ofGraphics.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\of3dutils.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\of3dutils.h
 	"ofVectorMath.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\of3dgraphics.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\of3dgraphics.h
 	"ofConstants.h"
 	"ofColor.h"
 	"ofPoint.h"
@@ -4223,17 +4225,17 @@
 	"ofGLRenderer.h"
 	"of3dPrimitives.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\of3dprimitives.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\of3dprimitives.h
 	"ofVboMesh.h"
 	"ofRectangle.h"
 	"ofNode.h"
 	"ofTexture.h"
 	<map>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofmaterial.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofmaterial.h
 	"ofColor.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofshader.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofshader.h
 	"ofConstants.h"
 	"ofBaseTypes.h"
 	"ofTexture.h"
@@ -4242,16 +4244,16 @@
 	<map>
 	"ofAppBaseWindow.h"
 
-1396347899 c:\users\tom\projects\openframeworks\libs\poco\include\poco\regularexpression.h
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\regularexpression.h
 	"Poco/Foundation.h"
 	<vector>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofappbasewindow.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofappbasewindow.h
 	"ofPoint.h"
 	"ofTypes.h"
 	<X11/Xlib.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglprogrammablerenderer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\gl\ofglprogrammablerenderer.h
 	"ofBaseTypes.h"
 	"ofPolyline.h"
 	"ofMatrix4x4.h"
@@ -4260,7 +4262,7 @@
 	"ofMatrixStack.h"
 	<stack>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofcairorenderer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofcairorenderer.h
 	"cairo-features.h"
 	"cairo-pdf.h"
 	"cairo-svg.h"
@@ -4271,24 +4273,24 @@
 	"ofBaseTypes.h"
 	"ofPath.h"
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-features.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-features.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-pdf.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-pdf.h
 	"cairo.h"
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo.h
 	"cairo-version.h"
 	"cairo-features.h"
 	"cairo-deprecated.h"
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-version.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-version.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-deprecated.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-deprecated.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-svg.h
+1410260588 c:\users\tom\projects\openframeworks\libs\cairo\include\cairo\cairo-svg.h
 	"cairo.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpath.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofpath.h
 	"ofConstants.h"
 	"ofPoint.h"
 	"ofColor.h"
@@ -4297,25 +4299,25 @@
 	"ofVboMesh.h"
 	"ofTessellator.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\oftessellator.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\oftessellator.h
 	"ofConstants.h"
 	"ofMesh.h"
 	"ofTypes.h"
 	"ofPolyline.h"
 	"tesselator.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofimage.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofimage.h
 	"ofFileUtils.h"
 	"ofTexture.h"
 	"ofPixels.h"
 	"ofBaseTypes.h"
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofrenderercollection.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\ofrenderercollection.h
 	"ofBaseTypes.h"
 	"ofGLRenderer.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\oftruetypefont.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\graphics\oftruetypefont.h
 	<vector>
 	"ofPoint.h"
 	"ofRectangle.h"
@@ -4324,19 +4326,19 @@
 	"ofTexture.h"
 	"ofMesh.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofbaseapp.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofbaseapp.h
 	"ofPoint.h"
 	"ofEvents.h"
 	"ofBaseTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofapprunner.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\app\ofapprunner.h
 	"ofConstants.h"
 	"ofPoint.h"
 	"ofRectangle.h"
 	"ofTypes.h"
 	<X11/Xlib.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofsoundstream.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofsoundstream.h
 	"ofConstants.h"
 	"ofBaseTypes.h"
 	"ofBaseApp.h"
@@ -4347,15 +4349,15 @@
 	"ofxAndroidSoundStream.h"
 	"ofxiOSSoundStream.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofbasesoundstream.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofbasesoundstream.h
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofrtaudiosoundstream.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofrtaudiosoundstream.h
 	"ofConstants.h"
 	"ofBaseSoundStream.h"
 	"ofTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofsoundplayer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofsoundplayer.h
 	"ofConstants.h"
 	"ofTypes.h"
 	"ofBaseTypes.h"
@@ -4366,30 +4368,30 @@
 	"ofxiOSSoundPlayer.h"
 	"ofxAndroidSoundPlayer.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofbasesoundplayer.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofbasesoundplayer.h
 	"ofConstants.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\offmodsoundplayer.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\offmodsoundplayer.h
 	"ofConstants.h"
 	"ofBaseSoundPlayer.h"
 	"fmod.h"
 	"fmod_errors.h"
 
-1396347896 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod.h
+1410260589 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod.h
 	"fmod_codec.h"
 	"fmod_dsp.h"
 	"fmod_memoryinfo.h"
 
-1396347896 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_codec.h
+1410260589 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_codec.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_dsp.h
+1410260589 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_dsp.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_memoryinfo.h
+1410260589 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_memoryinfo.h
 
-1396347896 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_errors.h
+1410260589 c:\users\tom\projects\openframeworks\libs\fmodex\include\fmod_errors.h
 	"fmod.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofopenalsoundplayer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\sound\ofopenalsoundplayer.h
 	"ofConstants.h"
 	"ofBaseSoundPlayer.h"
 	"ofEvents.h"
@@ -4403,7 +4405,7 @@
 	<sndfile.h>
 	<mpg123.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofvideograbber.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofvideograbber.h
 	"ofConstants.h"
 	"ofTexture.h"
 	"ofBaseTypes.h"
@@ -4416,14 +4418,14 @@
 	"ofGstVideoGrabber.h"
 	"ofxAndroidVideoGrabber.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofquicktimegrabber.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofquicktimegrabber.h
 	"ofConstants.h"
 	"ofQtUtils.h"
 	"ofTexture.h"
 	"ofBaseTypes.h"
 	"ofPixels.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtutils.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtutils.h
 	"ofConstants.h"
 	<QuickTime/QuickTime.h>
 	<CoreServices/CoreServices.h>
@@ -4434,26 +4436,26 @@
 	<TextUtils.h>
 	<MediaHandlers.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\qtml.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\qtml.h
 	<MacTypes.h>
 	<MacMemory.h>
 	<MacWindows.h>
 	<OSUtils.h>
 	<Files.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\mactypes.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\mactypes.h
 	<ConditionalMacros.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\conditionalmacros.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\conditionalmacros.h
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\macmemory.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\macmemory.h
 	<MacTypes.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\mixedmode.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\mixedmode.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\macwindows.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\macwindows.h
 	<MacTypes.h>
 	<Aliases.h>
 	<AppleEvents.h>
@@ -4468,16 +4470,16 @@
 	<Icons.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\aliases.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\aliases.h
 	<MacTypes.h>
 	<AppleTalk.h>
 	<Files.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\appletalk.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\appletalk.h
 	<MacTypes.h>
 	<OSUtils.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\osutils.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\osutils.h
 	<MacTypes.h>
 	<MixedMode.h>
 	<MacMemory.h>
@@ -4485,18 +4487,18 @@
 	<DateTimeUtils.h>
 	<Endian.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\patches.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\patches.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\datetimeutils.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\datetimeutils.h
 	<ConditionalMacros.h>
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\endian.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\endian.h
 	<ConditionalMacros.h>
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\files.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\files.h
 	<MacTypes.h>
 	<MixedMode.h>
 	<OSUtils.h>
@@ -4504,67 +4506,67 @@
 	<UTCUtils.h>
 	<Finder.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\textcommon.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\textcommon.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\utcutils.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\utcutils.h
 	<MacTypes.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\macerrors.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\macerrors.h
 	<ConditionalMacros.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\finder.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\finder.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\appleevents.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\appleevents.h
 	<MacTypes.h>
 	<MixedMode.h>
 	<Notification.h>
 	<Events.h>
 	<AEDataModel.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\notification.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\notification.h
 	<MacTypes.h>
 	<OSUtils.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\events.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\events.h
 	<OSUtils.h>
 	<Quickdraw.h>
 	<MacTypes.h>
 	<Endian.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\quickdraw.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\quickdraw.h
 	<Components.h>
 	<MacTypes.h>
 	<MixedMode.h>
 	<QuickdrawText.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\components.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\components.h
 	<MacErrors.h>
 	<MacTypes.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\quickdrawtext.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\quickdrawtext.h
 	<MacTypes.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\aedatamodel.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\aedatamodel.h
 	<MacTypes.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\collections.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\collections.h
 	<MacTypes.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\drag.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\drag.h
 	<MacTypes.h>
 	<Events.h>
 	<Files.h>
 	<AppleEvents.h>
 	<Quickdraw.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\menus.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\menus.h
 	<MacTypes.h>
 	<Events.h>
 	<Quickdraw.h>
@@ -4575,36 +4577,36 @@
 	<Collections.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\fonts.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\fonts.h
 	<MacTypes.h>
 	<Files.h>
 	<Quickdraw.h>
 	<TextCommon.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\processes.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\processes.h
 	<MacTypes.h>
 	<Events.h>
 	<Files.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\qdoffscreen.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\qdoffscreen.h
 	<MacErrors.h>
 	<Quickdraw.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\icons.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\icons.h
 	<MacTypes.h>
 	<Quickdraw.h>
 	<Files.h>
 	<CodeFragments.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\codefragments.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\codefragments.h
 	<MacTypes.h>
 	<Files.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\fixmath.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\fixmath.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\quicktimecomponents.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\quicktimecomponents.h
 	<MacTypes.h>
 	<MixedMode.h>
 	<Components.h>
@@ -4615,19 +4617,19 @@
 	<Sound.h>
 	<QuickTimeMusic.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\imagecompression.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\imagecompression.h
 	<MacTypes.h>
 	<Quickdraw.h>
 	<QDOffscreen.h>
 	<Components.h>
 	<StandardFile.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\standardfile.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\standardfile.h
 	<MacTypes.h>
 	<Dialogs.h>
 	<Files.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\dialogs.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\dialogs.h
 	<MacTypes.h>
 	<MixedMode.h>
 	<Events.h>
@@ -4636,12 +4638,12 @@
 	<Controls.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\textedit.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\textedit.h
 	<MacTypes.h>
 	<Quickdraw.h>
 	<MixedMode.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\controls.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\controls.h
 	<MacTypes.h>
 	<Quickdraw.h>
 	<Menus.h>
@@ -4651,7 +4653,7 @@
 	<Collections.h>
 	<MacErrors.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\movies.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\movies.h
 	<Quickdraw.h>
 	<Aliases.h>
 	<Events.h>
@@ -4659,17 +4661,17 @@
 	<Components.h>
 	<ImageCompression.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\video.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\video.h
 	<Quickdraw.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\sound.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\sound.h
 	<MacTypes.h>
 	<Dialogs.h>
 	<Components.h>
 	<MixedMode.h>
 	<Movies.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\quicktimemusic.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\quicktimemusic.h
 	<Components.h>
 	<ImageCompression.h>
 	<Movies.h>
@@ -4679,49 +4681,49 @@
 	<Sound.h>
 	<Endian.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\textutils.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\textutils.h
 	<MacTypes.h>
 	<NumberFormatting.h>
 	<StringCompare.h>
 	<DateTimeUtils.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\numberformatting.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\numberformatting.h
 	<ConditionalMacros.h>
 	<MacTypes.h>
 	<IntlResources.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\intlresources.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\intlresources.h
 	<MacTypes.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\stringcompare.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\stringcompare.h
 	<MacTypes.h>
 	<TextCommon.h>
 	<Script.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\script.h
+1410260594 c:\users\tom\projects\openframeworks\libs\quicktime\include\script.h
 	<MacTypes.h>
 	<Quickdraw.h>
 	<IntlResources.h>
 	<Events.h>
 
-1396347903 c:\users\tom\projects\openframeworks\libs\quicktime\include\mediahandlers.h
+1410260593 c:\users\tom\projects\openframeworks\libs\quicktime\include\mediahandlers.h
 	<ConditionalMacros.h>
 	<MacTypes.h>
 	<Components.h>
 	<Movies.h>
 	<Sound.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtkitgrabber.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtkitgrabber.h
 	"ofMain.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofdirectshowgrabber.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofdirectshowgrabber.h
 	"ofConstants.h"
 	"ofTexture.h"
 	"ofBaseTypes.h"
 	"ofPixels.h"
 	"videoInput.h"
 
-1396347903 c:\users\tom\projects\openframeworks\libs\videoinput\include\videoinput.h
+1410260594 c:\users\tom\projects\openframeworks\libs\videoinput\include\videoinput.h
 	<stdlib.h>
 	<stdio.h>
 	<math.h>
@@ -4731,11 +4733,11 @@
 	<vector>
 	<windows.h>
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstvideograbber.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstvideograbber.h
 	"ofGstUtils.h"
 	"ofTypes.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstutils.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstutils.h
 	"ofConstants.h"
 	"ofConstants.h"
 	"ofBaseTypes.h"
@@ -4745,8 +4747,9 @@
 	"ofThread.h"
 	<gst/gst.h>
 	<gst/gstpad.h>
+	"Poco/Condition.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofvideoplayer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofvideoplayer.h
 	"ofConstants.h"
 	"ofTexture.h"
 	"ofBaseTypes.h"
@@ -4757,28 +4760,28 @@
 	"ofxiOSVideoPlayer.h"
 	"ofxAndroidVideoPlayer.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstvideoplayer.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofgstvideoplayer.h
 	"ofGstUtils.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofquicktimeplayer.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofquicktimeplayer.h
 	"ofConstants.h"
 	"ofBaseTypes.h"
 	"ofPixels.h"
 	"ofQtUtils.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtkitplayer.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\video\ofqtkitplayer.h
 	"ofMain.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofcamera.h
+1410260589 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofcamera.h
 	"ofRectangle.h"
 	"ofAppRunner.h"
 	"ofNode.h"
 
-1396347897 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofeasycam.h
+1410260597 c:\users\tom\projects\openframeworks\libs\openframeworks\3d\ofeasycam.h
 	"ofCamera.h"
 	"ofEvents.h"
 
-1402919059 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\src\fdog.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\src\fdog.cpp
 	"ofMain.h"
 	<cmath>
 	"ETF.h"
@@ -4786,20 +4789,20 @@
 	"myvec.h"
 	"imatrix.h"
 
-1402919059 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\fdog.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\fdog.h
 
-1402919059 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\myvec.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\cld\include\cld\myvec.h
 	<cmath>
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\calibration.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\calibration.cpp
 	"ofxCv/Calibration.h"
 	"ofxCv/Helpers.h"
 	"ofFileUtils.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\calibration.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\calibration.h
 	"ofxCv.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\src\ofxcv.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\src\ofxcv.h
 	"opencv2/opencv.hpp"
 	"ofxCv/Utilities.h"
 	"ofxCv/Wrappers.h"
@@ -4811,8 +4814,9 @@
 	"ofxCv/RunningBackground.h"
 	"ofxCv/Flow.h"
 	"ofxCv/ObjectFinder.h"
+	"ofxCv/Kalman.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\opencv.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\opencv.hpp
 	"opencv2/core/core_c.h"
 	"opencv2/core/core.hpp"
 	"opencv2/flann/miniflann.hpp"
@@ -4827,10 +4831,10 @@
 	"opencv2/highgui/highgui.hpp"
 	"opencv2/contrib/contrib.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\core_c.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\core_c.h
 	"opencv2/core/types_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\types_c.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\types_c.h
 	<assert.h>
 	<stdlib.h>
 	<string.h>
@@ -4843,7 +4847,7 @@
 	<ipl.h>
 	<ipl/ipl.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\core.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\core.hpp
 	"opencv2/core/types_c.h"
 	"opencv2/core/version.hpp"
 	<limits.h>
@@ -4858,9 +4862,9 @@
 	"opencv2/core/operations.hpp"
 	"opencv2/core/mat.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\version.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\version.hpp
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\operations.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\operations.hpp
 	<string.h>
 	<limits.h>
 	<ext/atomicity.h>
@@ -4868,85 +4872,85 @@
 	<intrin.h>
 	<limits>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\mat.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\mat.hpp
 	<limits.h>
 	<string.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\miniflann.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\miniflann.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/flann/defines.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\defines.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\defines.h
 	"config.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\config.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\config.h
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\imgproc_c.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\imgproc_c.h
 	"opencv2/core/core_c.h"
 	"opencv2/imgproc/types_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\types_c.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\types_c.h
 	"opencv2/core/core_c.h"
 	"opencv2/imgproc/types_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\imgproc.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\imgproc\imgproc.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/imgproc/types_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\video.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\video.hpp
 	"opencv2/video/tracking.hpp"
 	"opencv2/video/background_segm.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\tracking.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\tracking.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\background_segm.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\video\background_segm.hpp
 	"opencv2/core/core.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\features2d\features2d.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\features2d\features2d.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/flann/miniflann.hpp"
 	<limits>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\objdetect\objdetect.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\objdetect\objdetect.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/features2d/features2d.hpp"
 	<deque>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\calib3d\calib3d.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\calib3d\calib3d.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/features2d/features2d.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\ml\ml.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\ml\ml.hpp
 	"opencv2/core/core.hpp"
 	<limits.h>
 	<map>
 	<string>
 	<iostream>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\highgui\highgui_c.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\highgui\highgui_c.h
 	"opencv2/core/core_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\highgui\highgui.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\highgui\highgui.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/highgui/highgui_c.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\contrib\contrib.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\contrib\contrib.hpp
 	"opencv2/core/core.hpp"
 	"opencv2/features2d/features2d.hpp"
 	"opencv2/objdetect/objdetect.hpp"
 	"opencv2/contrib/retina.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\contrib\retina.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\contrib\retina.hpp
 	"opencv2/core/core.hpp"
 	<valarray>
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\utilities.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\utilities.h
 	"ofMain.h"
 	"opencv2/opencv.hpp"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\wrappers.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\wrappers.h
 	"ofMain.h"
 	"opencv2/opencv.hpp"
 	"ofxCv/Utilities.h"
@@ -4955,69 +4959,69 @@
 	"fdog.h"
 	"myvec.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\helpers.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\helpers.h
 	"opencv2/opencv.hpp"
 	"ofMain.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\distance.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\distance.h
 	<string>
 	<vector>
 	<cstdlib>
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\tracker.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\tracker.h
 	"opencv2/opencv.hpp"
 	<utility>
 	<map>
 	"ofMath.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\contourfinder.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\contourfinder.h
 	"ofxCv/Utilities.h"
 	"ofxCv/Tracker.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\runningbackground.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\runningbackground.h
 	"ofxCv/Utilities.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\flow.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\flow.h
 	"ofxCv.h"
 
-1402924393 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\objectfinder.h
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\objectfinder.h
 	"ofxCv/Utilities.h"
 	"ofxCv/Tracker.h"
 	"ofxCv.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\contourfinder.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\contourfinder.cpp
 	"ofxCv/ContourFinder.h"
 	"ofxCv/Wrappers.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\distance.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\distance.cpp
 	"ofxCv/Distance.h"
 	<string.h>
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\flow.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\flow.cpp
 	"ofxCv/Flow.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\helpers.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\helpers.cpp
 	"ofxCv/Helpers.h"
 	"ofxCv/Utilities.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\objectfinder.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\objectfinder.cpp
 	"ObjectFinder.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\runningbackground.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\runningbackground.cpp
 	"ofxCv/RunningBackground.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\tracker.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\tracker.cpp
 	"ofxCv/Tracker.h"
 	"ofxCv/Utilities.h"
 	"ofRectangle.h"
 	"ofVec2f.h"
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\utilities.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\utilities.cpp
 	"ofxCv/Utilities.h"
 	"ofMath.h"
 	<stdint.h>
 
-1402924393 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\wrappers.cpp
+1410438508 source:c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\src\wrappers.cpp
 	"ofxCv/Wrappers.h"
 
 1402915755 source:c:\users\tom\projects\openframeworks\addons\ofxdelaunay\libs\delaunay\delaunay.cpp
@@ -5053,25 +5057,25 @@
 1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxfx\src\ofxfxobject.cpp
 	"ofxFXObject.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcolorimage.cpp
+1410260597 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcolorimage.cpp
 	"ofxCvGrayscaleImage.h"
 	"ofxCvColorImage.h"
 	"ofxCvFloatImage.h"
 	"ofxCvShortImage.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvgrayscaleimage.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvgrayscaleimage.h
 	"ofxCvImage.h"
 	"ofxCvBlob.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvimage.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvimage.h
 	"ofxCvConstants.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvconstants.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvconstants.h
 	"cv.h"
 	<vector>
 	"ofMain.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv\cv.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv\cv.h
 	"opencv2/core/core_c.h"
 	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
@@ -5084,13 +5088,13 @@
 	"opencv2/legacy/compat.hpp"
 	"opencv2/core/internal.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\flann.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\flann.hpp
 	"opencv2/core/types_c.h"
 	"opencv2/core/core.hpp"
 	"opencv2/flann/flann_base.hpp"
 	"opencv2/flann/miniflann.hpp"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\flann_base.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\flann_base.hpp
 	<vector>
 	<string>
 	<cassert>
@@ -5101,40 +5105,40 @@
 	"saving.h"
 	"all_indices.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\general.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\general.h
 	"defines.h"
 	<stdexcept>
 	<cassert>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\matrix.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\matrix.h
 	<stdio.h>
 	"general.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\params.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\params.h
 	"any.h"
 	"general.h"
 	<iostream>
 	<map>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\any.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\any.h
 	<stdexcept>
 	<ostream>
 	<typeinfo>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\saving.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\saving.h
 	<cstring>
 	<vector>
 	"general.h"
 	"nn_index.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\nn_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\nn_index.h
 	<string>
 	"general.h"
 	"matrix.h"
 	"result_set.h"
 	"params.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\result_set.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\result_set.h
 	<algorithm>
 	<cstring>
 	<iostream>
@@ -5142,7 +5146,7 @@
 	<set>
 	<vector>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\all_indices.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\all_indices.h
 	"general.h"
 	"nn_index.h"
 	"kdtree_index.h"
@@ -5154,7 +5158,7 @@
 	"lsh_index.h"
 	"autotuned_index.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kdtree_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kdtree_index.h
 	<algorithm>
 	<map>
 	<cassert>
@@ -5169,33 +5173,33 @@
 	"random.h"
 	"saving.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\dynamic_bitset.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\dynamic_bitset.h
 	<boost/dynamic_bitset.hpp>
 	<limits.h>
 	"dist.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\dist.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\dist.h
 	<cmath>
 	<cstdlib>
 	<string.h>
 	<stdint.h>
 	"defines.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\heap.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\heap.h
 	<algorithm>
 	<vector>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\allocator.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\allocator.h
 	<stdlib.h>
 	<stdio.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\random.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\random.h
 	<algorithm>
 	<cstdlib>
 	<vector>
 	"general.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kdtree_single_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kdtree_single_index.h
 	<algorithm>
 	<map>
 	<cassert>
@@ -5209,7 +5213,7 @@
 	"random.h"
 	"saving.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kmeans_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\kmeans_index.h
 	<algorithm>
 	<string>
 	<map>
@@ -5227,22 +5231,22 @@
 	"saving.h"
 	"logger.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\logger.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\logger.h
 	<stdio.h>
 	<stdarg.h>
 	"defines.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\composite_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\composite_index.h
 	"general.h"
 	"nn_index.h"
 	"kdtree_index.h"
 	"kmeans_index.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\linear_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\linear_index.h
 	"general.h"
 	"nn_index.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\hierarchical_clustering_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\hierarchical_clustering_index.h
 	<algorithm>
 	<string>
 	<map>
@@ -5259,7 +5263,7 @@
 	"random.h"
 	"saving.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\lsh_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\lsh_index.h
 	<algorithm>
 	<cassert>
 	<cstring>
@@ -5275,7 +5279,7 @@
 	"random.h"
 	"saving.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\lsh_table.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\lsh_table.h
 	<algorithm>
 	<iostream>
 	<iomanip>
@@ -5287,7 +5291,7 @@
 	"dynamic_bitset.h"
 	"matrix.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\autotuned_index.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\autotuned_index.h
 	"general.h"
 	"nn_index.h"
 	"ground_truth.h"
@@ -5300,11 +5304,11 @@
 	"linear_index.h"
 	"logger.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\ground_truth.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\ground_truth.h
 	"dist.h"
 	"matrix.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\index_testing.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\index_testing.h
 	<cstring>
 	<cassert>
 	<cmath>
@@ -5314,20 +5318,20 @@
 	"logger.h"
 	"timer.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\timer.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\timer.h
 	<time.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\sampling.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\flann\sampling.h
 	"matrix.h"
 	"random.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\legacy\compat.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\legacy\compat.hpp
 	"opencv2/core/core_c.h"
 	"opencv2/imgproc/types_c.h"
 	<math.h>
 	<string.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\internal.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\internal.hpp
 	<vector>
 	<windows.h>
 	<pthread.h>
@@ -5346,54 +5350,54 @@
 	<alloca.h>
 	<stdlib.h>
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\eigen.hpp
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv2\core\eigen.hpp
 	"cxcore.h"
 
-1396347888 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv\cxcore.h
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxopencv\libs\opencv\include\opencv\cxcore.h
 	"opencv2/core/core_c.h"
 	"opencv2/core/core.hpp"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvblob.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvblob.h
 	"ofxCvConstants.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcolorimage.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcolorimage.h
 	"ofxCvImage.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvfloatimage.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvfloatimage.h
 	"ofxCvImage.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvshortimage.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvshortimage.h
 	"ofxCvImage.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcontourfinder.cpp
+1410260597 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcontourfinder.cpp
 	"ofxCvContourFinder.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcontourfinder.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvcontourfinder.h
 	"ofxCvConstants.h"
 	"ofxCvBlob.h"
 	"ofxCvGrayscaleImage.h"
 	<algorithm>
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvfloatimage.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvfloatimage.cpp
 	"ofxCvGrayscaleImage.h"
 	"ofxCvColorImage.h"
 	"ofxCvFloatImage.h"
 	"ofxCvShortImage.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvgrayscaleimage.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvgrayscaleimage.cpp
 	"ofxCvGrayscaleImage.h"
 	"ofxCvColorImage.h"
 	"ofxCvFloatImage.h"
 	"ofxCvShortImage.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvhaarfinder.cpp
+1410260597 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvhaarfinder.cpp
 	"ofxCvHaarFinder.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvhaarfinder.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvhaarfinder.h
 	"ofMain.h"
 	"ofxOpenCv.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxopencv.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxopencv.h
 	"ofxCvConstants.h"
 	"ofxCvImage.h"
 	"ofxCvGrayscaleImage.h"
@@ -5403,120 +5407,120 @@
 	"ofxCvContourFinder.h"
 	"ofxCvHaarFinder.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvimage.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvimage.cpp
 	"ofxCvImage.h"
 	"ofxCvGrayscaleImage.h"
 	"ofxCvColorImage.h"
 	"ofxCvFloatImage.h"
 	"ofxCvBlob.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvshortimage.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxopencv\src\ofxcvshortimage.cpp
 	"ofxCvGrayscaleImage.h"
 	"ofxCvColorImage.h"
 	"ofxCvFloatImage.h"
 	"ofxCvShortImage.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasing.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasing.cpp
 	"ofxEasing.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasing.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasing.h
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingback.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingback.cpp
 	"ofxEasingBack.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingback.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingback.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingbounce.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingbounce.cpp
 	"ofxEasingBounce.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingbounce.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingbounce.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcirc.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcirc.cpp
 	"ofxEasingCirc.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcirc.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcirc.h
 	<math.h>
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcubic.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcubic.cpp
 	"ofxEasingCubic.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcubic.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingcubic.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingelastic.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingelastic.cpp
 	"ofxEasingElastic.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingelastic.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingelastic.h
 	<math.h>
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingexpo.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingexpo.cpp
 	"ofxEasingExpo.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingexpo.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingexpo.h
 	<math.h>
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasinglinear.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasinglinear.cpp
 	"ofxEasingLinear.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasinglinear.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasinglinear.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquad.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquad.cpp
 	"ofxEasingQuad.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquad.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquad.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquart.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquart.cpp
 	"ofxEasingQuart.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquart.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquart.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquint.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquint.cpp
 	"ofxEasingQuint.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquint.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingquint.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingsine.cpp
+1411216710 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingsine.cpp
 	"ofxEasingSine.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingsine.h
+1411216710 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\easings\ofxeasingsine.h
 	"ofxEasing.h"
 	<math.h>
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeventkeyframe.cpp
+1411216709 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeventkeyframe.cpp
 	"ofxEventKeyframe.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeventkeyframe.h
+1411216709 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeventkeyframe.h
 	"ofMain.h"
 	"ofxBaseKeyframe.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxbasekeyframe.h
+1411216709 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxbasekeyframe.h
 	"ofMain.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxkeyframe.cpp
+1411216709 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxkeyframe.cpp
 	"ofxKeyframe.h"
 	"ofxEasingExt.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxkeyframe.h
+1411216709 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxkeyframe.h
 	"ofMain.h"
 	"ofxBaseKeyframe.h"
 	"ofxEasingExt.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeasingext.h
+1411216709 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxeasingext.h
 	"ofxEasing.h"
 
-1402915756 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxplaylist.cpp
+1411216709 source:c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxplaylist.cpp
 	"ofxPlaylist.h"
 
-1402915756 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxplaylist.h
+1411216709 c:\users\tom\projects\openframeworks\addons\ofxplaylist\src\ofxplaylist.h
 	"ofMain.h"
 	"ofxKeyframe.h"
 	"ofxEventKeyframe.h"
@@ -5562,13 +5566,13 @@
 1402915756 c:\users\tom\projects\openframeworks\addons\ofxui\src\ofxuidefines.h
 	"ofxXmlSettings.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\src\ofxxmlsettings.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\src\ofxxmlsettings.h
 	"ofMain.h"
 	<string.h>
 	"../libs/tinyxml.h"
 	"tinyxml.h"
 
-1396347892 c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxml.h
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxml.h
 	<ctype.h>
 	<stdio.h>
 	<stdlib.h>
@@ -5953,22 +5957,22 @@
 	"ofxUIWidgetWithLabel.h"
 	"ofxUILabel.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxml.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxml.cpp
 	<ctype.h>
 	<sstream>
 	<iostream>
 	"tinyxml.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxmlerror.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxmlerror.cpp
 	"tinyxml.h"
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxmlparser.cpp
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\libs\tinyxmlparser.cpp
 	<ctype.h>
 	<stddef.h>
 	"tinyxml.h"
 	<windows.h>
 
-1396347892 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\src\ofxxmlsettings.cpp
+1410260597 source:c:\users\tom\projects\openframeworks\addons\ofxxmlsettings\src\ofxxmlsettings.cpp
 	"ofxXmlSettings.h"
 	<vector>
 	<string>
@@ -5983,16 +5987,16 @@
 	"ofxCv.h"
 	<iostream>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\utilities.h
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\utilities.h
 	"ofMain.h"
 	"ofxCv.h"
 	"constants.h"
 	"Box2D/Box2D.h"
 
-1403031910 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\constants.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\constants.h
 	<cmath>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\box2d.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\box2d.h
 	<Box2D/Common/b2Settings.h>
 	<Box2D/Common/b2Draw.h>
 	<Box2D/Common/b2Timer.h>
@@ -6022,83 +6026,83 @@
 	<Box2D/Dynamics/Joints/b2WeldJoint.h>
 	<Box2D/Dynamics/Joints/b2WheelJoint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2settings.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2settings.h
 	<stddef.h>
 	<assert.h>
 	<float.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2draw.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2draw.h
 	<Box2D/Common/b2Math.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2math.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2math.h
 	<Box2D/Common/b2Settings.h>
 	<math.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2timer.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2timer.h
 	<Box2D/Common/b2Settings.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2circleshape.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2circleshape.h
 	<Box2D/Collision/Shapes/b2Shape.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2shape.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2shape.h
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Common/b2Math.h>
 	<Box2D/Collision/b2Collision.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2blockallocator.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2blockallocator.h
 	<Box2D/Common/b2Settings.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collision.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collision.h
 	<Box2D/Common/b2Math.h>
 	<limits.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2edgeshape.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2edgeshape.h
 	<Box2D/Collision/Shapes/b2Shape.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2chainshape.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2chainshape.h
 	<Box2D/Collision/Shapes/b2Shape.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2polygonshape.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2polygonshape.h
 	<Box2D/Collision/Shapes/b2Shape.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2broadphase.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2broadphase.h
 	<Box2D/Common/b2Settings.h>
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/b2DynamicTree.h>
 	<algorithm>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2dynamictree.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2dynamictree.h
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Common/b2GrowableStack.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2growablestack.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2growablestack.h
 	<Box2D/Common/b2Settings.h>
 	<memory.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2distance.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2distance.h
 	<Box2D/Common/b2Math.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2timeofimpact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2timeofimpact.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Collision/b2Distance.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2body.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2body.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Collision/Shapes/b2Shape.h>
 	<memory>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2fixture.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2fixture.h
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/Shapes/b2Shape.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2worldcallbacks.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2worldcallbacks.h
 	<Box2D/Common/b2Settings.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2timestep.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2timestep.h
 	<Box2D/Common/b2Math.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2world.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2world.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Common/b2StackAllocator.h>
@@ -6106,67 +6110,67 @@
 	<Box2D/Dynamics/b2WorldCallbacks.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2stackallocator.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2stackallocator.h
 	<Box2D/Common/b2Settings.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2contactmanager.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2contactmanager.h
 	<Box2D/Collision/b2BroadPhase.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contact.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/Shapes/b2Shape.h>
 	<Box2D/Dynamics/b2Fixture.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2distancejoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2distancejoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2joint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2joint.h
 	<Box2D/Common/b2Math.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2frictionjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2frictionjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2gearjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2gearjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2motorjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2motorjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2mousejoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2mousejoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2prismaticjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2prismaticjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2pulleyjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2pulleyjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2revolutejoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2revolutejoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2ropejoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2ropejoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2weldjoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2weldjoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2wheeljoint.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2wheeljoint.h
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.cpp
 	"framerecord.h"
 
-1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\framerecord.h
 	"ofMain.h"
 	"ofxCv.h"
 	<vector>
 	<iostream>
 
-1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.cpp
 	"highscoretable.h"
 
-1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\highscoretable.h
 	"framerecord.h"
 	"motionvisualizer.h"
 	"ofMain.h"
@@ -6174,85 +6178,86 @@
 	<vector>
 	<algorithm>
 
-1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.h
 	"ParticleSystem.h"
 	"flowcam.h"
 	"ofxCv.h"
+	"ofxDropstuff.h"
 	<iostream>
 	<map>
 	<vector>
 	<deque>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.h
 	"Particle.h"
 	<deque>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particle.h
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particle.h
 	"ofGraphics.h"
 
-1403022207 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.cpp
 	"instructions.h"
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\instructions.h
 	"squid.h"
 	"ofMain.h"
 	"ofxPlaylist.h"
 	<iostream>
 	<vector>
 
-1403022207 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
+1411216650 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
 	"utilities.h"
 	"flowcam.h"
 	"motionvisualizer.h"
+	"ambientplayer.h"
 	"framerecord.h"
 	"highscoretable.h"
 	"objectfinderthreaded.h"
 	"ofMain.h"
 	"ofxCv.h"
-	"ofxFluid.h"
 	"ofxPlaylist.h"
 	"Box2D/Box2D.h"
 	<vector>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.h
 	"ofMain.h"
 	"ofxCv.h"
 	<iostream>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2broadphase.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2broadphase.cpp
 	<Box2D/Collision/b2BroadPhase.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collidecircle.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collidecircle.cpp
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/Shapes/b2CircleShape.h>
 	<Box2D/Collision/Shapes/b2PolygonShape.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collideedge.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collideedge.cpp
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/Shapes/b2CircleShape.h>
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<Box2D/Collision/Shapes/b2PolygonShape.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collidepolygon.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collidepolygon.cpp
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/Shapes/b2PolygonShape.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collision.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2collision.cpp
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/b2Distance.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2distance.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2distance.cpp
 	<Box2D/Collision/b2Distance.h>
 	<Box2D/Collision/Shapes/b2CircleShape.h>
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<Box2D/Collision/Shapes/b2ChainShape.h>
 	<Box2D/Collision/Shapes/b2PolygonShape.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2dynamictree.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2dynamictree.cpp
 	<Box2D/Collision/b2DynamicTree.h>
 	<memory.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2timeofimpact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\b2timeofimpact.cpp
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Collision/b2Distance.h>
 	<Box2D/Collision/b2TimeOfImpact.h>
@@ -6261,66 +6266,66 @@
 	<Box2D/Common/b2Timer.h>
 	<stdio.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2chainshape.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2chainshape.cpp
 	<Box2D/Collision/Shapes/b2ChainShape.h>
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<new>
 	<memory.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2circleshape.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2circleshape.cpp
 	<Box2D/Collision/Shapes/b2CircleShape.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2edgeshape.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2edgeshape.cpp
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2polygonshape.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\collision\shapes\b2polygonshape.cpp
 	<Box2D/Collision/Shapes/b2PolygonShape.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2blockallocator.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2blockallocator.cpp
 	<Box2D/Common/b2BlockAllocator.h>
 	<limits.h>
 	<memory.h>
 	<stddef.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2draw.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2draw.cpp
 	<Box2D/Common/b2Draw.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2math.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2math.cpp
 	<Box2D/Common/b2Math.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2settings.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2settings.cpp
 	<Box2D/Common/b2Settings.h>
 	<stdio.h>
 	<stdarg.h>
 	<stdlib.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2stackallocator.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2stackallocator.cpp
 	<Box2D/Common/b2StackAllocator.h>
 	<Box2D/Common/b2Math.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2timer.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\common\b2timer.cpp
 	<Box2D/Common/b2Timer.h>
 	<windows.h>
 	<sys/time.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2body.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2body.cpp
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2Fixture.h>
 	<Box2D/Dynamics/b2World.h>
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 	<Box2D/Dynamics/Joints/b2Joint.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2contactmanager.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2contactmanager.cpp
 	<Box2D/Dynamics/b2ContactManager.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2Fixture.h>
 	<Box2D/Dynamics/b2WorldCallbacks.h>
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2fixture.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2fixture.cpp
 	<Box2D/Dynamics/b2Fixture.h>
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 	<Box2D/Dynamics/b2World.h>
@@ -6332,7 +6337,7 @@
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Common/b2BlockAllocator.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2island.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2island.cpp
 	<Box2D/Collision/b2Distance.h>
 	<Box2D/Dynamics/b2Island.h>
 	<Box2D/Dynamics/b2Body.h>
@@ -6344,17 +6349,17 @@
 	<Box2D/Common/b2StackAllocator.h>
 	<Box2D/Common/b2Timer.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2island.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2island.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contactsolver.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contactsolver.h
 	<Box2D/Common/b2Math.h>
 	<Box2D/Collision/b2Collision.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2world.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2world.cpp
 	<Box2D/Dynamics/b2World.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2Fixture.h>
@@ -6373,11 +6378,11 @@
 	<Box2D/Common/b2Timer.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2worldcallbacks.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\b2worldcallbacks.cpp
 	<Box2D/Dynamics/b2WorldCallbacks.h>
 	<Box2D/Dynamics/b2Fixture.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandcirclecontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandcirclecontact.cpp
 	<Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Dynamics/b2Fixture.h>
@@ -6385,10 +6390,10 @@
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<new>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandcirclecontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandcirclecontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandpolygoncontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandpolygoncontact.cpp
 	<Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Dynamics/b2Fixture.h>
@@ -6396,10 +6401,10 @@
 	<Box2D/Collision/Shapes/b2EdgeShape.h>
 	<new>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandpolygoncontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2chainandpolygoncontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2circlecontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2circlecontact.cpp
 	<Box2D/Dynamics/Contacts/b2CircleContact.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2Fixture.h>
@@ -6408,10 +6413,10 @@
 	<Box2D/Collision/b2TimeOfImpact.h>
 	<new>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2circlecontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2circlecontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contact.cpp
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 	<Box2D/Dynamics/Contacts/b2CircleContact.h>
 	<Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h>
@@ -6429,19 +6434,19 @@
 	<Box2D/Dynamics/b2Fixture.h>
 	<Box2D/Dynamics/b2World.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygonandcirclecontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygonandcirclecontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygoncontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygoncontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandcirclecontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandcirclecontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandpolygoncontact.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandpolygoncontact.h
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contactsolver.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2contactsolver.cpp
 	<Box2D/Dynamics/Contacts/b2ContactSolver.h>
 	<Box2D/Dynamics/Contacts/b2Contact.h>
 	<Box2D/Dynamics/b2Body.h>
@@ -6449,25 +6454,25 @@
 	<Box2D/Dynamics/b2World.h>
 	<Box2D/Common/b2StackAllocator.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandcirclecontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandcirclecontact.cpp
 	<Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Dynamics/b2Fixture.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandpolygoncontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2edgeandpolygoncontact.cpp
 	<Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Dynamics/b2Fixture.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygonandcirclecontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygonandcirclecontact.cpp
 	<Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Dynamics/b2Fixture.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygoncontact.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\contacts\b2polygoncontact.cpp
 	<Box2D/Dynamics/Contacts/b2PolygonContact.h>
 	<Box2D/Common/b2BlockAllocator.h>
 	<Box2D/Collision/b2TimeOfImpact.h>
@@ -6476,24 +6481,24 @@
 	<Box2D/Dynamics/b2WorldCallbacks.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2distancejoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2distancejoint.cpp
 	<Box2D/Dynamics/Joints/b2DistanceJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2frictionjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2frictionjoint.cpp
 	<Box2D/Dynamics/Joints/b2FrictionJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2gearjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2gearjoint.cpp
 	<Box2D/Dynamics/Joints/b2GearJoint.h>
 	<Box2D/Dynamics/Joints/b2RevoluteJoint.h>
 	<Box2D/Dynamics/Joints/b2PrismaticJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2joint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2joint.cpp
 	<Box2D/Dynamics/Joints/b2Joint.h>
 	<Box2D/Dynamics/Joints/b2DistanceJoint.h>
 	<Box2D/Dynamics/Joints/b2WheelJoint.h>
@@ -6511,51 +6516,51 @@
 	<Box2D/Common/b2BlockAllocator.h>
 	<new>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2motorjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2motorjoint.cpp
 	<Box2D/Dynamics/Joints/b2MotorJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2mousejoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2mousejoint.cpp
 	<Box2D/Dynamics/Joints/b2MouseJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2prismaticjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2prismaticjoint.cpp
 	<Box2D/Dynamics/Joints/b2PrismaticJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2pulleyjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2pulleyjoint.cpp
 	<Box2D/Dynamics/Joints/b2PulleyJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2revolutejoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2revolutejoint.cpp
 	<Box2D/Dynamics/Joints/b2RevoluteJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2ropejoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2ropejoint.cpp
 	<Box2D/Dynamics/Joints/b2RopeJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2weldjoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2weldjoint.cpp
 	<Box2D/Dynamics/Joints/b2WeldJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2wheeljoint.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\dynamics\joints\b2wheeljoint.cpp
 	<Box2D/Dynamics/Joints/b2WheelJoint.h>
 	<Box2D/Dynamics/b2Body.h>
 	<Box2D/Dynamics/b2TimeStep.h>
 
-1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\rope\b2rope.cpp
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\rope\b2rope.cpp
 	<Box2D/Rope/b2Rope.h>
 	<Box2D/Common/b2Draw.h>
 
-1402999591 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\rope\b2rope.h
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\libs\box2d\rope\b2rope.h
 	<Box2D/Common/b2Math.h>
 
 1402999591 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\main.cpp
@@ -6599,5 +6604,320 @@
 	"ofxCv.h"
 	<algorithm>
 
-1396347904 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\icon.rc
+1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\icon.rc
+
+1410438508 c:\users\tom\projects\openframeworks\addons\ofxcv\libs\ofxcv\include\ofxcv\kalman.h
+	"ofxCv.h"
+
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\flowcam.h
+	"ofMain.h"
+	"ofxCv.h"
+	<iostream>
+
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\ofxdropstuff.h
+	"videofeed.h"
+	"flowcam.h"
+	"fileloader.h"
+
+1410969889 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\videofeed.h
+	"fileloader.h"
+	"ofMain.h"
+	"ofxCv.h"
+
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofxdropstuff\src\fileloader.h
+	"ofMain.h"
+	"Poco/Net/HTTPClientSession.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httpclientsession.h
+	"Poco/Net/Net.h"
+	"Poco/Net/HTTPSession.h"
+	"Poco/Net/SocketAddress.h"
+	<istream>
+	<ostream>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\net.h
+	"Poco/Foundation.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\httpsession.h
+	"Poco/Net/Net.h"
+	"Poco/Net/StreamSocket.h"
+	"Poco/Timespan.h"
+	"Poco/Exception.h"
+	"Poco/Any.h"
+	<ios>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\streamsocket.h
+	"Poco/Net/Net.h"
+	"Poco/Net/Socket.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\socket.h
+	"Poco/Net/Net.h"
+	"Poco/Net/SocketImpl.h"
+	<vector>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\socketimpl.h
+	"Poco/Net/Net.h"
+	"Poco/Net/SocketDefs.h"
+	"Poco/Net/SocketAddress.h"
+	"Poco/RefCountedObject.h"
+	"Poco/Timespan.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\socketdefs.h
+	"Poco/UnWindows.h"
+	<winsock2.h>
+	<ws2tcpip.h>
+	<hostLib.h>
+	<ifLib.h>
+	<inetLib.h>
+	<ioLib.h>
+	<resolvLib.h>
+	<types.h>
+	<socket.h>
+	<netinet/tcp.h>
+	<unistd.h>
+	<errno.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/select.h>
+	<sys/ioctl.h>
+	<inet.h>
+	<arpa/inet.h>
+	<netinet/in.h>
+	<netinet/tcp.h>
+	<netdb.h>
+	<net/if.h>
+	<sys/sockio.h>
+	<sys/filio.h>
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\socketaddress.h
+	"Poco/Net/Net.h"
+	"Poco/Net/SocketDefs.h"
+	"Poco/Net/IPAddress.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\net\ipaddress.h
+	"Poco/Net/Net.h"
+	"Poco/Net/SocketDefs.h"
+
+1410260590 c:\users\tom\projects\openframeworks\libs\poco\include\poco\timespan.h
+	"Poco/Foundation.h"
+	"Poco/Timestamp.h"
+
+1410969888 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ambientplayer.h
+	"ofMain.h"
+	<string>
+	<iostream>
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscbundle.cpp
+	"ofxOscBundle.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscbundle.h
+	<vector>
+	"ofxOscMessage.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscmessage.h
+	"ofxOscArg.h"
+	<vector>
+	<string>
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscarg.h
+	<string>
+	"ofMain.h"
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\src\ofxoscmessage.cpp
+	"ofxOscMessage.h"
+	"ofLog.h"
+	<iostream>
+	<assert.h>
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\ipendpointname.cpp
+	"IpEndpointName.h"
+	<cstdio>
+	"NetworkingUtils.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\ipendpointname.h
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\networkingutils.h
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\posix\networkingutils.cpp
+	"ip/NetworkingUtils.h"
+	<netdb.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<string.h>
+	<stdio.h>
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\posix\udpsocket.cpp
+	"ip/UdpSocket.h"
+	<vector>
+	<algorithm>
+	<stdexcept>
+	<assert.h>
+	<signal.h>
+	<math.h>
+	<errno.h>
+	<string.h>
+	<pthread.h>
+	<unistd.h>
+	<stdlib.h>
+	<stdio.h>
+	<netdb.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<netinet/in.h>
+	"ip/PacketListener.h"
+	"ip/TimerListener.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\udpsocket.h
+	"NetworkingUtils.h"
+	"IpEndpointName.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\packetlistener.h
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\timerlistener.h
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\win32\networkingutilswin.cpp
+	"ip/NetworkingUtils.h"
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\ip\win32\udpsocketwin.cpp
+	"ip/UdpSocket.h"
+	<winsock2.h>
+	<windows.h>
+	<mmsystem.h>
+	<vector>
+	<algorithm>
+	<stdexcept>
+	<assert.h>
+	<signal.h>
+	"ip/NetworkingUtils.h"
+	"ip/PacketListener.h"
+	"ip/TimerListener.h"
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscoutboundpacketstream.cpp
+	"OscOutboundPacketStream.h"
+	<string.h>
+	<stdlib.h>
+	<assert.h>
+	<malloc.h>
+	"OscHostEndianness.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscoutboundpacketstream.h
+	"OscTypes.h"
+	"OscException.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\osctypes.h
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscexception.h
+	<exception>
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oschostendianness.h
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscprintreceivedelements.cpp
+	"OscPrintReceivedElements.h"
+	<iostream>
+	<iomanip>
+	<ctime>
+	<cstring>
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscprintreceivedelements.h
+	<iosfwd>
+	"OscReceivedElements.h"
+
+1410260586 c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscreceivedelements.h
+	<cstddef>
+	"OscTypes.h"
+	"OscException.h"
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\oscreceivedelements.cpp
+	"OscReceivedElements.h"
+	<cassert>
+	"OscHostEndianness.h"
+
+1410260586 source:c:\users\tom\projects\openframeworks\addons\ofxosc\libs\oscpack\src\osc\osctypes.cpp
+	"OscTypes.h"
+
+1410260583 source:c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpclient.cpp
+	"ofxTCPClient.h"
+	"ofAppRunner.h"
+	"ofxNetworkUtils.h"
+
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpclient.h
+	"ofConstants.h"
+	"ofxTCPManager.h"
+	"ofFileUtils.h"
+	"ofTypes.h"
+
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpmanager.h
+	"ofConstants.h"
+	<string.h>
+	<wchar.h>
+	<stdio.h>
+	<ctype.h>
+	<netdb.h>
+	<string.h>
+	<fcntl.h>
+	<time.h>
+	<errno.h>
+	<unistd.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<sys/timeb.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<sys/ioctl.h>
+	<sys/signal.h>
+	<signal.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxnetworkutils.h
+	<cerrno>
+	"ofConstants.h"
+	"ofUtils.h"
+
+1410260583 source:c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpmanager.cpp
+	"ofxTCPManager.h"
+	<stdio.h>
+	"ofxNetworkUtils.h"
+
+1410260583 source:c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpserver.cpp
+	"ofxTCPServer.h"
+	"ofxTCPClient.h"
+	"ofUtils.h"
+
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxtcpserver.h
+	"ofConstants.h"
+	"ofThread.h"
+	"ofxTCPManager.h"
+	<map>
+
+1410260583 source:c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxudpmanager.cpp
+	"ofxUDPManager.h"
+	"ofxNetworkUtils.h"
+
+1410260583 c:\users\tom\projects\openframeworks\addons\ofxnetwork\src\ofxudpmanager.h
+	"ofConstants.h"
+	<string.h>
+	<wchar.h>
+	<stdio.h>
+	<ctype.h>
+	<netdb.h>
+	<string.h>
+	<fcntl.h>
+	<errno.h>
+	<unistd.h>
+	<arpa/inet.h>
+	<netinet/in.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<sys/ioctl.h>
+	<netinet/tcp.h>
+	<winsock2.h>
+	<ws2tcpip.h>
 

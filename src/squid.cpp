@@ -361,7 +361,7 @@ void Squid::updateBehaviorState(double delta_t)
                 break;
             }
 
-            moveGoalWithFlow();
+//            moveGoalWithFlow();
             break;
 
         case STATIONARY:

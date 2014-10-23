@@ -18,9 +18,6 @@ void ofApp::setup()
     ofSetLogLevel(OF_LOG_NOTICE);
     // Gui Setup
     setupGUI();
-    // Window setup
-    ofSetWindowPosition(window_x, window_y);
-    ofSetWindowShape(window_width, window_height);
     // Videofeed
     if (use_imagefeed){
         VideoFeedImageURL* feed = new VideoFeedImageURL();
@@ -35,6 +32,10 @@ void ofApp::setup()
         webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
         videofeed = ofPtr<VideoFeed>(webcam);
     }
+    // Window setup
+    ofSetWindowPosition(window_x, window_y);
+    ofSetWindowShape(window_width, window_height);
+    // Flowcam
     flowcam.setup(160);
     // Visualizer
     visualizer.setup(&flowcam);

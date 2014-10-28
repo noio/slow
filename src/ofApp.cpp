@@ -18,9 +18,6 @@ void ofApp::setup()
     ofSetLogLevel(OF_LOG_NOTICE);
     // Gui Setup
     setupGUI();
-    // Window setup
-    ofSetWindowPosition(window_x, window_y);
-    ofSetWindowShape(window_width, window_height);
     // Videofeed
     if (use_imagefeed){
         VideoFeedImageURL* feed = new VideoFeedImageURL();
@@ -36,6 +33,10 @@ void ofApp::setup()
         webcam->setAspectRatio(ofGetWidth(), ofGetHeight());
         videofeed = ofPtr<VideoFeed>(webcam);
     }
+    // Window setup
+    ofSetWindowPosition(window_x, window_y);
+    ofSetWindowShape(window_width, window_height);
+    // Flowcam
     flowcam.setup(160);
     // Visualizer
     visualizer.setup(&flowcam);
@@ -43,10 +44,12 @@ void ofApp::setup()
     sounds.setup();
     // Highscore table
     highscores.setup(ofGetWidth() / 10, &visualizer);
+    // Photograbber
+    photograb.setup(photograb_path);
     // Set up Box2d
     phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
     // Squid setup
-    squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores);
+    squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores, &photograb);
     // Instructions
     instructions.setup(&squid);
 }
@@ -71,11 +74,7 @@ void ofApp::setupGUI()
     RUI_SHARE_ENUM_PARAM(capture_res, 0, 2, resolutions);
     RUI_SHARE_PARAM(use_imagefeed);
     RUI_SHARE_PARAM(imagefeed_address);
-    //
-    RUI_NEW_GROUP("Flow");
-    RUI_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
-    RUI_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
-    RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    RUI_SHARE_PARAM(photograb_path);
     //
     RUI_NEW_GROUP("Squishy");
     // TODO callback for scale
@@ -87,6 +86,17 @@ void ofApp::setupGUI()
     RUI_SHARE_PARAM(squid.core_area_radius, 20, 80);
     RUI_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
     RUI_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
+
+    //
+    RUI_NEW_GROUP("Flow");
+    RUI_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    //
+    RUI_NEW_GROUP("Photograb");
+    RUI_SHARE_PARAM(photograb.grab_width, 100, 300);
+    RUI_SHARE_PARAM(photograb.grab_delay, 1.1f, 5.1f);
+    RUI_SHARE_PARAM(photograb.fade_time, 3, 10);
 
     RUI_NEW_GROUP("Visualizer");
     RUI_SHARE_PARAM(visualizer.trail_hue, 0, 255);
@@ -108,6 +118,7 @@ void ofApp::update()
         flowcam.update(frame);
     }
     squid.update(delta_t, frame);
+    photograb.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);
     sounds.update(delta_t);
@@ -125,6 +136,7 @@ void ofApp::draw()
     highscores.draw();
     instructions.draw();
     squid.draw(draw_debug);
+    photograb.draw();
 
     if (draw_debug) {
         flowcam.drawDebug();
@@ -165,7 +177,14 @@ void ofApp::keyPressed(int key)
         case 'o':
             sounds.setSoundsOn(false);
             break;
+<<<<<<< HEAD
 
+=======
+            
+        case 'p':
+            ofSaveFrame();
+            
+>>>>>>> 272ff7b6ab724376aa41392cc50a9faccc809012
         default:
             break;
     }

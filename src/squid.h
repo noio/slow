@@ -9,6 +9,7 @@
 #include "ambientplayer.h"
 #include "framerecord.h"
 #include "highscoretable.h"
+#include "photograb.h"
 #include "objectfinderthreaded.h"
 
 #include "ofMain.h"
@@ -40,7 +41,8 @@ const ofColor kSquidTransparentWhite(255,255,255,96);
 const SquidColorPreset kDefaultColors = {kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor};
 const SquidColorPreset kPanicColors = {kSquidPink, kSquidOutlineWhite, kSquidPink, kSquidOutlineWhite, kSquidPink};
 const SquidColorPreset kGrabColors = {kSquidGreen, kSquidGreen, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
-const SquidColorPreset kFaceColors = {kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
+//const SquidColorPreset kFaceColors = {kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite, kSquidTransparentWhite};
+const SquidColorPreset kFaceColors = {kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor, kSquidOutlineWhite, kSquidDefaultColor};
 
 ////////// CLASS DEF //////////
 
@@ -61,7 +63,7 @@ public:
 
 
     // METHODS
-    void setup(float in_scale, ofPtr<b2World> phys_world, ofxDS::FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores);
+    void setup(float in_scale, ofPtr<b2World> phys_world, ofxDS::FlowCam* flowcam, MotionVisualizer* visualizer, AmbientPlayer* sounds, HighscoreTable* in_highscores, Photograb* in_photograb);
     void update(double delta_t, const cv::Mat& frame);
     void draw(bool draw_debug);
 
@@ -203,6 +205,8 @@ private:
     MotionVisualizer *visualizer;
     AmbientPlayer *sounds;
     HighscoreTable* highscores;
+    Photograb* photograb;
+    
     cv::Mat latest_frame;
 
     BehaviorState behavior_state = IDLE;

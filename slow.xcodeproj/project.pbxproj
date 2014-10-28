@@ -18,6 +18,7 @@
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		C602002DE761F9B52DB4400A /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE75A3FBA2C2D87D14F06FE6 /* ObjectFinder.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
+		E23FAD0619FFFC3B00718A3B /* ofxLUT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E23FAD0119FFFC3B00718A3B /* ofxLUT.cpp */; };
 		E244DE8B194E19DD0099BE28 /* instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E244DE89194E19DD0099BE28 /* instructions.cpp */; };
 		E245AEFB194F3F3600B41F9B /* objectfinderthreaded.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */; };
 		E2492023193F338300528EA5 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2491FFC193F338300528EA5 /* ofxEasing.cpp */; };
@@ -161,6 +162,7 @@
 		E2E9319B18F43158007BC76B /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E9319518F43158007BC76B /* tinyxmlerror.cpp */; };
 		E2E9319C18F43158007BC76B /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E9319618F43158007BC76B /* tinyxmlparser.cpp */; };
 		E2E9319D18F43158007BC76B /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2E9319818F43158007BC76B /* ofxXmlSettings.cpp */; };
+		E2F657D819F9735D00A9FF12 /* photograb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2F657D619F9735D00A9FF12 /* photograb.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -241,6 +243,8 @@
 		D29DD28C195CD81267F3C8A1 /* Distance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Distance.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h; sourceTree = SOURCE_ROOT; };
 		D347FB65D19015303863922A /* Wrappers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Wrappers.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Wrappers.cpp; sourceTree = SOURCE_ROOT; };
 		DB0CD4C938C079DCD67222FE /* imatrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imatrix.h; path = ../../../addons/ofxCv/libs/CLD/include/CLD/imatrix.h; sourceTree = SOURCE_ROOT; };
+		E23FAD0119FFFC3B00718A3B /* ofxLUT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLUT.cpp; sourceTree = "<group>"; };
+		E23FAD0219FFFC3B00718A3B /* ofxLUT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLUT.h; sourceTree = "<group>"; };
 		E244DE89194E19DD0099BE28 /* instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instructions.cpp; sourceTree = "<group>"; };
 		E244DE8A194E19DD0099BE28 /* instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instructions.h; sourceTree = "<group>"; };
 		E245AEF9194F3F3600B41F9B /* objectfinderthreaded.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectfinderthreaded.cpp; sourceTree = "<group>"; };
@@ -595,6 +599,8 @@
 		E2E9319618F43158007BC76B /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		E2E9319818F43158007BC76B /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		E2E9319918F43158007BC76B /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		E2F657D619F9735D00A9FF12 /* photograb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = photograb.cpp; sourceTree = "<group>"; };
+		E2F657D719F9735D00A9FF12 /* photograb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = photograb.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -736,6 +742,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E23FACE319FFFC3B00718A3B /* ofxLUT */,
 				E264C12119B8835200015120 /* ofxOsc */,
 				E264C00E19B87EE400015120 /* ofxRemoteUI */,
 				E2491FCC193F338300528EA5 /* ofxPlaylist */,
@@ -793,6 +800,24 @@
 				D347FB65D19015303863922A /* Wrappers.cpp */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		E23FACE319FFFC3B00718A3B /* ofxLUT */ = {
+			isa = PBXGroup;
+			children = (
+				E23FAD0019FFFC3B00718A3B /* src */,
+			);
+			name = ofxLUT;
+			path = ../../../addons/ofxLUT;
+			sourceTree = "<group>";
+		};
+		E23FAD0019FFFC3B00718A3B /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E23FAD0119FFFC3B00718A3B /* ofxLUT.cpp */,
+				E23FAD0219FFFC3B00718A3B /* ofxLUT.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		E2491FCC193F338300528EA5 /* ofxPlaylist */ = {
@@ -1497,7 +1522,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E2AA54A719C9D287007E4B76 /* ofxDropstuff */,
+				E2F657D619F9735D00A9FF12 /* photograb.cpp */,
+				E2F657D719F9735D00A9FF12 /* photograb.h */,
 				E2E2332E19543A2F00EFD6B9 /* ambientplayer.cpp */,
 				E2E2332F19543A2F00EFD6B9 /* ambientplayer.h */,
 				E256414318EAC8650030858B /* constants.h */,
@@ -1515,6 +1541,7 @@
 				E245AEFA194F3F3600B41F9B /* objectfinderthreaded.h */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
+				E2AA54A719C9D287007E4B76 /* ofxDropstuff */,
 				E29D5C2418FBDF5300890C23 /* Particle.h */,
 				E29D5C2118FBDF4600890C23 /* ParticleSystem.cpp */,
 				E29D5C2318FBDF4B00890C23 /* ParticleSystem.h */,
@@ -1573,7 +1600,7 @@
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "slow" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1772,9 +1799,11 @@
 				E2492028193F338300528EA5 /* ofxEasingElastic.cpp in Sources */,
 				E2E9314F18F42F7F007BC76B /* ofxUISortableList.cpp in Sources */,
 				E2E9314E18F42F7F007BC76B /* ofxUISlider.cpp in Sources */,
+				E2F657D819F9735D00A9FF12 /* photograb.cpp in Sources */,
 				E249202C193F338300528EA5 /* ofxEasingQuart.cpp in Sources */,
 				E25839B9191BBB1A0049E948 /* b2Collision.cpp in Sources */,
 				E2E9315118F42F7F007BC76B /* ofxUISpectrum.cpp in Sources */,
+				E23FAD0619FFFC3B00718A3B /* ofxLUT.cpp in Sources */,
 				E2E9315B18F42F7F007BC76B /* ofxUIWidgetWithLabel.cpp in Sources */,
 				E25839DE191BBB1A0049E948 /* b2RevoluteJoint.cpp in Sources */,
 				E25839C3191BBB1A0049E948 /* b2Math.cpp in Sources */,

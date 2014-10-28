@@ -26,6 +26,7 @@ void ofApp::setup()
         VideoFeedImageURL* feed = new VideoFeedImageURL();
         feed->setup(imagefeed_address);
         feed->setAspectRatio(ofGetWidth(), ofGetHeight());
+        feed->setFlip(1);
         videofeed = ofPtr<VideoFeed>(feed);
     }
     else

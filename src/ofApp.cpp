@@ -177,14 +177,9 @@ void ofApp::keyPressed(int key)
         case 'o':
             sounds.setSoundsOn(false);
             break;
-<<<<<<< HEAD
 
-=======
-            
         case 'p':
             ofSaveFrame();
-            
->>>>>>> 272ff7b6ab724376aa41392cc50a9faccc809012
         default:
             break;
     }

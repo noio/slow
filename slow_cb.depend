@@ -6205,13 +6205,14 @@
 	<iostream>
 	<vector>
 
-1411216650 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
+1414521703 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.h
 	"utilities.h"
 	"flowcam.h"
 	"motionvisualizer.h"
 	"ambientplayer.h"
 	"framerecord.h"
 	"highscoretable.h"
+	"photograb.h"
 	"objectfinderthreaded.h"
 	"ofMain.h"
 	"ofxCv.h"
@@ -6568,7 +6569,8 @@
 	"ofApp.h"
 	"constants.h"
 
-1411216823 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
+1414521703 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.h
+	"photograb.h"
 	"motionvisualizer.h"
 	"squid.h"
 	"highscoretable.h"
@@ -6580,14 +6582,14 @@
 	"Box2D/Box2D.h"
 	<vector>
 
-1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
+1414521703 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\motionvisualizer.cpp
 	"motionvisualizer.h"
 	"constants.h"
 
 1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\objectfinderthreaded.cpp
 	"objectfinderthreaded.h"
 
-1411218288 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
+1414521963 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\ofapp.cpp
 	"ofApp.h"
 	"constants.h"
 	"utilities.h"
@@ -6596,7 +6598,7 @@
 1410969888 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\particlesystem.cpp
 	"ParticleSystem.h"
 
-1410969889 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
+1414521703 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\squid.cpp
 	"squid.h"
 	"constants.h"
 	"ofxCv.h"
@@ -7344,4 +7346,18 @@
 	<string.h>
 	<sstream>
 	<iomanip>
+
+1414521703 c:\users\tom\projects\openframeworks\apps\myapps\slow\src\photograb.h
+	"ofxLUT.h"
+	"ofMain.h"
+	<string>
+
+1414518267 source:c:\users\tom\projects\openframeworks\addons\ofxlut\src\ofxlut.cpp
+	"ofxLUT.h"
+
+1342029000 c:\users\tom\projects\openframeworks\addons\ofxlut\src\ofxlut.h
+	"ofMain.h"
+
+1414521703 source:c:\users\tom\projects\openframeworks\apps\myapps\slow\src\photograb.cpp
+	"photograb.h"
 

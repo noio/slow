@@ -12,7 +12,12 @@ using std::endl;
 
 ////////// SQUID CLASS //////////
 
-void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world, ofxDS::FlowCam* in_flowcam, MotionVisualizer* in_visualizer, AmbientPlayer* in_sounds, HighscoreTable* in_highscores)
+void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world,
+                  ofxDS::FlowCam* in_flowcam,
+                  MotionVisualizer* in_visualizer,
+                  AmbientPlayer* in_sounds,
+                  HighscoreTable* in_highscores,
+                  Photograb* in_photograb)
 {
     scale = in_scale;
     phys_world = in_phys_world;
@@ -20,6 +25,7 @@ void Squid::setup(float in_scale, ofPtr<b2World> in_phys_world, ofxDS::FlowCam* 
     visualizer = in_visualizer;
     sounds = in_sounds;
     highscores = in_highscores;
+    photograb = in_photograb;
     squish = 1.0f;
     colors_prev = kPanicColors;
     colors_cur = kPanicColors;
@@ -358,6 +364,7 @@ void Squid::updateBehaviorState(double delta_t)
             if (sees_face) {
                 sounds->stopGrab();
                 switchBehaviorState(FACE);
+                hintFadeOut();
                 break;
             }
 
@@ -446,6 +453,7 @@ void Squid::updateMotionState(double delta_t)
         case LOCK:
             bodyPush(delta_t);
             turnUpright(delta_t);
+            tentaclePrep();
             break;
     }
 }
@@ -473,6 +481,7 @@ void Squid::switchBehaviorState(BehaviorState next)
             switchMotionState(LOCK);
             clearFace();
             visualizer->sparkle(found_face.getCenter(), body_radius);
+            photograb->grab(pos_game);
             break;
 
         case GRABBED:
@@ -752,7 +761,7 @@ void Squid::draw(bool draw_debug)
 {
     tweenColors();
     ofEnableAlphaBlending();
-    if (has_face){
+    if (has_face && face_time > 20){
         drawScore();
     }
     drawTentacles();

@@ -43,10 +43,12 @@ void ofApp::setup()
     sounds.setup();
     // Highscore table
     highscores.setup(ofGetWidth() / 10, &visualizer);
+    // Photograbber
+    photograb.setup("../../../photos");
     // Set up Box2d
     phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
     // Squid setup
-    squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores);
+    squid.setup(squid_scale, phys_world, &flowcam, &visualizer, &sounds, &highscores, &photograb);
     // Instructions
     instructions.setup(&squid);
 }
@@ -108,6 +110,7 @@ void ofApp::update()
         flowcam.update(frame);
     }
     squid.update(delta_t, frame);
+    photograb.update(delta_t);
     highscores.update(delta_t);
     visualizer.update(delta_t);
     sounds.update(delta_t);
@@ -125,6 +128,7 @@ void ofApp::draw()
     highscores.draw();
     instructions.draw();
     squid.draw(draw_debug);
+    photograb.draw();
 
     if (draw_debug) {
         flowcam.drawDebug();
@@ -165,6 +169,9 @@ void ofApp::keyPressed(int key)
         case 'o':
             sounds.setSoundsOn(false);
             break;
+            
+        case 'p':
+            ofSaveFrame();
             
         default:
             break;

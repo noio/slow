@@ -1,5 +1,6 @@
 #pragma once
 
+#include "photograb.h"
 #include "motionvisualizer.h"
 #include "squid.h"
 #include "highscoretable.h"
@@ -47,6 +48,7 @@ public:
     ofxDS::FlowCam flowcam;
     MotionVisualizer visualizer;
     AmbientPlayer sounds;
+    Photograb photograb;
     Squid squid;
     HighscoreTable highscores;
     Instructions instructions;

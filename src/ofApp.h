@@ -59,6 +59,7 @@ public:
     bool draw_debug = false;
     bool use_imagefeed = false;
     std::string imagefeed_address = "http://localhost:1338/color";
+    std::string photograb_path = "../../../photos";
     int window_x = 20;
     int window_y = 100;
     int window_width = 896;

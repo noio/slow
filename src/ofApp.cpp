@@ -44,7 +44,7 @@ void ofApp::setup()
     // Highscore table
     highscores.setup(ofGetWidth() / 10, &visualizer);
     // Photograbber
-    photograb.setup("../../../photos");
+    photograb.setup(photograb_path);
     // Set up Box2d
     phys_world = ofPtr<b2World> ( new b2World(b2Vec2(0.0f, 3.0f)) );
     // Squid setup
@@ -73,11 +73,7 @@ void ofApp::setupGUI()
     RUI_SHARE_ENUM_PARAM(capture_res, 0, 2, resolutions);
     RUI_SHARE_PARAM(use_imagefeed);
     RUI_SHARE_PARAM(imagefeed_address);
-    //
-    RUI_NEW_GROUP("Flow");
-    RUI_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
-    RUI_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
-    RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    RUI_SHARE_PARAM(photograb_path);
     //
     RUI_NEW_GROUP("Squishy");
     // TODO callback for scale
@@ -89,6 +85,17 @@ void ofApp::setupGUI()
     RUI_SHARE_PARAM(squid.core_area_radius, 20, 80);
     RUI_SHARE_PARAM(squid.local_flow_max, 0, 0.5);
     RUI_SHARE_PARAM(squid.core_flow_max, 0, 0.5);
+    //
+    RUI_NEW_GROUP("Flow");
+    RUI_SHARE_PARAM(flowcam.flow_erosion_size, 1, 11);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_low, 0.0f, 1.0f);
+    RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
+    //
+    RUI_NEW_GROUP("Photograb");
+    RUI_SHARE_PARAM(photograb.grab_width, 100, 300);
+    RUI_SHARE_PARAM(photograb.grab_delay, 1.1f, 5.1f);
+    RUI_SHARE_PARAM(photograb.fade_time, 3, 10);
+
     
     RUI_NEW_GROUP("Visualizer");
     RUI_SHARE_PARAM(visualizer.trail_hue, 0, 255);

@@ -42,7 +42,7 @@ void Photograb::draw()
         case FADE:
             refer_im.draw(0,0, ofGetWidth(), ofGetHeight());
             ofEnableAlphaBlending();
-            ofSetColor(255, 255, 255, 255 * (1.0f - (state_time / fade_time)));
+            ofSetColor(255, 255, 255, 255 * (MAX(0, 1.0f - state_time)));
             ofFill();
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             ofDisableAlphaBlending();
@@ -80,6 +80,7 @@ void Photograb::capture()
 {
     screen.grabScreen(topleft.x, topleft.y, grab_width, grab_height);
     lut.applyLUT(screen.getPixelsRef());
+    screen.update();
     std::string file_path = save_path + "/slow_artis_" + ofGetTimestampString("%Y%m%d-%H%M") + ".png";
     screen.saveImage(file_path);
 }

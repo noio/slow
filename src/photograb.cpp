@@ -82,6 +82,7 @@ void Photograb::capture()
     lut.applyLUT(screen.getPixelsRef());
     screen.update();
     std::string file_path = save_path + "/slow_artis_" + ofGetTimestampString("%Y%m%d-%H%M") + ".png";
+    ofLogNotice("Photograb") << "Saving photo: " << file_path;
     screen.saveImage(file_path);
 }
 

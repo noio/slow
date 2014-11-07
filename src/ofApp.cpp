@@ -94,6 +94,7 @@ void ofApp::setupGUI()
     RUI_SHARE_PARAM(flowcam.flow_threshold_high, 0.0f, 2.0f);
     //
     RUI_NEW_GROUP("Photograb");
+    RUI_SHARE_PARAM(photograb.do_save);
     RUI_SHARE_PARAM(photograb.grab_width, 100, 300);
     RUI_SHARE_PARAM(photograb.grab_delay, 1.1f, 5.1f);
     RUI_SHARE_PARAM(photograb.fade_time, 3, 10);

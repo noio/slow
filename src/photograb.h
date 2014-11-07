@@ -24,6 +24,7 @@ public:
     float flash_time = 0.1;
     float fade_time = 3;
     int grab_width = 200;
+    bool do_save = false;
     
 private:
     
